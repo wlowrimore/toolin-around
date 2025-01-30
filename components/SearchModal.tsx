@@ -21,7 +21,7 @@ export function SearchModal() {
           Find Tools
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white bg-[url('/logos/modalLogo.png')] bg-no-repeat bg-center bg-contain">
         <DialogHeader>
           <DialogTitle>Find Tools</DialogTitle>
           <DialogDescription>
@@ -36,19 +36,9 @@ export function SearchModal() {
             <Input
               id="query"
               placeholder="Search for tools"
-              className="col-span-3"
+              className="col-span-3 bg-white/90"
             />
           </div>
-          {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input
-              id="username"
-              defaultValue="@peduarte"
-              className="col-span-3"
-            />
-          </div> */}
         </div>
         <DialogFooter>
           <button

@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
+import GoogleButton from "./GoogleButton";
 
 const LoginModalForm = () => {
   return (
@@ -40,30 +41,39 @@ const LoginModalForm = () => {
             <Label htmlFor="loginPassword">Password</Label>
             <Input id="loginPassword" type="password" className="col-span-3" />
           </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
-            <label
-              htmlFor="terms"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              I Accept the
-              <Link href="/terms-and-conditions">
-                &nbsp;
-                <span className="text-blue-700 hover:underline">
-                  Terms and Conditions
-                </span>
-              </Link>
-            </label>
-          </div>
+
+          <DialogFooter>
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="terms" />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I Accept the
+                  <Link href="/terms-and-conditions">
+                    &nbsp;
+                    <span className="text-blue-700 hover:underline">
+                      Terms and Conditions
+                    </span>
+                  </Link>
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white px-4 py-2 border border-cyan-700/90 bg-cyan-600 hover:bg-cyan-700"
+              >
+                Submit
+              </button>
+              <div className="w-full flex items-center gap-2">
+                <div className="w-full h-[1px] bg-gray-300"></div>
+                <div className="text-gray-500">or</div>
+                <div className="w-full h-[1px] bg-gray-300"></div>
+              </div>
+              <GoogleButton />
+            </div>
+          </DialogFooter>
         </div>
-        <DialogFooter>
-          <button
-            type="submit"
-            className="w-full text-white px-4 py-2 border border-cyan-700/90 bg-cyan-600 hover:bg-cyan-700"
-          >
-            Submit
-          </button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
