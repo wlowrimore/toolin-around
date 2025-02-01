@@ -48,7 +48,7 @@ export const author = defineType({
           fields: [
             defineField({
               name: "listing",
-              title: "listing",
+              title: "Listing",
               type: "reference",
               to: [{ type: "listing" }],
               validation: (Rule: any) => Rule.required(),

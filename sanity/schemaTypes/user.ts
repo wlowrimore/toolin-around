@@ -8,7 +8,8 @@ export const user = defineType({
     defineField({
       name: "id",
       title: "ID",
-      type: "refernce",
+      type: "reference",
+      to: [{ type: "author" }],
       hidden: true,
       description: "User ID (email)",
     }),

@@ -6,13 +6,14 @@ export const listing = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
+      name: "id",
+      title: "ID",
       type: "string",
+      hidden: true,
     }),
     defineField({
-      name: "description",
-      title: "Description",
+      name: "title",
+      title: "Title",
       type: "string",
     }),
     defineField({
@@ -21,32 +22,55 @@ export const listing = defineType({
       type: "slug",
       options: {
         source: "title",
-        maxLength: 96,
       },
     }),
     defineField({
-      name: "mainImage",
-      title: "Main image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: { type: "author" },
+      description: "The author who created this service",
     }),
     defineField({
-      name: "publishedAt",
-      title: "Published at",
-      type: "datetime",
+      name: "description",
+      title: "Description",
+      type: "text",
+      validation: (Rule) => Rule.min(10).max(100),
     }),
     defineField({
-      name: "body",
-      title: "Body",
-      type: "blockContent",
+      name: "category",
+      title: "Category",
+      type: "string",
+    }),
+    defineField({
+      name: "price",
+      title: "Price",
+      type: "number",
+    }),
+    defineField({
+      name: "image",
+      title: "Image",
+      type: "url",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "deleteToken",
+      title: "Delete Token",
+      type: "string",
+    }),
+    defineField({
+      name: "toolDetails",
+      title: "Tool Details",
+      type: "text",
+      description: "Briefly describe your services and how you can help others",
+      validation: (Rule) => Rule.required().min(20).max(1000),
+    }),
+    defineField({
+      name: "contact",
+      title: "Contact Email",
+      type: "email",
+      description: "Contact email for this service",
+      validation: (Rule) => Rule.required().error("Contact email is required"),
     }),
   ],
-  preview: {
-    select: {
-      title: "title",
-      media: "mainImage",
-    },
-  },
 });

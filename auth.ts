@@ -1,9 +1,10 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import Credintials from "next-auth/providers/credentials";
 import { client } from "./sanity/lib/client";
 import { writeClient } from "./sanity/lib/write-client";
 import { AUTHOR_BY_GOOGLE_ID_QUERY } from "./sanity/lib/queries";
+
+import { groq } from "next-sanity";
 
 console.log("AUTH_URL:", process.env.AUTH_URL);
 console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
@@ -32,13 +33,21 @@ export const createValidId = (email: string) => {
   return `author-${email.replace(/[@.]/g, "-")}`;
 };
 
+const authorQuery = groq`*[_type == "author" && email == $email][0]{
+  _id,
+  name,
+  email,
+  image,
+  roles[]->{
+    _id,
+    code,
+    name
+  }
+}`;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID || "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
-    }),
-  ],
+  providers: [Google],
+  secret: process.env.AUTH_SECRET,
   debug: false,
   callbacks: {
     async signIn({ user, account, profile }) {
@@ -106,10 +115,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       try {
         if (user?.email) {
           const author = await client
-            .fetch(AUTHOR_BY_GOOGLE_ID_QUERY, {
+            .fetch<{
+              _id: string;
+              name: string;
+              email: string;
+              image: string;
+              roles: Array<{ _id: string; code: string; name: string }>;
+            } | null>(authorQuery, {
               email: user.email,
             })
             .catch(() => null);
+
+          console.log("Author data:", JSON.stringify(author, null, 2));
 
           if (author) {
             token.id = author._id;
