@@ -6,6 +6,7 @@ import { AUTHOR_BY_GOOGLE_ID_QUERY } from "./sanity/lib/queries";
 
 import { groq } from "next-sanity";
 
+console.log("AUTH_GOOGLE_API_KEY:", process.env.AUTH_GOOGLE_API_KEY);
 console.log("AUTH_URL:", process.env.AUTH_URL);
 console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
 console.log("AUTH_GOOGLE_ID:", process.env.AUTH_GOOGLE_ID);
