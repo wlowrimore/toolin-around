@@ -17,11 +17,10 @@ const ListingCard = () => {
   const { data: session } = useSession();
 
   const userHandle = () => {
-    const firstName = session?.user?.name.split(" ")[0].toLowerCase();
-    const firstInitial = firstName?.charAt(0);
-
-    const lastName = session?.user?.name.split(" ")[1].toLowerCase();
-    return `@${firstInitial}${lastName}`;
+    if (session) {
+      const nameTag = session?.user?.email?.split("@")[0].toLowerCase();
+      return `@${nameTag}`;
+    }
   };
 
   return (

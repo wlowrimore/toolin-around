@@ -1,31 +1,35 @@
-"use client";
-
 import React from "react";
-import LoginModalForm from "./LoginModalForm";
 
-const SignUpForm = () => {
+const ListToolsForm = () => {
   return (
-    <main>
-      <h1 className="text-xl font-semibold px-2">Sign Up Today</h1>
-      <div className="w-full h-0.5 bg-neutral-300 mt-1 mb-4"></div>
-      <form className="ml-2 space-y-3">
+    <main className="w-full mt-10 px-6">
+      <header className="w-full border-b-[0.025rem] border-slate-300 py-2">
+        <h1 className="text-slate-600 text-3xl font-semibold">
+          Create a Listing
+        </h1>
+        <h2 className="text-xl text-slate-600">
+          Please fill out the form below leaving no fields blank.
+        </h2>
+      </header>
+
+      <form className="space-y-3 mt-2">
         <div className="flex flex-col gap-1">
-          <label htmlFor="fullname">Full Name</label>
+          <label htmlFor="listing-title">Listing Title</label>
           <input
             type="text"
-            name="fullname"
-            id="fullname"
-            placeholder="Enter your full name"
+            name="listing-title"
+            id="listing-title"
+            placeholder="Create a listing title"
             className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="listing-description">Listing Description</label>
           <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
+            type="listing-description"
+            name="listing-description"
+            id="listing-description"
+            placeholder="Describe your listing"
             className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
           />
         </div>
@@ -64,21 +68,15 @@ const SignUpForm = () => {
             type="submit"
             className="w-1/3 bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
           >
-            Sign Up
+            Publish Listing
           </button>
-          <p className="text-sm text-slate-500">
-            After clicking "Sign Up", you will automatically be logged in.
-          </p>
         </div>
         <p className="flex items-center text-sm text-slate-500">
-          Already have an account?{" "}
-          <span className="text-blue-700 ml-1 hover:underline">
-            <LoginModalForm />
-          </span>
+          ** We will never share your personal information with anyone. **
         </p>
       </form>
     </main>
   );
 };
 
-export default SignUpForm;
+export default ListToolsForm;

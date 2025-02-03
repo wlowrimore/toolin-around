@@ -5,7 +5,10 @@ import { signIn, useSession } from "next-auth/react";
 const GoogleButton = () => {
   const { data: session } = useSession();
   return (
-    <button onClick={() => signIn("google")} className="gsi-material-button">
+    <button
+      onClick={() => signIn("google", { callbackUrl: "/featured-listings" })}
+      className="gsi-material-button"
+    >
       <div className="gsi-material-button-state"></div>
       <div className="gsi-material-button-content-wrapper">
         <div className="gsi-material-button-icon">

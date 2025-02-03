@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 const Header = () => {
   const { data: session } = useSession();
@@ -41,9 +42,14 @@ const Header = () => {
               <UserCircle className="h-5 w-5" />
               <span>Profile</span>
             </button>
-            <button className="bg-white/70 text-slate-700 px-4 py-2 hover:bg-blue-50">
-              List a Tool
-            </button>
+            <Link href="/list-tools">
+              <button
+                type="button"
+                className="bg-white/70 text-slate-700 px-4 py-2 hover:bg-blue-50"
+              >
+                List Tools
+              </button>
+            </Link>
             {session ? (
               <TooltipProvider>
                 <Tooltip delayDuration={0}>
@@ -61,7 +67,7 @@ const Header = () => {
                   <TooltipContent>
                     <button
                       className="hover:text-cyan-500"
-                      onClick={() => signOut()}
+                      onClick={() => signOut({ callbackUrl: "/" })}
                     >
                       Sign Out
                     </button>
