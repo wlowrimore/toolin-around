@@ -48,14 +48,15 @@ const Header = () => {
               <TooltipProvider>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger className="absolute right-[11.5rem] ">
-                    <Image
-                      src={session.user?.image! as string}
-                      alt={session.user?.name! as string}
-                      width={1000}
-                      height={1000}
-                      className="w-14 h-14 rounded-full"
-                      onClick={() => signOut()}
-                    />
+                    <div className="bg-transparent p-1 border-[0.5px] border-zinc-300 rounded-full">
+                      <Image
+                        src={session.user?.image! as string}
+                        alt={session.user?.name! as string}
+                        width={1000}
+                        height={1000}
+                        className="w-12 h-12 rounded-full"
+                      />
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <button
