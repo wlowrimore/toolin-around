@@ -9,6 +9,7 @@ export const condition = {
       { title: "Good", value: "Good" },
       { title: "Fair", value: "Fair" },
       { title: "Poor", value: "Poor" },
+      { title: "Other", value: "Other" },
     ],
   },
   validation: (Rule: any) => Rule.required(),
