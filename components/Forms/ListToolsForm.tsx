@@ -17,8 +17,8 @@ const ListToolsForm = () => {
         </h2>
       </header>
 
-      <form className="grid grid-cols-2 space-y-5 mt-4">
-        <div>
+      <form className="grid grid-cols-2 mt-4 gap-8">
+        <div className="space-y-5">
           <div className="flex flex-col gap-1">
             <label htmlFor="listing-title">Listing Title</label>
             <input
@@ -26,7 +26,7 @@ const ListToolsForm = () => {
               name="listing-title"
               id="listing-title"
               placeholder="Listing Title"
-              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
+              className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -46,9 +46,19 @@ const ListToolsForm = () => {
             <label htmlFor="tool-condition">Tool Condition</label>
             <ToolConditionForm value="" onChange={() => {}} />
           </div>
-        </div>
-        <div>
           <div className="flex flex-col gap-1">
+            <label htmlFor="tool-details">Tool Details</label>
+            <textarea
+              rows={6}
+              name="tool-details"
+              id="tool-details"
+              placeholder="Brief description of your tools and lending terms"
+              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
+            />
+          </div>
+        </div>
+        <div className="space-y-5">
+          <div className="flex flex-col gap-1 pb-[2.3rem]">
             <label htmlFor="rental-price">Rental Fee</label>
             <div className="flex items-center">
               <label htmlFor="rental-price">$</label>
@@ -92,7 +102,7 @@ const ListToolsForm = () => {
               </div>
             </div>
           </div>
-          <div className="w-1/3 cursor-pointer bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white">
+          <div className="w-full  cursor-pointer bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-[3.3rem] text-white">
             <input
               multiple
               accept="image/*"
@@ -103,21 +113,12 @@ const ListToolsForm = () => {
             />
             <label
               htmlFor="listing-image"
-              className="cursor-pointer flex justify-center"
+              className="cursor-pointer text-xl flex justify-center"
             >
               Upload Images
             </label>
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="tool-details">Tool Details</label>
-            <textarea
-              rows={6}
-              name="tool-details"
-              id="tool-details"
-              placeholder="Brief description of your tools and lending terms"
-              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
-            />
-          </div>
+
           <div className="flex flex-col gap-1">
             <label htmlFor="contact-email">Contact Email</label>
             <input
@@ -125,22 +126,22 @@ const ListToolsForm = () => {
               name="contact-email"
               id="contact-email"
               placeholder="Email address for contact"
-              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
+              className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
             />
+            <p className="flex items-center text-sm text-slate-500 border-b border-slate-400 pb-6">
+              ** We will never share your personal information with anyone. **
+            </p>
           </div>
         </div>
-        <div className="w-full gap-6 flex items-center">
-          <button
-            type="submit"
-            className="w-1/3 bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
-          >
-            Publish Listing
-          </button>
-        </div>
-        <p className="flex items-center text-sm text-slate-500">
-          ** We will never share your personal information with anyone. **
-        </p>
       </form>
+      <div className="w-full gap-6 flex items-center mt-6">
+        <button
+          type="submit"
+          className="w-full bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
+        >
+          Publish Listing
+        </button>
+      </div>
     </main>
   );
 };

@@ -1151,6 +1151,10 @@
         {
           "type": "string",
           "value": "Poor"
+        },
+        {
+          "type": "string",
+          "value": "Other"
         }
       ]
     }
