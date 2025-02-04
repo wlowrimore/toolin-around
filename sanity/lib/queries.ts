@@ -15,6 +15,7 @@ export const LISTINGS_QUERY = defineQuery(`
     )
   ] | order(_createdAt desc) {
     _id,
+    _type,
     title,
     slug,
     _createdAt,
@@ -31,6 +32,7 @@ export const LISTINGS_QUERY = defineQuery(`
     price,
     contact,
     toolDetails,
+    deleteToken,
     "ratings": *[_type == "rating" && service._ref == ^._id] {
       _id,
       rating,

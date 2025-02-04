@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { ListingType } from "@/types";
 
 import {
   Card,
@@ -13,7 +14,24 @@ import {
 import Image from "next/image";
 import { Star } from "lucide-react";
 
-const ListingCard = () => {
+interface ListingCardProps {
+  id: string;
+  listing: ListingType;
+  currentUser?: string;
+  createdAt: ListingType["createdAt"];
+  author: ListingType["author"];
+  category: ListingType["category"];
+  condition: ListingType["condition"];
+  contact: ListingType["contact"];
+  image: ListingType["image"];
+  price: ListingType["price"];
+  title: ListingType["title"];
+  description: ListingType["description"];
+  toolDetails: ListingType["toolDetails"];
+  handleClick?: () => void;
+}
+
+const ListingCard: React.FC<ListingCardProps> = ({ listing, currentUser }) => {
   const { data: session } = useSession();
 
   const userHandle = () => {
@@ -22,6 +40,14 @@ const ListingCard = () => {
       return `@${nameTag}`;
     }
   };
+
+  const truncateDesc = (text: string, maxLength = 57) => {
+    if (!text) return "No description provided";
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  const truncatedToolDetails = truncateDesc(listing.toolDetails || "");
 
   return (
     <Card className="border-slate-800 rounded-none">
@@ -36,26 +62,25 @@ const ListingCard = () => {
             read the reviews
           </span>
         </div>
-        <CardTitle>Lender&apos;s Name</CardTitle>
-        <CardDescription>
-          A short description truncated at 50 characters with ...read more
-        </CardDescription>
+        <CardTitle>{listing.title}</CardTitle>
+        <CardDescription>{listing.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="w-full max-h-64 overflow-hidden flex justify-center items-center">
-          <Image
-            src="/logos/toolinAround.png"
-            alt="Tooling Around Logo"
+          <img
+            src={listing.image || ""}
+            alt={listing.title || ""}
             width={1000}
             height={1000}
-            className="w-auto h-auto object-cover"
+            className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
       </CardContent>
-      <CardFooter>
-        <div className="w-full flex justify-between items-center">
+      <CardFooter className="flex flex-col">
+        <div className="w-full flex justify-between items-end">
           {session ? (
-            <div className="flex gap-2 items-center">
+            <div className="flex px-4 gap-2 items-center">
               <Image
                 src={session?.user?.image as string}
                 alt={session?.user?.name as string}
@@ -71,9 +96,9 @@ const ListingCard = () => {
           ) : (
             <p>No user info available</p>
           )}
-          <div className="bg-slate-700 py-1 px-2">
-            <p className="text-xs font-normal text-white">Category</p>
-          </div>
+        </div>
+        <div className="w-full bg-slate-700 py-1 px-2 mt-6">
+          <p className="text-sm font-normal text-white">{listing.category}</p>
         </div>
       </CardFooter>
     </Card>

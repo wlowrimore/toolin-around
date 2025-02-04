@@ -1481,6 +1481,13 @@
         },
         "optional": true
       },
+      "condition": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "price": {
         "type": "objectAttribute",
         "value": {

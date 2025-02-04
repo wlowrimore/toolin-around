@@ -280,9 +280,10 @@ export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: LISTINGS_QUERY
-// Query: *[_type == "listing" && defined(slug.current) &&     (      !defined($search) ||       title match $search ||       category match $search ||       author->name match $search    ) &&     (      !defined($category) ||       category match $category    )  ] | order(_createdAt desc) {    _id,    title,    slug,    _createdAt,    author -> {      _id,      name,      image,      email    },    description,    category,    image,    condition,    price,    contact,    toolDetails,    "ratings": *[_type == "rating" && service._ref == ^._id] {      _id,      rating,      review,      createdAt,      user-> {        _id,        name,        image      }    }  }
+// Query: *[_type == "listing" && defined(slug.current) &&     (      !defined($search) ||       title match $search ||       category match $search ||       author->name match $search    ) &&     (      !defined($category) ||       category match $category    )  ] | order(_createdAt desc) {    _id,    _type,    title,    slug,    _createdAt,    author -> {      _id,      name,      image,      email    },    description,    category,    image,    condition,    price,    contact,    toolDetails,    deleteToken,    "ratings": *[_type == "rating" && service._ref == ^._id] {      _id,      rating,      review,      createdAt,      user-> {        _id,        name,        image      }    }  }
 export type LISTINGS_QUERYResult = Array<{
   _id: string;
+  _type: "listing";
   title: string | null;
   slug: Slug | null;
   _createdAt: string;
@@ -294,6 +295,7 @@ export type LISTINGS_QUERYResult = Array<{
   price: null;
   contact: null;
   toolDetails: null;
+  deleteToken: null;
   ratings: Array<never>;
 }>;
 // Variable: AUTHOR_BY_GOOGLE_ID_QUERY
@@ -304,7 +306,7 @@ export type AUTHOR_BY_GOOGLE_ID_QUERYResult = null;
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  *[_type == \"listing\" && defined(slug.current) && \n    (\n      !defined($search) || \n      title match $search || \n      category match $search || \n      author->name match $search\n    ) && \n    (\n      !defined($category) || \n      category match $category\n    )\n  ] | order(_createdAt desc) {\n    _id,\n    title,\n    slug,\n    _createdAt,\n    author -> {\n      _id,\n      name,\n      image,\n      email\n    },\n    description,\n    category,\n    image,\n    condition,\n    price,\n    contact,\n    toolDetails,\n    \"ratings\": *[_type == \"rating\" && service._ref == ^._id] {\n      _id,\n      rating,\n      review,\n      createdAt,\n      user-> {\n        _id,\n        name,\n        image\n      }\n    }\n  }": LISTINGS_QUERYResult;
+    "\n  *[_type == \"listing\" && defined(slug.current) && \n    (\n      !defined($search) || \n      title match $search || \n      category match $search || \n      author->name match $search\n    ) && \n    (\n      !defined($category) || \n      category match $category\n    )\n  ] | order(_createdAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    _createdAt,\n    author -> {\n      _id,\n      name,\n      image,\n      email\n    },\n    description,\n    category,\n    image,\n    condition,\n    price,\n    contact,\n    toolDetails,\n    deleteToken,\n    \"ratings\": *[_type == \"rating\" && service._ref == ^._id] {\n      _id,\n      rating,\n      review,\n      createdAt,\n      user-> {\n        _id,\n        name,\n        image\n      }\n    }\n  }": LISTINGS_QUERYResult;
     "[_type == \"author\" && email == $email][0]{\n      _id,\n      id,\n      name,\n      email,\n      image,\n      \"roles\": roles[]->{\n      code\n      }\n    }": AUTHOR_BY_GOOGLE_ID_QUERYResult;
   }
 }
