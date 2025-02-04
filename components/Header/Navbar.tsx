@@ -20,15 +20,17 @@ const Header = () => {
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
-          <div className="flex items-center space-x-2">
-            <Image
-              src="/logos/headerLogo.png"
-              alt="Tooling Around Logo"
-              width={1000}
-              height={1000}
-              className="w-64 h-auto"
-            />
-          </div>
+          <Link href="/">
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/logos/headerLogo.png"
+                alt="Tooling Around Logo"
+                width={1000}
+                height={1000}
+                className="w-24 h-auto"
+              />
+            </div>
+          </Link>
 
           {/* Navigation */}
           <div className="flex items-center space-x-8 text-xl">

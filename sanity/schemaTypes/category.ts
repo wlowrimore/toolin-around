@@ -10,7 +10,7 @@ export const category = {
       { title: "Carpentry Tools", value: "Carpentry Tools" },
       { title: "Gardening Tools", value: "Gardening Tools" },
       { title: "Plumbing Tools", value: "Plumbing Tools" },
-      { title: "Measuring Tools", value: "Measuring Tools" },
+      { title: "Automotive Tools", value: "Automotive Tools" },
       { title: "Safety Tools", value: "Safety Tools" },
       { title: "Other Tools", value: "Other Tools" },
     ],

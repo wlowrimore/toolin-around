@@ -43,6 +43,11 @@ export const listing = defineType({
       type: "string",
     }),
     defineField({
+      name: "condition",
+      title: "Condition",
+      type: "string",
+    }),
+    defineField({
       name: "price",
       title: "Price",
       type: "number",
@@ -62,7 +67,7 @@ export const listing = defineType({
       name: "toolDetails",
       title: "Tool Details",
       type: "text",
-      description: "Briefly describe your services and how you can help others",
+      description: "Briefly describe your listing",
       validation: (Rule) => Rule.required().min(20).max(1000),
     }),
     defineField({

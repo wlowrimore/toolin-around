@@ -14,7 +14,10 @@ interface SelectFormProps {
   onChange: (value: string) => void;
 }
 
-export function ToolSelectionForm({ value, onChange }: SelectFormProps) {
+export const ToolSelectionForm: React.FC<SelectFormProps> = ({
+  value,
+  onChange,
+}) => {
   const toolsCategories = [
     "Common Tools",
     "Power Tools",
@@ -22,7 +25,7 @@ export function ToolSelectionForm({ value, onChange }: SelectFormProps) {
     "Carpentry Tools",
     "Gardening Tools",
     "Plumbing Tools",
-    "Measuring Tools",
+    "Automotive Tools",
     "Safety Tools",
     "Other Tools",
   ];
@@ -45,4 +48,4 @@ export function ToolSelectionForm({ value, onChange }: SelectFormProps) {
       </Select>
     </div>
   );
-}
+};

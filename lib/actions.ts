@@ -6,7 +6,7 @@ import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
 import { client } from "@/sanity/lib/client";
 import { revalidatePath } from "next/cache";
-// import { deleteCloudinaryImage } from "@/lib/cloudinary";
+import { deleteCloudinaryImage } from "./cloudinary";
 
 interface Author {
   _id: string;
@@ -16,46 +16,44 @@ interface Author {
   image: string;
 }
 
-export type Service = {
+export type Listing = {
   _id: string;
   _createdAt: string;
   title: string;
   description: string;
   image: string;
-  license: string;
-  licensingState: string;
   category: string;
-  pitch: string;
+  condition: string;
+  toolDetails: string;
   contact: string;
   author: Author;
 };
 
-export type ServiceWithAuthorRef = Omit<Service, "author"> & {
+export type ListingWithAuthorRef = Omit<Listing, "author"> & {
   author: {
     _ref: string;
     email: string;
   };
 };
 
-// New interface for service with expanded author
-interface ServiceWithAuthor extends Omit<ServiceWithAuthorRef, "author"> {
+// New interface for listing with expanded author
+interface ListingWithAuthor extends Omit<ListingWithAuthorRef, "author"> {
   author: Author;
   deleteToken: string;
 }
 
-export type ServiceFormData = {
+export type ListingFormData = {
   title: string;
   description: string;
   category: string;
+  condition: string;
   image: string;
-  license: string;
-  licensingState: string;
   imageDeleteToken?: string;
-  pitch: string;
+  toolDetails: string;
   contact: string;
 };
 
-export const createPitch = async (state: any, form: FormData) => {
+export const createToolDetails = async (state: any, form: FormData) => {
   const session = await auth();
 
   if (!session)
@@ -68,10 +66,9 @@ export const createPitch = async (state: any, form: FormData) => {
     title,
     description,
     category,
+    condition,
     image,
-    license,
-    licensingState,
-    pitch,
+    toolDetails,
     deleteToken,
     contact,
   } = Object.fromEntries(form);
@@ -100,14 +97,13 @@ export const createPitch = async (state: any, form: FormData) => {
       authorId = existingAuthor;
     }
 
-    const service = {
-      _type: "service",
+    const listing = {
+      _type: "listing",
       title,
       description,
       category,
+      condition,
       image: image as string,
-      license: license as string,
-      licensingState: licensingState as string,
       deleteToken: deleteToken as string,
       contact: contact as string,
       slug: {
@@ -118,10 +114,10 @@ export const createPitch = async (state: any, form: FormData) => {
         _type: "reference",
         _ref: authorId,
       },
-      pitch,
+      toolDetails: toolDetails as string,
     };
 
-    const result = await writeClient.create(service);
+    const result = await writeClient.create(listing);
 
     return parseServerActionResponse({
       ...result,
@@ -133,8 +129,176 @@ export const createPitch = async (state: any, form: FormData) => {
 
     return parseServerActionResponse({
       error:
-        error instanceof Error ? error.message : "Failed to create service",
+        error instanceof Error ? error.message : "Failed to create listing",
       status: "ERROR",
     });
   }
 };
+
+// ----------------------------------------------------------------
+//                          MUTATIONS
+// ----------------------------------------------------------------
+
+export async function updateListing(
+  listingId: string,
+  data: Partial<
+    Omit<ListingWithAuthorRef, "author"> & {
+      contact: string;
+      category: string;
+      imageDeleteToken?: string;
+      deleteToken: string;
+    }
+  >,
+  authorEmail: string
+) {
+  try {
+    // Get the existing listing first
+    const existingListing = await client.fetch<ListingWithAuthor | null>(
+      `*[_type == "listing" && _id == $listingId][0]{
+        _id,
+        _type,
+        title,
+        description,
+        category,
+        condition,
+        image,
+        deleteToken,
+        toolDetails,
+        contact,
+        "author": author->{
+          _id,
+          _type,
+          email,
+          name,
+        }
+      }`,
+      { listingId }
+    );
+
+    if (!existingListing) {
+      throw new Error(`Service with ID ${listingId} not found`);
+    }
+
+    // Check if the service's author email matches the provided email
+    if (existingListing.author.email !== authorEmail) {
+      throw new Error(
+        "Unauthorized: You don't have permission to edit this listing"
+      );
+    }
+
+    let updatedImageUrl = existingListing.image;
+    if (data.image && data.image !== existingListing.image) {
+      if (existingListing.image) {
+        try {
+          const publicId = extractPublicIdFromUrl(existingListing.image);
+          if (publicId) {
+            await deleteCloudinaryImage(publicId);
+            console.log("Old image deleted from Cloudinary");
+          }
+        } catch (deleteError) {
+          console.error(
+            "Error deleting old image from Cloudinary:",
+            deleteError
+          );
+        }
+      }
+
+      updatedImageUrl = data.image;
+    }
+
+    // Use the existing author reference for the update
+    const updatedData: Partial<ListingWithAuthorRef> & { deleteToken: string } =
+      {
+        title: data.title,
+        description: data.description ?? existingListing.description,
+        category: data.category ?? existingListing.category,
+        image: updatedImageUrl,
+        deleteToken: data.deleteToken ?? existingListing.deleteToken,
+        toolDetails: data.toolDetails ?? existingListing.toolDetails,
+        contact: data.contact ?? existingListing.contact,
+      };
+
+    const result = await writeClient.patch(listingId).set(updatedData).commit();
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+
+export async function deleteListing(listingId: string) {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new Error("Authorization required");
+    }
+
+    // Fetch and delete all ratings associated with the listing
+    const ratingIds = await client.fetch(
+      `
+      *[_type == "rating" && listing._ref == $listingId]._id
+    `,
+      { listingId }
+    );
+
+    for (const ratingId of ratingIds) {
+      await client.delete(ratingId);
+    }
+
+    const listing = await client.fetch(
+      `
+      *[_type == "listing" && _id == $listingId][0]{
+        _id,
+        image,
+        license,
+        licensingState,
+        deleteToken,
+        author->{
+          _id,
+          email
+        }
+      }
+    `,
+      { listingId }
+    );
+
+    if (!listing) {
+      throw new Error("Listing not found");
+    }
+
+    if (!listing.author) {
+      throw new Error("Listing author information not found");
+    }
+
+    if (listing.author.email !== session.user.email) {
+      throw new Error(
+        "Unauthorized: You don't have permission to delete this listing"
+      );
+    }
+
+    // Delete the image from Cloudinary if deleteToken exists
+    if (listing.deleteToken) {
+      try {
+        await deleteCloudinaryImage(listing.deleteToken);
+        console.log("Cloudinary image deleted successfully");
+      } catch (cloudinaryError) {
+        console.error("Failed to delete Cloudinary image:", cloudinaryError);
+      }
+    }
+
+    // Delete the service from Sanity
+    await client.delete(listingId);
+
+    revalidatePath("/");
+
+    return {
+      status: "SUCCESS",
+      message: "Listing deleted successfully",
+    };
+  } catch (error) {
+    return {
+      status: "ERROR",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

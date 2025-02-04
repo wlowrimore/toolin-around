@@ -25,8 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable}`}>
-        <AppSessionProvider>{children}</AppSessionProvider>
-        <Toaster />
+        <AppSessionProvider>
+          {children}
+          <Toaster />
+        </AppSessionProvider>
       </body>
     </html>
   );
