@@ -3,6 +3,7 @@ import { author } from "./author";
 import { category } from "./category";
 import { condition } from "./condition";
 import { listing } from "./listing";
+import { playlist } from "./playlist";
 import { rating } from "./rating";
 import { ratingKey } from "./ratingKey";
 import { role } from "./role";
@@ -14,6 +15,7 @@ export const schema = {
     category,
     condition,
     listing,
+    playlist,
     rating,
     ratingKey,
     role,

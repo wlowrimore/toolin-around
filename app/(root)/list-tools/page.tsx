@@ -4,7 +4,7 @@ import React from "react";
 const ListTools = () => {
   return (
     <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
-      <ListToolsForm />
+      <ListToolsForm authorEmail="example@example.com" />
     </main>
   );
 };

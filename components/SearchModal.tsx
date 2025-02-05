@@ -21,7 +21,11 @@ export function SearchModal({ query }: { query: string }) {
           Find Tools
         </button>
       </DialogTrigger>
-      <form action="/search" method="get">
+      <form
+        id="search-form"
+        action="/all-listings"
+        className="flex items-center gap-2.5 w-3/4 justify-center"
+      >
         <DialogContent className="sm:max-w-[425px] bg-white bg-[url('/logos/modalLogo.png')] bg-no-repeat bg-center bg-contain">
           <DialogHeader>
             <DialogTitle>Find Tools</DialogTitle>

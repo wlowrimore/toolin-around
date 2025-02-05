@@ -1,7 +1,8 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { ListingType } from "@/types";
+import { ListingType, ListingCardProps } from "@/types";
+import { formatDate } from "@/lib/utils";
 
 import {
   Card,
@@ -14,24 +15,11 @@ import {
 import Image from "next/image";
 import { Star } from "lucide-react";
 
-interface ListingCardProps {
-  id: string;
-  listing: ListingType;
-  currentUser?: string;
-  createdAt: ListingType["createdAt"];
-  author: ListingType["author"];
-  category: ListingType["category"];
-  condition: ListingType["condition"];
-  contact: ListingType["contact"];
-  image: ListingType["image"];
-  price: ListingType["price"];
-  title: ListingType["title"];
-  description: ListingType["description"];
-  toolDetails: ListingType["toolDetails"];
-  handleClick?: () => void;
-}
-
-const ListingCard: React.FC<ListingCardProps> = ({ listing, currentUser }) => {
+const ListingCard: React.FC<ListingCardProps> = ({
+  listing,
+  currentUser,
+  createdAt,
+}) => {
   const { data: session } = useSession();
 
   const userHandle = () => {
@@ -41,13 +29,13 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, currentUser }) => {
     }
   };
 
-  const truncateDesc = (text: string, maxLength = 57) => {
+  const truncateDesc = (text: string, maxLength = 25) => {
     if (!text) return "No description provided";
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "...";
   };
 
-  const truncatedToolDetails = truncateDesc(listing.toolDetails || "");
+  const truncatedDescription = truncateDesc(listing?.description || "");
 
   return (
     <Card className="border-slate-800 rounded-none">
@@ -62,28 +50,31 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, currentUser }) => {
             read the reviews
           </span>
         </div>
-        <CardTitle>{listing.title}</CardTitle>
-        <CardDescription>{listing.description}</CardDescription>
+        <CardTitle>{listing?.title}</CardTitle>
+        <CardDescription>{truncatedDescription}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="w-full max-h-64 overflow-hidden flex justify-center items-center">
+        <div className="w-full max-h-64 overflow-hidden flex justify-center items-center bg-slate-700">
           <img
-            src={listing.image || ""}
-            alt={listing.title || ""}
+            src={listing?.image || ""}
+            alt={listing?.title || ""}
             width={1000}
             height={1000}
             className="w-full h-full object-cover"
             loading="lazy"
           />
         </div>
+        <p className="text-slate-900 tracking-wide text-[0.65rem]">
+          Listed {formatDate(createdAt)}
+        </p>
       </CardContent>
       <CardFooter className="flex flex-col">
         <div className="w-full flex justify-between items-end">
           {session ? (
             <div className="flex px-4 gap-2 items-center">
-              <Image
-                src={session?.user?.image as string}
-                alt={session?.user?.name as string}
+              <img
+                src={session?.user?.image || ""}
+                alt={session?.user?.name || ""}
                 width={1000}
                 height={1000}
                 className="w-10 h-10 rounded-full object-cover"
@@ -98,7 +89,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, currentUser }) => {
           )}
         </div>
         <div className="w-full bg-slate-700 py-1 px-2 mt-6">
-          <p className="text-sm font-normal text-white">{listing.category}</p>
+          <p className="text-sm font-normal text-white">{listing?.category}</p>
         </div>
       </CardFooter>
     </Card>

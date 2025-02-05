@@ -5,6 +5,7 @@ import { ListingType } from "@/types";
 import { LISTINGS_QUERY } from "@/sanity/lib/queries";
 import { SearchModal } from "@/components/SearchModal";
 import ListingCard from "@/components/ListingCard";
+import PageHeaderSearchForm from "@/components/PageHeaderSearchForm";
 
 export default async function AllListingsPage({
   searchParams,
@@ -26,15 +27,18 @@ export default async function AllListingsPage({
     ? `Listings in ${category}`
     : query
       ? `Search results for ${query}`
-      : "All Listings";
+      : `No listings found for ${query}`;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
-        <h1 className="text-4xl font-bold">All Listings</h1>
-        <SearchModal query={query ?? ""} />
-        <h2 className="text-2xl font-bold">{displayText}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
+        <header className="flex items-center w-full border-b-[0.025rem] border-slate-300 py-2">
+          <h1 className="text-slate-600 text-3xl font-semibold">
+            All Listings
+          </h1>
+          <PageHeaderSearchForm query={query ?? ""} />
+        </header>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
           {listings?.map((listing: any) => (
             <ListingCard
               key={listing._id}

@@ -18,7 +18,7 @@ const LoginModalForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-1">Login</button>
+        <button className="flex items-center gap-1">login</button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
