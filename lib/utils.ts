@@ -2,6 +2,7 @@ import { auth } from "../auth";
 import { client } from "@/sanity/lib/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Listing } from "../types";
 
 // GET LISTING RATINGS INTERFACE
 
@@ -114,6 +115,61 @@ export function formatDate(date: string) {
     day: "numeric",
     year: "numeric",
   });
+}
+
+interface WeekCycle {
+  start: Date;
+  end: Date;
+  formattedRange: string;
+}
+
+export function generateWeekCycles(numberOfWeeks: number): WeekCycle[] {
+  const cycles: WeekCycle[] = [];
+  const today = new Date();
+
+  for (let i = 0; i < numberOfWeeks; i++) {
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - today.getDay() + i * 7); // Move to Monday
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6); // Move to Sunday
+
+    const formattedRange = `${weekStart.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })} - ${weekEnd.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })}`;
+
+    cycles.push({ start: weekStart, end: weekEnd, formattedRange });
+  }
+
+  return cycles;
+}
+
+export function getTopListingsForWeek(
+  listings: Listing[],
+  weekStart: Date,
+  weekEnd: Date
+): Listing[] {
+  return listings
+    .filter((listing) => {
+      const listingDate = new Date(listing._createdAt);
+      return listingDate >= weekStart && listingDate <= weekEnd;
+    })
+    .sort((a, b) => {
+      const aRating =
+        a.ratings.reduce((acc, r) => acc + r.rating, 0) / a.ratings.length || 0;
+      const bRating =
+        b.ratings.reduce((acc, r) => acc + r.rating, 0) / b.ratings.length || 0;
+      return bRating - aRating;
+    })
+    .slice(0, 3);
 }
 
 export function parseServerActionResponse<T>(response: T) {

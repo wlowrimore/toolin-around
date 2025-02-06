@@ -1,15 +1,11 @@
-import Feature from "@/components/MainPageComponents/Feature";
 import { auth } from "@/auth";
-import { client } from "@/sanity/lib/client";
-import {
-  LISTING_BY_ID_QUERY,
-  PLAYLIST_BY_SLUG_QUERY,
-} from "@/sanity/lib/queries";
-import { Author, SanityFetchResponse, ListingCardProps } from "@/types";
+import { PLAYLIST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
+import { ListingCardProps } from "@/types";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { sanityFetch } from "@/sanity/lib/live";
 import ListingCard from "@/components/ListingCard";
+import { getTopListingsForWeek, generateWeekCycles } from "@/lib/utils";
 
 interface Listing {
   _id: string;
@@ -77,27 +73,42 @@ const FeaturePage: React.FC<ListingCardProps> = async ({
 
   const listings = response.data?.select;
 
+  const weekCycles = generateWeekCycles(4);
+  const topListingsPerWeek = weekCycles.map((cycle) => ({
+    ...cycle,
+    listings: getTopListingsForWeek(listings, cycle.start, cycle.end),
+  }));
+
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="absolute z-60 top-[30%] left-[30%] flex items-center justify-center text-xl text-cyan-700 animate-pulse">
+          Loading...
+        </div>
+      }
+    >
       <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
         <div className="w-full mt-10 px-6">
           <header className="w-full border-b-[0.025rem] border-slate-300 py-2">
             <h1 className="text-slate-600 text-3xl font-semibold">
               Featured Listings
             </h1>
-            <h2 className="text-xl text-slate-600">
-              Here are the top 3 rated listings for the week of 01/03/2025 -
-              01/09/2025
+            <h2 className="text-lg text-slate-600">
+              Here are the top 3 rated listings for the week of{" "}
+              <span className="font-bold text-cyan-600">
+                {topListingsPerWeek[0].start.toLocaleDateString()} -{" "}
+                {topListingsPerWeek[0].end.toLocaleDateString()}
+              </span>
             </h2>
           </header>
 
-          <div className="grid grid-cols-3 gap-4 text-xl font-bold items-center py-6">
+          <div className="grid grid-cols-3 gap-4 text-xl items-center py-6">
             {listings.length > 0 &&
               listings.map((listing: any) => (
                 <ListingCard
                   key={listing?._id}
                   listing={listing}
-                  createdAt={listing?.createdAt}
+                  createdAt={listing?._createdAt}
                   id={listing?._id}
                   title={listing?.title}
                   image={listing?.image}

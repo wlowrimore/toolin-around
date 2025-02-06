@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { Search, UserCircle, MessageCircle } from "lucide-react";
+import { Search, UserCircle, MessageCircle, Gem } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -41,7 +41,7 @@ const Header = () => {
 
           {/* Navigation */}
           {session ? (
-            <div className="flex items-center space-x-8 text-xl">
+            <div className="flex items-center space-x-8 text-lg">
               <Link href="/all-listings">
                 <button
                   type="button"
@@ -49,6 +49,15 @@ const Header = () => {
                 >
                   <Search className="h-5 w-5" />
                   <span>Find Tools</span>
+                </button>
+              </Link>
+              <Link href="/featured-listings">
+                <button
+                  type="button"
+                  className="flex items-center space-x-1 hover:text-blue-200"
+                >
+                  <Gem className="h-5 w-5" />
+                  <span>Featured Listings</span>
                 </button>
               </Link>
               <button className="flex items-center hover:text-blue-200">
@@ -85,9 +94,7 @@ const Header = () => {
                     <TooltipContent>
                       <button
                         className="hover:text-cyan-500"
-                        onClick={() =>
-                          signOut({ callbackUrl: "/featured-listings" })
-                        }
+                        onClick={() => signOut({ callbackUrl: "/" })}
                       >
                         Sign Out
                       </button>
