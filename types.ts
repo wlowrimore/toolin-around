@@ -2,17 +2,25 @@ export interface ListingType {
   _id: string;
   _type: "listing";
   title: string | null;
-  slug: Slug | null;
+  slug: {
+    current: string;
+    _type: "slug";
+  };
   createdAt: string;
   description: string | null;
-  category: null;
-  condition: null;
-  image: null;
-  deleteToken: null;
-  toolDetails: null;
-  price: null;
-  contact: null;
-  author: null;
+  category: string | null;
+  condition: string | null;
+  image: string | null;
+  deleteToken: string | null;
+  toolDetails: string | null;
+  price: string | null;
+  contact: string | null;
+  author: {
+    _id: string;
+    name: string;
+    image: string;
+    email: string;
+  } | null;
 }
 
 export interface ListingCardProps {

@@ -6,6 +6,7 @@ import React, { Suspense } from "react";
 import { sanityFetch } from "@/sanity/lib/live";
 import ListingCard from "@/components/ListingCard";
 import { getTopListingsForWeek, generateWeekCycles } from "@/lib/utils";
+import Link from "next/link";
 
 interface Listing {
   _id: string;
@@ -55,7 +56,9 @@ const FeaturePage: React.FC<ListingCardProps> = async ({
   }
 
   const query = PLAYLIST_BY_SLUG_QUERY;
+
   const params = { slug: "featured-listings" };
+  console.log("PARAMS IN FEATURED LISTINGS:", params);
   const response = await sanityFetch<any>({
     query,
     params,
@@ -72,6 +75,7 @@ const FeaturePage: React.FC<ListingCardProps> = async ({
   }
 
   const listings = response.data?.select;
+  console.log("LISTINGS IN FEATURED LISTINGS:", listings);
 
   const weekCycles = generateWeekCycles(4);
   const topListingsPerWeek = weekCycles.map((cycle) => ({

@@ -107,21 +107,25 @@ export const PLAYLIST_BY_SLUG_QUERY = defineQuery(`
         }
       }`);
 
-export const LISTING_BY_ID_QUERY =
-  defineQuery(`*[_type == "listing" && _id == $id][0]{
-      _id,
-      title,
-      slug,
-      _createdAt,
-      author->{
+export const LISTING_BY_ID_QUERY = `*[_type == "listing" && _id == $id][0]{
         _id,
-        name,
+        title,
+        "slug": {
+          "current": slug.current,
+          _type: "slug"
+        },
+        _createdAt,
+        description,
+        price,
         image,
-        email
-      },
-      description,
-      category,
-      image,
-      toolDetails,
-      contact
-    }`);
+        category,
+        condition,
+        contact,
+        author->{
+          _id,
+          name,
+          image,
+          email
+        },
+        toolDetails
+      }[0]`;
