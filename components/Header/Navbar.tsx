@@ -4,21 +4,34 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { Search, UserCircle, MessageCircle, Gem } from "lucide-react";
+import { Search, UserCircle, MessageCircle, Gem, X, Eye } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import LoginModalForm from "../Auth/LoginModalForm";
+import { SearchModal } from "../SearchModal";
 
-const Header = () => {
+const Header = ({ query }: { query: string }) => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleSignIn = () => {
+  const handleSearchClick = () => {
     setIsOpen(true);
   };
 
@@ -42,7 +55,7 @@ const Header = () => {
           {/* Navigation */}
           {session ? (
             <div className="flex items-center space-x-8 text-lg">
-              <Link href="/all-listings">
+              {/* <Link href="/all-listings">
                 <button
                   type="button"
                   className="flex items-center space-x-1 hover:text-blue-200"
@@ -50,8 +63,60 @@ const Header = () => {
                   <Search className="h-5 w-5" />
                   <span>Find Tools</span>
                 </button>
+              </Link> */}
+              {/* <Dialog>
+                <DialogTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center space-x-1 hover:text-blue-200 w-fit"
+                  >
+                    <span className="flex items-center gap-[0.125rem]">
+                      <Search className="h-5 w-5" />
+                      Find Tools
+                    </span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Find Tools</DialogTitle>
+                    <DialogDescription>
+                      Use keywords to find tools.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form
+                    id="search-form"
+                    action="/all-listings"
+                    className="flex items-center gap-2.5 w-3/4 justify-center"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="grid flex-1 gap-2">
+                        <Input
+                          name="query"
+                          defaultValue={query}
+                          placeholder="Use keywords to find tools"
+                        />
+                      </div>
+                      <button type="submit" className="">
+                        <span className="">
+                          <Search className="h-9 w-9 p-1 border-2 border-slate-400 hover:bg-slate-200" />
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                  
+                </DialogContent>
+              </Dialog> */}
+              <Link href="/all-listings">
+                <button
+                  type="button"
+                  className="flex items-center space-x-1 hover:text-blue-200"
+                >
+                  <Eye className="h-5 w-5" />
+                  <span>View All Listings</span>
+                </button>
               </Link>
-              <Link href="/featured-listings">
+              <SearchModal query={query} />
+              <Link href="/filtered-listings">
                 <button
                   type="button"
                   className="flex items-center space-x-1 hover:text-blue-200"

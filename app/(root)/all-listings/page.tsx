@@ -23,12 +23,6 @@ export default async function AllListingsPage({
     params,
   });
 
-  const displayText = category
-    ? `Listings in ${category}`
-    : query
-      ? `Search results for ${query}`
-      : `No listings found for ${query}`;
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
@@ -36,7 +30,6 @@ export default async function AllListingsPage({
           <h1 className="text-slate-600 text-3xl font-semibold">
             All Listings
           </h1>
-          <PageHeaderSearchForm query={query ?? ""} />
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
           {listings?.map((listing: any) => (

@@ -11,7 +11,11 @@ import { ToolSelectionForm } from "./ToolSelectionForm";
 import { Checkbox } from "../ui/checkbox";
 import { ToolConditionForm } from "./ToolConditionForm";
 import { BookOpenCheck, CloudUpload } from "lucide-react";
-import { createToolDetails, updateListing } from "@/lib/actions";
+import {
+  createToolDetails,
+  ListingWithAuthorRef,
+  updateListing,
+} from "@/lib/actions";
 import {
   RatePeriodSelector,
   RatePeriod,
@@ -95,7 +99,7 @@ const ListToolsForm = (
         description: initialData.description || "",
         category: initialData.category || "",
         condition: initialData.condition || "",
-        price: initialData.price || "",
+        price: initialData.price ?? "",
         image: initialData.image || "",
         imageDeleteToken: "",
         toolDetails: initialData.toolDetails || "",
@@ -197,6 +201,7 @@ const ListToolsForm = (
   };
 
   const handleFormSubmit = async (prevState: any, formDataSubmit: FormData) => {
+    // Figure out why the price isn't saving to Sanity.
     try {
       if (!validateEmail(formData.contact)) {
         setErrors((prev) => ({
@@ -229,10 +234,20 @@ const ListToolsForm = (
             image: formData.image,
             contact: formDataSubmit.get("contact") as string,
             toolDetails: formDataSubmit.get("toolDetails") as string,
-          },
+            price: formDataSubmit.get("price") as string,
+          } as Partial<
+            Omit<ListingWithAuthorRef, "author"> & {
+              contact: string;
+              category: string;
+              condition: string;
+              image: string;
+              toolDetails: string;
+              price: string;
+            }
+          >,
           initialData.author.email
         );
-
+        console.log("FORM DATA PRICE:", formData.price);
         if (result) {
           handleSuccessfulSubmission();
           toast({
@@ -428,23 +443,6 @@ const ListToolsForm = (
               currentImageUrl={formData.image}
               className=" bg-cyan-600 border border-black !max-w-fit hover:bg-black text-white font-semibold py-2 px-11 rounded-full transition:hover duration-300"
             />
-            {/* {formData.image && (
-              <div className="mt-2">
-                {showSuccess !== void 0 && (
-                  <p className="text-sm text-green-600 mt-2">
-                    Image uploaded successfully!
-                  </p>
-                )}
-                <img
-                  src={formData.image}
-                  alt="Uploaded preview"
-                  className="mt-2 md:max-w-xs rounded-xl shadow-md shadow-neutral-700 border border-neutral-400"
-                />
-              </div>
-            )}
-            {errors.image && (
-              <p className="text-red-600 text-small">{errors.image}</p>
-            )} */}
           </div>
 
           <div className="flex flex-col gap-1 pt-[0.05rem]">

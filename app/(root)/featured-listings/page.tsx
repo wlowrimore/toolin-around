@@ -64,7 +64,7 @@ const FeaturePage: React.FC<ListingCardProps> = async ({
     params,
   });
 
-  if (!response) {
+  if (!response || !listing) {
     return (
       <div className="w-full p-4 h-[96vh] flex items-center justify-center">
         <h1 className="text-2xl font-normal text-slate-800 tracking-wide">

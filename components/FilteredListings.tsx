@@ -3,36 +3,36 @@
 import { Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ListingCardProps } from "@/types";
 import { formatDate } from "@/lib/utils";
+import { Star } from "lucide-react";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
-import Image from "next/image";
-import { Star } from "lucide-react";
-import Link from "next/link";
+import { Listing } from "@/types";
+import { list } from "postcss";
 
-const ListingCard: React.FC<ListingCardProps> = ({
-  listing,
-  createdAt,
-  id: _id,
-  title,
-  description,
-  image,
-  category,
-  author,
-}) => {
-  const { data: session } = useSession();
+interface ListingsGridProps {
+  listings: Listing[];
+  query: string;
+}
+
+export default function FilteredListings({
+  listings,
+  query,
+}: ListingsGridProps) {
   const router = useRouter();
+  const { data: session } = useSession();
+
+  const listing = listings[0];
 
   const handleListingClick = () => {
-    router.push(`/listing/${_id}`);
+    router.push(`/listing/${listing?._id}`);
   };
 
   const userHandle = () => {
@@ -50,10 +50,18 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
   const truncatedDescription = truncateDesc(listing?.description || "");
 
+  if (listings.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">No listings found matching "{query}"</p>
+      </div>
+    );
+  }
+
   return (
     <Card
       onClick={handleListingClick}
-      className="border-cyan-800 hover:shadow-md hover:shadow-cyan-900 rounded-none hover:bg-slate-300/30 cursor-pointer"
+      className="border-slate-800 rounded-none hover:bg-blue-300/10 cursor-pointer"
     >
       <CardHeader>
         <div className="w-full h-auto flex items-center pb-2">
@@ -70,14 +78,14 @@ const ListingCard: React.FC<ListingCardProps> = ({
             read the reviews
           </span>
         </div>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>{listing?.title}</CardTitle>
         <CardDescription>{truncatedDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="w-full max-h-64 overflow-hidden flex justify-center items-center bg-slate-700">
           <img
-            src={image || ""}
-            alt={title || ""}
+            src={listing?.image || ""}
+            alt={listing?.title || ""}
             width={1000}
             height={1000}
             className="w-full h-full object-cover"
@@ -85,7 +93,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           />
         </div>
         <p className="text-slate-800 tracking-wide text-[0.65rem]">
-          Listed {formatDate(createdAt)}
+          Listed {formatDate(listing?._createdAt)}
         </p>
       </CardContent>
       <Suspense fallback={<div>Loading...</div>}>
@@ -112,12 +120,31 @@ const ListingCard: React.FC<ListingCardProps> = ({
             )}
           </div>
           <div className="w-full bg-slate-700 py-1 px-2 mt-6">
-            <p className="text-sm font-normal text-white">{category}</p>
+            <p className="text-sm font-normal text-white">
+              {listing?.category}
+            </p>
           </div>
         </CardFooter>
       </Suspense>
     </Card>
   );
-};
 
-export default ListingCard;
+  //   return (
+  //     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  //       {listings.map((listing, filteredIndex) => (
+  //         <Card
+  //           key={filteredIndex}
+  //           className="border-slate-800 rounded-none hover:bg-blue-300/10 cursor-pointer"
+  //         >
+  //           <CardHeader>
+  //             <CardTitle>{listing.title}</CardTitle>
+  //             <CardDescription>ID: {listing.description}</CardDescription>
+  //           </CardHeader>
+  //           <CardContent>
+  //             <p className="text-gray-600">{listing.description}</p>
+  //           </CardContent>
+  //         </Card>
+  //       ))}
+  //     </div>
+  //   );
+}

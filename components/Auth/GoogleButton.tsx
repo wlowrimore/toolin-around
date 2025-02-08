@@ -6,7 +6,7 @@ const GoogleButton = () => {
   const { data: session } = useSession();
   return (
     <button
-      onClick={() => signIn("google", { callbackUrl: "/featured-listings" })}
+      onClick={() => signIn("google", { callbackUrl: "/all-listings" })}
       className="gsi-material-button"
     >
       <div className="gsi-material-button-state"></div>

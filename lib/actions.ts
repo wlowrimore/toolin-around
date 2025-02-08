@@ -69,6 +69,7 @@ export const createToolDetails = async (state: any, form: FormData) => {
     condition,
     image,
     toolDetails,
+    price,
     deleteToken,
     contact,
   } = Object.fromEntries(form);
@@ -115,6 +116,7 @@ export const createToolDetails = async (state: any, form: FormData) => {
         _ref: authorId,
       },
       toolDetails: toolDetails as string,
+      price: price as string,
     };
 
     const result = await writeClient.create(listing);
@@ -164,6 +166,7 @@ export async function updateListing(
         image,
         deleteToken,
         toolDetails,
+        price,
         contact,
         "author": author->{
           _id,
@@ -215,6 +218,7 @@ export async function updateListing(
         image: updatedImageUrl,
         deleteToken: data.deleteToken ?? existingListing.deleteToken,
         toolDetails: data.toolDetails ?? existingListing.toolDetails,
+        condition: data.condition ?? existingListing.condition,
         contact: data.contact ?? existingListing.contact,
       };
 

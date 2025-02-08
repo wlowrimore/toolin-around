@@ -16,46 +16,40 @@ export function SearchModal({ query }: { query: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-1 hover:text-blue-200">
-          <Search className="h-5 w-5" />
-          Find Tools
+        <button
+          type="button"
+          className="flex items-center space-x-1 hover:text-blue-200 w-fit"
+        >
+          <span className="flex items-center gap-[0.125rem]">
+            <Search className="h-5 w-5" />
+            Find Tools
+          </span>
         </button>
       </DialogTrigger>
-      <form
-        id="search-form"
-        action="/all-listings"
-        className="flex items-center gap-2.5 w-3/4 justify-center"
-      >
-        <DialogContent className="sm:max-w-[425px] bg-white bg-[url('/logos/modalLogo.png')] bg-no-repeat bg-center bg-contain">
-          <DialogHeader>
-            <DialogTitle>Find Tools</DialogTitle>
-            <DialogDescription>
-              Search for tools by tool type, tool name, or tool purpose.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex items-center gap-2">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Find Tools</DialogTitle>
+          <DialogDescription>Use keywords to find tools.</DialogDescription>
+        </DialogHeader>
+        <form id="search-form" action="/filtered-listings" className="w-full">
+          <div className="flex items-center gap-2">
+            <div className="w-full">
               <Input
-                id="query"
                 name="query"
                 defaultValue={query}
-                placeholder="Search for tools"
-                className="col-span-3 bg-white/90"
+                placeholder="Use keywords to find tools"
+                className="w-full"
+                autoFocus
               />
             </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="submit"
-              title="Search"
-              aria-label="Search"
-              className="text-white px-4 py-2 border border-cyan-700/90 bg-cyan-600 hover:bg-cyan-700"
-            >
-              Search
+            <button type="submit" className="">
+              <span className="">
+                <Search className="h-9 w-9 p-1 border-2 border-slate-400 hover:bg-slate-200" />
+              </span>
             </button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </div>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
