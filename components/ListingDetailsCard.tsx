@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 import Link from "next/link";
 
 const ListingDetailsCard: React.FC<ListingCardProps> = ({
@@ -42,13 +42,13 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
   return (
     <Card className="border-slate-800 rounded-none hover:bg-blue-300/10">
       <CardHeader>
-        <div className="w-full h-auto flex items-center pb-2">
+        <div className="w-fit h-auto flex items-center pb-2">
           <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
           <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
           <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
           <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
           <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-          <span className="w-full ml-2 text-end text-xs text-slate-400">
+          <span className="w-fit ml-4 text-xs text-white px-2 py-1 bg-rose-400">
             read the reviews
           </span>
         </div>
@@ -62,9 +62,26 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
             alt={listing?.title || ""}
             width={1000}
             height={1000}
-            className="w-full h-full object-cover"
+            className="w-[24rem] h-[24rem] object-cover"
             loading="lazy"
           />
+
+          <article className="p-20 text-white">
+            <div className="flex">
+              <div className="w-[95%]">
+                <Quote
+                  style={{ transform: "scaleX(-1)" }}
+                  className="fill-white/60 stroke-none"
+                />
+                <div className="mx-12">
+                  <span className="">{listing?.toolDetails}</span>
+                </div>
+                <div className="flex w-full justify-end">
+                  <Quote className="fill-white/60 stroke-none" />
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
         <p className="text-slate-800 tracking-wide text-[0.65rem]">
           Listed {formatDate(createdAt)}
@@ -78,8 +95,8 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
                 <img
                   src={session?.user?.image || ""}
                   alt={session?.user?.name || ""}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">

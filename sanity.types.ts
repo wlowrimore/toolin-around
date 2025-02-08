@@ -305,6 +305,24 @@ export type AUTHOR_BY_GOOGLE_ID_QUERYResult = null;
 // Query: *[_type == "playlist" && slug.current == $slug][0]{        _id,        title,        slug,        description,        category,        image,        toolDescription,        "ratings": *[_type == "rating" && listing._ref == ^._id] {          _id,          rating,          review,          createdAt,          user-> {            _id,            name,            image          }        },        "select": select[]->{          _id,          _createdAt,          title,          slug,          description,          category,          image,          "ratings": *[_type == "rating" && listing._ref == ^._id] {          _id,          rating,          review,          createdAt,          user-> {            _id,            name,            image          }        },          author-> {            _id,            name,            slug,            image,            email          }        }      }
 export type PLAYLIST_BY_SLUG_QUERYResult = null;
 
+// Source: ./app/(root)/filtered-listings/page.tsx
+// Variable: listingsQuery
+// Query: *[_type == "listing" && (    title match $query + "*" ||    description match $query + "*" ||    tags[]->name match $query + "*"  )] {    _id,    _createdAt,    title,    description,    slug,    image,    category,    condition,    price,    contact,    toolDetails,    author,    "slug": slug.current,  }
+export type ListingsQueryResult = Array<{
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  description: string | null;
+  slug: string | null;
+  image: null;
+  category: null;
+  condition: null;
+  price: null;
+  contact: null;
+  toolDetails: null;
+  author: null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -312,5 +330,6 @@ declare module "@sanity/client" {
     "\n  *[_type == \"listing\" && defined(slug.current) && \n    (\n      !defined($search) || \n      title match $search || \n      category match $search || \n      author->name match $search\n    ) && \n    (\n      !defined($category) || \n      category match $category\n    )\n  ] | order(_createdAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    _createdAt,\n    author -> {\n      _id,\n      name,\n      image,\n      email\n    },\n    description,\n    category,\n    image,\n    condition,\n    price,\n    contact,\n    toolDetails,\n    deleteToken,\n    \"ratings\": *[_type == \"rating\" && service._ref == ^._id] {\n      _id,\n      rating,\n      review,\n      createdAt,\n      user-> {\n        _id,\n        name,\n        image\n      }\n    }\n  }": LISTINGS_QUERYResult;
     "[_type == \"author\" && email == $email][0]{\n      _id,\n      id,\n      name,\n      email,\n      image,\n      \"roles\": roles[]->{\n      code\n      }\n    }": AUTHOR_BY_GOOGLE_ID_QUERYResult;
     "\n      *[_type == \"playlist\" && slug.current == $slug][0]{\n        _id,\n        title,\n        slug,\n        description,\n        category,\n        image,\n        toolDescription,\n        \"ratings\": *[_type == \"rating\" && listing._ref == ^._id] {\n          _id,\n          rating,\n          review,\n          createdAt,\n          user-> {\n            _id,\n            name,\n            image\n          }\n        },\n        \"select\": select[]->{\n          _id,\n          _createdAt,\n          title,\n          slug,\n          description,\n          category,\n          image,\n          \"ratings\": *[_type == \"rating\" && listing._ref == ^._id] {\n          _id,\n          rating,\n          review,\n          createdAt,\n          user-> {\n            _id,\n            name,\n            image\n          }\n        },\n          author-> {\n            _id,\n            name,\n            slug,\n            image,\n            email\n          }\n        }\n      }": PLAYLIST_BY_SLUG_QUERYResult;
+    "\n  *[_type == \"listing\" && (\n    title match $query + \"*\" ||\n    description match $query + \"*\" ||\n    tags[]->name match $query + \"*\"\n  )] {\n    _id,\n    _createdAt,\n    title,\n    description,\n    slug,\n    image,\n    category,\n    condition,\n    price,\n    contact,\n    toolDetails,\n    author,\n    \"slug\": slug.current,\n  }\n": ListingsQueryResult;
   }
 }
