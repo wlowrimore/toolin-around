@@ -36,6 +36,7 @@ export type Listing = {
   title: string;
   description: string;
   price: string;
+  ratePeriod: string;
   image: string;
   category: string;
   condition: string;
@@ -61,6 +62,7 @@ interface ListingFormProps {
     condition: string;
     toolDetails: string;
     price: string;
+    ratePeriod: string;
     image: string;
     contact: string;
     role: string;
@@ -75,6 +77,7 @@ interface ListingFormData {
   condition: string;
   toolDetails: string;
   price: string;
+  ratePeriod: string;
   image: string;
   contact: string;
   imageDeleteToken?: string;
@@ -100,6 +103,7 @@ const ListToolsForm = (
         category: initialData.category || "",
         condition: initialData.condition || "",
         price: initialData.price ?? "",
+        ratePeriod: initialData.ratePeriod ?? "",
         image: initialData.image || "",
         imageDeleteToken: "",
         toolDetails: initialData.toolDetails || "",
@@ -116,6 +120,7 @@ const ListToolsForm = (
         condition: "",
         toolDetails: "",
         price: "",
+        ratePeriod: "",
         image: "",
         imageDeleteToken: "",
         pitch: "",
@@ -169,8 +174,14 @@ const ListToolsForm = (
   };
 
   const handleRatePeriodChange = (selectedPeriod?: RatePeriod) => {
-    console.log("Selected period:", selectedPeriod);
-    // Do something with selected periods
+    if (!selectedPeriod) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      ratePeriod: selectedPeriod,
+    }));
+
+    console.log("Updated ratePeriod:", selectedPeriod);
   };
 
   const handleTextareaKeyDown = (
@@ -201,7 +212,6 @@ const ListToolsForm = (
   };
 
   const handleFormSubmit = async (prevState: any, formDataSubmit: FormData) => {
-    // Figure out why the price isn't saving to Sanity.
     try {
       if (!validateEmail(formData.contact)) {
         setErrors((prev) => ({
@@ -235,6 +245,7 @@ const ListToolsForm = (
             contact: formDataSubmit.get("contact") as string,
             toolDetails: formDataSubmit.get("toolDetails") as string,
             price: formDataSubmit.get("price") as string,
+            ratePeriod: formData.ratePeriod,
           } as Partial<
             Omit<ListingWithAuthorRef, "author"> & {
               contact: string;
@@ -243,6 +254,7 @@ const ListToolsForm = (
               image: string;
               toolDetails: string;
               price: string;
+              ratePeriod: string;
             }
           >,
           initialData.author.email
@@ -425,8 +437,9 @@ const ListToolsForm = (
                 className="w-1/4 pt-[0.59rem] text-center text-[1rem] border-b-2 border-slate-400 px-2 outline-none mr-6"
               />
               <RatePeriodSelector
+                value={formData.ratePeriod}
                 onChange={handleRatePeriodChange}
-                initialSelected="hour"
+                initialSelected={(formData.ratePeriod as RatePeriod) || "hour"}
               />
               {errors.price && (
                 <p className="text-red-600 text-small">{errors.price}</p>
@@ -441,7 +454,7 @@ const ListToolsForm = (
             <CloudinaryUploader
               onImageUrlChange={handleImageChange}
               currentImageUrl={formData.image}
-              className=" bg-cyan-600 border border-black !max-w-fit hover:bg-black text-white font-semibold py-2 px-11 rounded-full transition:hover duration-300"
+              className=" bg-cyan-600 border border-black !max-w-fit hover:bg-black text-white font-semibold py-2 px-11 rounded-full transition:hover duration-300 cursor-pointer"
             />
           </div>
 

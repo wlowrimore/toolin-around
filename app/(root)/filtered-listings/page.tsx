@@ -1,58 +1,3 @@
-// import { auth } from "@/auth";
-// import { Suspense } from "react";
-// import { sanityFetch } from "@/sanity/lib/live";
-// import ListingCard from "@/components/ListingCard";
-// import { LISTINGS_QUERY } from "@/sanity/lib/queries";
-
-// export default async function FilteredListingsPage({
-//   searchParams,
-// }: {
-//   searchParams: Promise<{ query?: string; category?: string }>;
-// }) {
-//   const query = (await searchParams).query || null;
-//   const category = (await searchParams).category || null;
-//   const params = { search: query || null, category: category || null };
-
-//   const session = await auth();
-
-//   const { data: listings } = await sanityFetch({
-//     query: LISTINGS_QUERY,
-//     params,
-//   });
-
-//   const displayText = query
-//     ? `Search results for "${query}"`
-//     : `No listings found for "${query}"`;
-
-//   return (
-//     <div>
-//       <h1>{displayText}</h1>
-//       <div>
-//         <Suspense fallback={<div>Loading...</div>}>
-//           {listings?.length > 0 &&
-//             listings.map((listing: any) => (
-//               <ListingCard
-//                 listing={listing}
-//                 key={listing._id}
-//                 id={listing._id}
-//                 title={listing.title}
-//                 description={listing.description}
-//                 createdAt={listing._createdAt}
-//                 price={listing.price}
-//                 image={listing.image}
-//                 category={listing.category}
-//                 condition={listing.condition}
-//                 contact={listing.contact}
-//                 author={listing.author}
-//                 toolDetails={listing.toolDetails}
-//               />
-//             ))}
-//         </Suspense>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { type Metadata } from "next";
 import { draftMode } from "next/headers";
 import { groq } from "next-sanity";
@@ -96,7 +41,7 @@ export default async function FilteredListingsPage({
 
   const params: QueryParams = (await searchParams).query
     ? { query: (await searchParams).query }
-    : { query: undefined };
+    : { query: "" };
   const listings = await client
     .withConfig({ useCdn: false })
     .fetch<

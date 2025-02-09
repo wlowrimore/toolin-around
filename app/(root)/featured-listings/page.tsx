@@ -119,6 +119,7 @@ const FeaturePage: React.FC<ListingCardProps> = async ({
                   category={listing?.category}
                   condition={listing?.condition}
                   price={listing?.price}
+                  ratePeriod={listing?.ratePeriod}
                   contact={listing?.contact}
                   description={listing?.description}
                   author={listing?.author}

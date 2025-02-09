@@ -50,7 +50,20 @@ export const listing = defineType({
     defineField({
       name: "price",
       title: "Price",
-      type: "number",
+      type: "string",
+    }),
+    defineField({
+      name: "ratePeriod",
+      title: "Rate Period",
+      type: "string",
+      options: {
+        list: [
+          { title: "Hour", value: "hour" },
+          { title: "Day", value: "day" },
+          { title: "Week", value: "week" },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "image",

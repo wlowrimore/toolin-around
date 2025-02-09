@@ -48,6 +48,12 @@ const ListingCard: React.FC<ListingCardProps> = ({
     return text.slice(0, maxLength) + "...";
   };
 
+  const truncateTitle = (text: string, maxLength = 25) => {
+    if (!text) return "No title provided";
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
   const truncatedDescription = truncateDesc(listing?.description || "");
 
   return (
@@ -70,11 +76,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
             read the reviews
           </span>
         </div>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>{truncateTitle(title || "")}</CardTitle>
         <CardDescription>{truncatedDescription}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="w-full max-h-64 overflow-hidden flex justify-center items-center bg-slate-700">
+        <div className="w-full h-52 max-h-52 overflow-hidden flex justify-center items-center bg-slate-700">
           <img
             src={image || ""}
             alt={title || ""}
@@ -93,21 +99,16 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="w-full flex ">
             {session ? (
               <div className="flex p-4 pt-0 gap-2 items-center">
-                <div className="flex items-center justify-center gap-2">
-                  {/* <p className="text-sm text-slate-600 font-semibold">
-                    {listing?.price}
-                  </p> */}
+                <div className="flex items-center justify-center gap-2 pb-2 pt-1">
                   <img
-                    src={session?.user?.image || ""}
-                    alt={session?.user?.name || ""}
+                    src={author?.image || ""}
+                    alt={author?.name || ""}
                     width={1000}
                     height={1000}
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">
-                    <p className="font-semibold">
-                      {session?.user?.name as string}
-                    </p>
+                    <p className="font-semibold">{author?.name as string}</p>
                     <p className="font-normal">{userHandle()}</p>
                   </div>
                 </div>

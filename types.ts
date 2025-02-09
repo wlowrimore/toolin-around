@@ -14,6 +14,7 @@ export interface ListingType {
   deleteToken: string | null;
   toolDetails: string | null;
   price: string | null;
+  ratePeriod: "hour" | "day" | "week";
   contact: string | null;
   author: {
     _id: string;
@@ -34,6 +35,7 @@ export interface ListingCardProps {
   contact: ListingType["contact"];
   image: ListingType["image"];
   price: ListingType["price"];
+  ratePeriod: ListingType["ratePeriod"];
   title: ListingType["title"];
   description: ListingType["description"];
   toolDetails: ListingType["toolDetails"];

@@ -37,6 +37,7 @@ const Feature: React.FC<ListingCardProps> = ({
           title={listing?.title}
           description={listing?.description}
           price={listing?.price}
+          ratePeriod={listing?.ratePeriod}
           image={listing?.image}
           category={listing?.category}
           condition={listing?.condition}

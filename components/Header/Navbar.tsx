@@ -115,8 +115,10 @@ const Header = ({ query }: { query: string }) => {
                   <span>View All Listings</span>
                 </button>
               </Link>
-              <SearchModal query={query} />
-              <Link href="/filtered-listings">
+              <div>
+                <SearchModal query={query} />
+              </div>
+              <Link href="/featured-listings">
                 <button
                   type="button"
                   className="flex items-center space-x-1 hover:text-blue-200"

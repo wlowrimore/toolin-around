@@ -6,13 +6,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 export type RatePeriod = "hour" | "day" | "week";
 
 export interface RatePeriodSelectorProps {
-  onChange?: (selectedPeriod: RatePeriod) => void;
+  onChange?: (selectedPeriod: RatePeriod | undefined) => void;
   initialSelected?: RatePeriod;
+  value: string | undefined;
 }
 
 export const RatePeriodSelector: React.FC<RatePeriodSelectorProps> = ({
   onChange,
-  initialSelected,
+  initialSelected = "hour",
 }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<RatePeriod | undefined>(
     initialSelected
@@ -25,27 +26,30 @@ export const RatePeriodSelector: React.FC<RatePeriodSelectorProps> = ({
     setSelectedPeriod(newSelectedPeriod);
 
     // Optional callback for parent component
-    onChange?.(newSelectedPeriod as RatePeriod);
+    if (newSelectedPeriod !== undefined) {
+      onChange?.(newSelectedPeriod as RatePeriod);
+    }
   };
 
-  const periods: RatePeriod[] = ["hour", "day", "week"];
+  const ratePeriods: RatePeriod[] = ["hour", "day", "week"];
 
   return (
     <div className="items-center mb-[-0.7rem] flex space-x-2">
       <p>rate per:</p>
 
-      {periods.map((period) => (
-        <div key={period} className="flex items-center space-x-2">
+      {ratePeriods.map((ratePeriod) => (
+        <div key={ratePeriod} className="flex items-center space-x-2">
           <Checkbox
-            id={period}
-            checked={selectedPeriod === period}
-            onCheckedChange={() => handlePeriodChange(period)}
+            id={ratePeriod}
+            name={ratePeriod}
+            checked={selectedPeriod === ratePeriod}
+            onCheckedChange={() => handlePeriodChange(ratePeriod)}
           />
           <label
-            htmlFor={period}
+            htmlFor={ratePeriod}
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            {period.charAt(0).toUpperCase() + period.slice(1)}
+            {ratePeriod.charAt(0).toUpperCase() + ratePeriod.slice(1)}
           </label>
         </div>
       ))}

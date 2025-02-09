@@ -30,6 +30,7 @@ export const LISTINGS_QUERY = defineQuery(`
     image,
     condition,
     price,
+    ratePeriod,
     contact,
     toolDetails,
     deleteToken,

@@ -1587,7 +1587,28 @@
       "price": {
         "type": "objectAttribute",
         "value": {
-          "type": "number"
+          "type": "string"
+        },
+        "optional": true
+      },
+      "ratePeriod": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "hour"
+            },
+            {
+              "type": "string",
+              "value": "day"
+            },
+            {
+              "type": "string",
+              "value": "week"
+            }
+          ]
         },
         "optional": true
       },

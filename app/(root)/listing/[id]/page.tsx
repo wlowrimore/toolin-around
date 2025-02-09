@@ -23,6 +23,7 @@ interface Listing {
   _createdAt: string;
   description: string;
   price: number | null;
+  ratePeriod: string | null;
   image: string;
   category: string;
   condition: string | null;
@@ -67,6 +68,7 @@ const IndividualListingPage = async ({
       _createdAt,
       description,
       price,
+      ratePeriod,
       image,
       category,
       condition,
@@ -97,9 +99,11 @@ const IndividualListingPage = async ({
     createdAt: listingResult._createdAt,
     slug,
     description: listingResult.description,
-    condition: null,
+    condition: listingResult.condition,
     deleteToken: null,
-    price: null,
+    price: listingResult.price,
+    ratePeriod: listingResult.ratePeriod,
+    contact: listingResult.contact,
   };
 
   console.log("LISTING IN ID PAGE:", listing);
@@ -113,6 +117,7 @@ const IndividualListingPage = async ({
         title={listing?.title}
         description={listing?.description}
         price={listing?.price}
+        ratePeriod={listing?.ratePeriod}
         image={listing?.image}
         category={listing?.category}
         condition={listing?.condition}

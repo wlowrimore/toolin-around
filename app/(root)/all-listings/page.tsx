@@ -48,6 +48,7 @@ export default async function AllListingsPage({
               condition={listing.condition}
               image={listing.image}
               price={listing.price}
+              ratePeriod={listing.ratePeriod}
             />
           ))}
         </div>

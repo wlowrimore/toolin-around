@@ -70,6 +70,7 @@ export const createToolDetails = async (state: any, form: FormData) => {
     image,
     toolDetails,
     price,
+    ratePeriod,
     deleteToken,
     contact,
   } = Object.fromEntries(form);
@@ -117,6 +118,7 @@ export const createToolDetails = async (state: any, form: FormData) => {
       },
       toolDetails: toolDetails as string,
       price: price as string,
+      ratePeriod: ratePeriod as string,
     };
 
     const result = await writeClient.create(listing);
@@ -167,6 +169,7 @@ export async function updateListing(
         deleteToken,
         toolDetails,
         price,
+        ratePeriod,
         contact,
         "author": author->{
           _id,
