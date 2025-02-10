@@ -47,6 +47,30 @@ export const LISTINGS_QUERY = defineQuery(`
     }
   }`);
 
+export const LISTINGS_BY_AUTHOR_QUERY =
+  defineQuery(`*[_type == "listing" && author._ref == $authorId] | order(_createdAt desc){
+  _id,
+  title,
+  description,
+  category,
+  condition,
+  author->{
+    _id,
+    name,
+    image,
+    email
+  },
+  slug,
+  _createdAt,
+  ratings,
+  image,
+  deleteToken,  // Make sure this is included if you need it for mutations
+  toolDetails,
+  price,
+  ratePeriod,
+  contact
+}`);
+
 export const AUTHOR_BY_GOOGLE_ID_QUERY =
   defineQuery(`[_type == "author" && email == $email][0]{
       _id,
@@ -118,6 +142,7 @@ export const LISTING_BY_ID_QUERY = `*[_type == "listing" && _id == $id][0]{
         _createdAt,
         description,
         price,
+        ratePeriod,
         image,
         category,
         condition,

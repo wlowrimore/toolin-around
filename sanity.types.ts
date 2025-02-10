@@ -299,6 +299,25 @@ export type LISTINGS_QUERYResult = Array<{
   deleteToken: null;
   ratings: Array<never>;
 }>;
+// Variable: LISTINGS_BY_AUTHOR_QUERY
+// Query: *[_type == "listing" && author._ref == $authorId] | order(_createdAt desc){  _id,  title,  description,  category,  condition,  author->{    _id,    name,    image,    email  },  slug,  _createdAt,  ratings,  image,  deleteToken,  // Make sure this is included if you need it for mutations  toolDetails,  price,  ratePeriod,  contact}
+export type LISTINGS_BY_AUTHOR_QUERYResult = Array<{
+  _id: string;
+  title: string | null;
+  description: string | null;
+  category: null;
+  condition: null;
+  author: null;
+  slug: Slug | null;
+  _createdAt: string;
+  ratings: null;
+  image: null;
+  deleteToken: null;
+  toolDetails: null;
+  price: null;
+  ratePeriod: null;
+  contact: null;
+}>;
 // Variable: AUTHOR_BY_GOOGLE_ID_QUERY
 // Query: [_type == "author" && email == $email][0]{      _id,      id,      name,      email,      image,      "roles": roles[]->{      code      }    }
 export type AUTHOR_BY_GOOGLE_ID_QUERYResult = null;
@@ -329,6 +348,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type == \"listing\" && defined(slug.current) && \n    (\n      !defined($search) || \n      title match $search || \n      category match $search || \n      author->name match $search\n    ) && \n    (\n      !defined($category) || \n      category match $category\n    )\n  ] | order(_createdAt desc) {\n    _id,\n    _type,\n    title,\n    slug,\n    _createdAt,\n    author -> {\n      _id,\n      name,\n      image,\n      email\n    },\n    description,\n    category,\n    image,\n    condition,\n    price,\n    ratePeriod,\n    contact,\n    toolDetails,\n    deleteToken,\n    \"ratings\": *[_type == \"rating\" && service._ref == ^._id] {\n      _id,\n      rating,\n      review,\n      createdAt,\n      user-> {\n        _id,\n        name,\n        image\n      }\n    }\n  }": LISTINGS_QUERYResult;
+    "*[_type == \"listing\" && author._ref == $authorId] | order(_createdAt desc){\n  _id,\n  title,\n  description,\n  category,\n  condition,\n  author->{\n    _id,\n    name,\n    image,\n    email\n  },\n  slug,\n  _createdAt,\n  ratings,\n  image,\n  deleteToken,  // Make sure this is included if you need it for mutations\n  toolDetails,\n  price,\n  ratePeriod,\n  contact\n}": LISTINGS_BY_AUTHOR_QUERYResult;
     "[_type == \"author\" && email == $email][0]{\n      _id,\n      id,\n      name,\n      email,\n      image,\n      \"roles\": roles[]->{\n      code\n      }\n    }": AUTHOR_BY_GOOGLE_ID_QUERYResult;
     "\n      *[_type == \"playlist\" && slug.current == $slug][0]{\n        _id,\n        title,\n        slug,\n        description,\n        category,\n        image,\n        toolDescription,\n        \"ratings\": *[_type == \"rating\" && listing._ref == ^._id] {\n          _id,\n          rating,\n          review,\n          createdAt,\n          user-> {\n            _id,\n            name,\n            image\n          }\n        },\n        \"select\": select[]->{\n          _id,\n          _createdAt,\n          title,\n          slug,\n          description,\n          category,\n          image,\n          \"ratings\": *[_type == \"rating\" && listing._ref == ^._id] {\n          _id,\n          rating,\n          review,\n          createdAt,\n          user-> {\n            _id,\n            name,\n            image\n          }\n        },\n          author-> {\n            _id,\n            name,\n            slug,\n            image,\n            email\n          }\n        }\n      }": PLAYLIST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"listing\" && (\n    title match $query + \"*\" ||\n    description match $query + \"*\" ||\n    tags[]->name match $query + \"*\"\n  )] {\n    _id,\n    _createdAt,\n    title,\n    description,\n    slug,\n    image,\n    category,\n    condition,\n    price,\n    contact,\n    toolDetails,\n    author,\n    \"slug\": slug.current,\n  }\n": ListingsQueryResult;

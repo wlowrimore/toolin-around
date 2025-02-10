@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -31,10 +31,6 @@ const Header = ({ query }: { query: string }) => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleSearchClick = () => {
-    setIsOpen(true);
-  };
-
   return (
     <div className="bg-sky-900 text-slate-400">
       <div className="max-w-6xl mx-auto px-4 py-3">
@@ -55,57 +51,6 @@ const Header = ({ query }: { query: string }) => {
           {/* Navigation */}
           {session ? (
             <div className="flex items-center space-x-8 text-lg">
-              {/* <Link href="/all-listings">
-                <button
-                  type="button"
-                  className="flex items-center space-x-1 hover:text-blue-200"
-                >
-                  <Search className="h-5 w-5" />
-                  <span>Find Tools</span>
-                </button>
-              </Link> */}
-              {/* <Dialog>
-                <DialogTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex items-center space-x-1 hover:text-blue-200 w-fit"
-                  >
-                    <span className="flex items-center gap-[0.125rem]">
-                      <Search className="h-5 w-5" />
-                      Find Tools
-                    </span>
-                  </button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Find Tools</DialogTitle>
-                    <DialogDescription>
-                      Use keywords to find tools.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form
-                    id="search-form"
-                    action="/all-listings"
-                    className="flex items-center gap-2.5 w-3/4 justify-center"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <div className="grid flex-1 gap-2">
-                        <Input
-                          name="query"
-                          defaultValue={query}
-                          placeholder="Use keywords to find tools"
-                        />
-                      </div>
-                      <button type="submit" className="">
-                        <span className="">
-                          <Search className="h-9 w-9 p-1 border-2 border-slate-400 hover:bg-slate-200" />
-                        </span>
-                      </button>
-                    </div>
-                  </form>
-                  
-                </DialogContent>
-              </Dialog> */}
               <Link href="/all-listings">
                 <button
                   type="button"
@@ -132,10 +77,12 @@ const Header = ({ query }: { query: string }) => {
                 <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
                 <span>Messages</span>
               </button>
-              <button className="flex items-center space-x-1 hover:text-blue-200">
-                <UserCircle className="h-5 w-5" />
-                <span>Profile</span>
-              </button>
+              <Link href={`/user-profile/${session.user?.id}`}>
+                <button className="flex items-center space-x-1 hover:text-blue-200">
+                  <UserCircle className="h-5 w-5" />
+                  <span>Profile</span>
+                </button>
+              </Link>
               <Link href="/list-tools">
                 <button
                   type="button"
