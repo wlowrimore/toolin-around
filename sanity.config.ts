@@ -160,7 +160,8 @@
 import { LoginMethod } from "sanity";
 import { defineConfig } from "sanity";
 import { validateToken } from "./middleware/sanityStudio";
-import type { SanityDocument, User } from "@sanity/types";
+import type { SanityDocument } from "@sanity/types";
+import type { User } from "next-auth";
 
 import { visionTool } from "@sanity/vision";
 // import { sanityConfig } from "./lib/utils";
@@ -283,7 +284,7 @@ export default defineConfig({
   },
 
   cors: {
-    origin: ["http://localhost:3000", "https://skillseekapp.com"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   },
 });

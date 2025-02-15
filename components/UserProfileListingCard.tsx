@@ -3,10 +3,7 @@
 import { Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  UserProfileListingType,
-  UserProfilePageProps,
-} from "../app/(root)/user-profile/[id]/page";
+import { UserProfilePageProps } from "../app/(root)/user-profile/[id]/page";
 import { formatDate } from "@/lib/utils";
 
 import {
@@ -21,25 +18,49 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import Link from "next/link";
 
+interface UserProfileListingType {
+  userListings: {
+    _id: string;
+    title: string;
+    description: string;
+    image: string | null;
+    category: string;
+    condition: string;
+    price: string;
+    ratePeriod: string;
+    author: {
+      _id: string;
+      name: string;
+      image: string;
+      email: string;
+    };
+    slug: string;
+    _createdAt: string;
+    ratings: number;
+    deleteToken: string;
+    toolDetails: string;
+    contact: string;
+  }[];
+}
+
 const UserProfileListingCard: React.FC<UserProfileListingType> = ({
-  userListing,
+  userListings,
 }) => {
-  const { data: session } = useSession();
-  const router = useRouter();
+  const listing = userListings[0];
   const {
     _id,
     title,
     description,
     image,
-    price,
-    _createdAt,
-    author,
     category,
     condition,
-    contact,
+    price,
     ratePeriod,
-    toolDetails,
-  } = userListing;
+    author,
+    _createdAt,
+  } = listing;
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const handleListingClick = () => {
     router.push(`/listing/${_id}`);
@@ -91,14 +112,20 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
       </CardHeader>
       <CardContent>
         <div className="w-full h-52 max-h-52 overflow-hidden flex justify-center items-center bg-slate-700">
-          <img
-            src={image || ""}
-            alt={title || ""}
-            width={1000}
-            height={1000}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
+          {image ? (
+            <img
+              src={image || ""}
+              alt={title || ""}
+              width={1000}
+              height={1000}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full text-slate-400 text-xl flex justify-center items-center">
+              No Image Available
+            </div>
+          )}
         </div>
         <p className="text-slate-800 tracking-wide text-[0.65rem]">
           Listed {formatDate(_createdAt)}
@@ -110,13 +137,19 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
             {session ? (
               <div className="flex p-4 pt-0 gap-2 items-center">
                 <div className="flex items-center justify-center gap-2 pb-2 pt-1">
-                  <img
-                    src={author?.image || ""}
-                    alt={author?.name || ""}
-                    width={1000}
-                    height={1000}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
+                  {author?.image ? (
+                    <img
+                      src={author?.image || ""}
+                      alt={author?.name || ""}
+                      width={1000}
+                      height={1000}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-slate-400 flex justify-center items-center">
+                      No Image Available
+                    </div>
+                  )}
                   <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">
                     <p className="font-semibold">{author?.name as string}</p>
                     <p className="font-normal">{userHandle()}</p>
