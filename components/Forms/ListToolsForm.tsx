@@ -10,7 +10,7 @@ import { useFormPersistence } from "@/hooks/useFormPersistence";
 import { ToolSelectionForm } from "./ToolSelectionForm";
 import { Checkbox } from "../ui/checkbox";
 import { ToolConditionForm } from "./ToolConditionForm";
-import { BookOpenCheck, CloudUpload } from "lucide-react";
+import { BookOpenCheck, CloudUpload, SquarePen } from "lucide-react";
 import {
   createToolDetails,
   ListingWithAuthorRef,
@@ -345,164 +345,178 @@ const ListToolsForm = (
         </h1>
         <h2 className="text-xl text-slate-600">
           {isUpdatePath
-            ? "Add any changes to your existing listing"
+            ? "Make any changes to your existing listing"
             : "Fill out the form below to create a new listing "}
         </h2>
       </header>
 
-      <form action={formAction} className="grid grid-cols-2 mt-4 gap-8">
-        <div className="space-y-5">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="title">Listing Title</label>
-            <input
-              id="title"
-              name="title"
-              type="text"
-              value={formData.title}
-              onChange={handleInputChange}
-              placeholder="Listing Title"
-              required
-              className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
-            />
-            {errors.title && (
-              <p className="text-red-600 text-small">{errors.title}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="description">Listing Keywords</label>
-            <textarea
-              name="description"
-              id="description"
-              placeholder="Use keywords to help users find your listing separated by commas"
-              value={formData.description}
-              onChange={handleInputChange}
-              required
-              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
-            />
-            {errors.description && (
-              <p className="text-red-600 text-small">{errors.description}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="category">Tool Type</label>
-            <ToolSelectionForm
-              value={formData.category}
-              onChange={handleCategoryChange}
-            />
-            {errors.category && (
-              <p className="text-red-600 text-small">{errors.category}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="condition">Tool Condition</label>
-            <ToolConditionForm
-              value={formData.condition}
-              onChange={handleConditionChange}
-            />
-            {errors.condition && (
-              <p className="text-red-600 text-small">{errors.condition}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="toolDetails">Tool Details</label>
-            <textarea
-              id="toolDetails"
-              name="toolDetails"
-              value={formData.toolDetails}
-              onChange={handleInputChange}
-              rows={6}
-              required
-              placeholder="Brief description of your tools and lending terms"
-              className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
-            />
-            {errors.toolDetails && (
-              <p className="text-red-600 text-small">{errors.toolDetails}</p>
-            )}
-          </div>
-        </div>
-        {/* Right Column */}
-        <div className="space-y-5">
-          <div className="flex flex-col gap-1 pb-[1.8rem]">
-            <label htmlFor="price">Rental Fee</label>
-            <div className="flex items-center">
-              <label htmlFor="price">$</label>
+      <form action={formAction} className="">
+        <div className="grid grid-cols-2 mt-4 gap-8">
+          <div className="flex flex-col gap-1 space-y-5">
+            <div className="flex flex-col gap-1">
+              <label htmlFor="title">Listing Title</label>
               <input
-                id="price"
-                name="price"
+                id="title"
+                name="title"
                 type="text"
-                placeholder="0.00"
-                value={formData.price}
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="Listing Title"
+                required
+                className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
+              />
+              {errors.title && (
+                <p className="text-red-600 text-small">{errors.title}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="description">Listing Keywords</label>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                placeholder="Use keywords to help users find your listing separated by commas"
+                value={formData.description}
                 onChange={handleInputChange}
                 required
-                className="w-1/4 pt-[0.59rem] text-center text-[1rem] border-b-2 border-slate-400 px-2 outline-none mr-6"
+                className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
               />
-              <RatePeriodSelector
-                value={formData.ratePeriod}
-                onChange={handleRatePeriodChange}
-                initialSelected={(formData.ratePeriod as RatePeriod) || "hour"}
+              {errors.description && (
+                <p className="text-red-600 text-small">{errors.description}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="category">Tool Type</label>
+              <ToolSelectionForm
+                value={formData.category}
+                onChange={handleCategoryChange}
               />
-              {errors.price && (
-                <p className="text-red-600 text-small">{errors.price}</p>
+              {errors.category && (
+                <p className="text-red-600 text-small">{errors.category}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="condition">Tool Condition</label>
+              <ToolConditionForm
+                value={formData.condition}
+                onChange={handleConditionChange}
+              />
+              {errors.condition && (
+                <p className="text-red-600 text-small">{errors.condition}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="toolDetails">Tool Details</label>
+              <textarea
+                id="toolDetails"
+                name="toolDetails"
+                value={formData.toolDetails}
+                onChange={handleInputChange}
+                rows={6}
+                required
+                placeholder="Brief description of your tools and lending terms"
+                className="w-full text-[1rem] border-2 border-slate-400 px-2 outline-none"
+              />
+              {errors.toolDetails && (
+                <p className="text-red-600 text-small">{errors.toolDetails}</p>
               )}
             </div>
           </div>
-          <div className="w-full flex flex-col justify-center cursor-pointer bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-[0.65rem] text-white">
-            <label
-              htmlFor="image"
-              className="cursor-pointer w-[10rem] text-xl flex flex-col justify-center items-center"
-            ></label>
-            <CloudinaryUploader
-              onImageUrlChange={handleImageChange}
-              currentImageUrl={formData.image}
-              className=" bg-cyan-600 border border-black !max-w-fit hover:bg-black text-white font-semibold py-2 px-11 rounded-full transition:hover duration-300 cursor-pointer"
-            />
-          </div>
+          {/* Right Column */}
+          <div className="space-y-5">
+            <div className="flex flex-col gap-1 pb-8">
+              <label htmlFor="price">Rental Fee</label>
+              <div className="flex items-center">
+                <label htmlFor="price">$</label>
+                <input
+                  id="price"
+                  name="price"
+                  type="text"
+                  placeholder="0.00"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  required
+                  className="w-1/4 pt-[0.59rem] text-center text-[1rem] border-b-2 border-slate-400 px-2 outline-none mr-6"
+                />
+                <RatePeriodSelector
+                  value={formData.ratePeriod}
+                  onChange={handleRatePeriodChange}
+                  initialSelected={
+                    (formData.ratePeriod as RatePeriod) || "hour"
+                  }
+                />
+                {errors.price && (
+                  <p className="text-red-600 text-small">{errors.price}</p>
+                )}
+              </div>
+            </div>
+            <div className="w-full flex flex-col justify-center cursor-pointer bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-[0.3rem] text-white">
+              <label
+                htmlFor="image"
+                className="cursor-pointer w-[10rem] text-xl flex flex-col justify-center items-center"
+              ></label>
+              <CloudinaryUploader
+                onImageUrlChange={handleImageChange}
+                currentImageUrl={formData.image}
+                className=" bg-cyan-600 border border-black !max-w-fit hover:bg-black text-white font-semibold py-2 px-11 rounded-full transition:hover duration-300 cursor-pointer"
+              />
+            </div>
 
-          <div className="flex flex-col gap-1 pt-[0.05rem]">
-            <label htmlFor="contact">Contact Email</label>
-            <input
-              id="contact"
-              type="email"
-              name="contact"
-              value={formData.contact}
-              onChange={handleInputChange}
-              placeholder="Email address for contact"
-              className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
-            />
-            <p className="flex items-center text-sm text-slate-500 border-b border-slate-400 pb-6">
-              ** We will never share your personal information with anyone. **
-            </p>
-          </div>
-          {formData.image && (
-            <div className="mt-2 grid grid-cols-2">
-              {showSuccess !== void 0 && (
-                <p className="text-sm text-green-600 mt-2">
-                  Image uploaded successfully!
-                </p>
-              )}
-              <img
-                src={formData.image}
-                alt="Uploaded preview"
-                width={500}
-                height={500}
-                className="w-32 h-32 overflow-hidden object-contain md:max-w-xs shadow-sm -mt-[0.13rem] shadow-neutral-700"
+            <div className="flex flex-col gap-1 pt-[0.3rem]">
+              <label htmlFor="contact">Contact Email</label>
+              <input
+                id="contact"
+                type="email"
+                name="contact"
+                value={formData.contact}
+                onChange={handleInputChange}
+                placeholder="Email address for contact"
+                className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
               />
+              <p className="flex items-center text-sm text-slate-500 border-b border-slate-400 pb-[1.7rem]">
+                ** We will never share your personal information with anyone. **
+              </p>
+              {formData.image && (
+                <div className="my-2 grid grid-cols-2">
+                  {showSuccess !== void 0 && (
+                    <p className="text-sm text-green-600 mt-2">
+                      Image uploaded successfully!
+                    </p>
+                  )}
+                  <div className="flex gap-2 items-center max-w-[8.5rem] min-w-[8.5rem] w-[8.5rem] h-[8.5rem]">
+                    <img
+                      src={formData.image}
+                      alt="Uploaded preview"
+                      width={500}
+                      height={500}
+                      className="w-full h-full object-cover overflow-hidden md:max-w-xs shadow-sm -mt-[0.13rem] shadow-neutral-700"
+                    />
+                  </div>
+                </div>
+              )}
+              {errors.image && (
+                <p className="text-red-600 text-small">{errors.image}</p>
+              )}
             </div>
-          )}
-          {errors.image && (
-            <p className="text-red-600 text-small">{errors.image}</p>
-          )}
+          </div>
         </div>
-        <button
-          type="submit"
-          className="w-full text-xl bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
-        >
-          <span className="flex items-end justify-center gap-2">
-            Publish Listing <BookOpenCheck className="h-6 w-6" />
-          </span>
-        </button>
+        <div className="mt-8">
+          <button
+            type="submit"
+            className="w-full text-xl bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
+          >
+            {isUpdatePath ? (
+              <span className="flex items-end justify-center gap-2">
+                Update Listing <SquarePen className="h-6 w-6" />
+              </span>
+            ) : (
+              <span className="flex items-end justify-center gap-2">
+                Publish Listing <BookOpenCheck className="h-6 w-6" />
+              </span>
+            )}
+          </button>
+        </div>
       </form>
-      <div className="w-full gap-6 flex items-center mt-6"></div>
     </main>
   );
 };

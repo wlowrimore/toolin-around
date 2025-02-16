@@ -119,8 +119,7 @@ const UserProfilePage = async () => {
               <p className="text-slate-500">{session?.user?.email}</p>
               {usersListings.length > 0 ? (
                 <p className="flex items-center gap-3 text-slate-500">
-                  Total Number of Listings{" "}
-                  <MoveRight size={20} strokeWidth={1} />
+                  Total Number of Listings :
                   <span className="underline text-blue-500">
                     {usersListings.length || null}
                   </span>
@@ -128,7 +127,7 @@ const UserProfilePage = async () => {
               ) : null}
               <div className="flex items-center">
                 <p className="flex text-slate-500 gap-3">
-                  Overall Rating :
+                  Your Overall Rating :
                   <span className="flex items-center">
                     <Star size={22} strokeWidth={0.5} fill="#fbbf24" />
                   </span>
