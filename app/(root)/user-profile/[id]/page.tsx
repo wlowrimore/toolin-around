@@ -7,6 +7,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { LISTINGS_BY_AUTHOR_QUERY } from "@/sanity/lib/queries";
 import { MoveRight, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export interface UserProfileListingType {
@@ -91,7 +92,7 @@ const UserProfilePage = async () => {
             <h1 className="text-slate-600 text-3xl font-semibold">
               {userFirstName}&apos;s Profile
             </h1>
-            <h2 className="text-slate-500 text-xl">
+            <h2 className="text-slate-500 text-lg">
               View, Edit, and Delete Your Listings Here
             </h2>
           </header>
@@ -145,9 +146,14 @@ const UserProfilePage = async () => {
                 />
               ))
             ) : (
-              <p className="text-slate-500 col-span-full text-center">
-                No listings found
-              </p>
+              <Link
+                href="/list-tools"
+                className="flex mt-24 justify-center items-center text-sky-800 hover:text-sky-600 hover:underline col-span-4 text-xl w-full"
+              >
+                <p className="w-fit p-2">
+                  Let&apos;s add some listings to your profile!
+                </p>
+              </Link>
             )}
           </div>
         </div>

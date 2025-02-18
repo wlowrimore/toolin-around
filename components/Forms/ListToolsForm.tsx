@@ -22,6 +22,7 @@ import {
   RatePeriodSelectorProps,
 } from "../RatePeriodSelector";
 import CloudinaryUploader from "../CloudinaryUploader";
+import { LoadingSpinnerWhite } from "../LoadingAnimations";
 
 export type Author = {
   _id: string;
@@ -41,6 +42,7 @@ export type Listing = {
   category: string;
   condition: string;
   toolDetails: string;
+  deleteToken: string;
   contact: string;
   author: Author;
 };
@@ -61,6 +63,7 @@ interface ListingFormProps {
     category: string;
     condition: string;
     toolDetails: string;
+    deleteToken: string;
     price: string;
     ratePeriod: string;
     image: string;
@@ -76,6 +79,7 @@ interface ListingFormData {
   category: string;
   condition: string;
   toolDetails: string;
+  deleteToken: string;
   price: string;
   ratePeriod: string;
   image: string;
@@ -85,6 +89,7 @@ interface ListingFormData {
 
 const ListToolsForm = (
   { initialData }: ListingFormProps
+
   // newSelectedPeriods: RatePeriod[]
 ) => {
   const { saveFormData, loadFormData, clearFormData } =
@@ -107,6 +112,7 @@ const ListToolsForm = (
         image: initialData.image || "",
         imageDeleteToken: "",
         toolDetails: initialData.toolDetails || "",
+        deleteToken: initialData.deleteToken || "",
         contact: initialData.contact || "",
       } as ListingFormData;
     }
@@ -123,7 +129,7 @@ const ListToolsForm = (
         ratePeriod: "",
         image: "",
         imageDeleteToken: "",
-        pitch: "",
+        deleteToken: "",
         contact: "",
       }
     );
@@ -232,7 +238,6 @@ const ListToolsForm = (
 
       if (initialData?._id) {
         console.log("Taking Update Branch");
-
         const result = await updateListing(
           initialData._id,
           {
@@ -244,7 +249,8 @@ const ListToolsForm = (
             image: formData.image,
             contact: formDataSubmit.get("contact") as string,
             toolDetails: formDataSubmit.get("toolDetails") as string,
-            price: formDataSubmit.get("price") as string,
+            deleteToken: formData.deleteToken,
+            price: formData.price,
             ratePeriod: formData.ratePeriod,
           } as Partial<
             Omit<ListingWithAuthorRef, "author"> & {
@@ -255,6 +261,7 @@ const ListToolsForm = (
               toolDetails: string;
               price: string;
               ratePeriod: string;
+              deleteToken: string;
             }
           >,
           initialData.author.email
@@ -474,7 +481,16 @@ const ListToolsForm = (
                 className="w-full h-[2.25rem] text-[1rem] border-2 border-slate-400 px-2 outline-none"
               />
               <p className="flex items-center text-sm text-slate-500 border-b border-slate-400 pb-[1.7rem]">
-                ** We will never share your personal information with anyone. **
+                {errors.contact ? (
+                  <span className="text-red-600 text-small">
+                    {errors.contact}
+                  </span>
+                ) : (
+                  <span>
+                    ** We will never share your personal information with
+                    anyone. **
+                  </span>
+                )}
               </p>
               {formData.image && (
                 <div className="my-2 grid grid-cols-2">
@@ -501,18 +517,37 @@ const ListToolsForm = (
           </div>
         </div>
         <div className="mt-8">
+          {/* {isUpdatePath ? <UpdateSubmitButton /> : <p>Something</p>} */}
           <button
             type="submit"
             className="w-full text-xl bg-cyan-600 border border-cyan-700/90 hover:bg-cyan-700 px-4 py-2 text-white"
           >
             {isUpdatePath ? (
-              <span className="flex items-end justify-center gap-2">
-                Update Listing <SquarePen className="h-6 w-6" />
-              </span>
+              <p className="flex items-end justify-center gap-2">
+                {isPending ? (
+                  <span className="flex items-end justify-center gap-2">
+                    Updating...
+                    <LoadingSpinnerWhite />
+                  </span>
+                ) : (
+                  <span className="flex items-end justify-center gap-2">
+                    Update Listing <SquarePen className="h-6 w-6" />
+                  </span>
+                )}
+              </p>
             ) : (
-              <span className="flex items-end justify-center gap-2">
-                Publish Listing <BookOpenCheck className="h-6 w-6" />
-              </span>
+              <p className="flex items-end justify-center gap-2">
+                {isPending ? (
+                  <span className="flex items-end justify-center gap-2">
+                    Publishing...
+                    <LoadingSpinnerWhite />
+                  </span>
+                ) : (
+                  <span className="flex items-end justify-center gap-2">
+                    Publish Listing <BookOpenCheck className="h-6 w-6" />
+                  </span>
+                )}
+              </p>
             )}
           </button>
         </div>

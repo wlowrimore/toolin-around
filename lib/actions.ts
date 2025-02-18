@@ -40,6 +40,8 @@ export type ListingWithAuthorRef = Omit<Listing, "author"> & {
 interface ListingWithAuthor extends Omit<ListingWithAuthorRef, "author"> {
   author: Author;
   deleteToken: string;
+  price: string;
+  ratePeriod: string;
 }
 
 export type ListingFormData = {
@@ -47,6 +49,8 @@ export type ListingFormData = {
   description: string;
   category: string;
   condition: string;
+  price: string;
+  ratePeriod: string;
   image: string;
   imageDeleteToken?: string;
   toolDetails: string;
@@ -149,8 +153,15 @@ export async function updateListing(
     Omit<ListingWithAuthorRef, "author"> & {
       contact: string;
       category: string;
+      toolDetails: string;
+      image: string;
+      condition: string;
+      description: string;
+      title: string;
       imageDeleteToken?: string;
       deleteToken: string;
+      price: string;
+      ratePeriod: string;
     }
   >,
   authorEmail: string
@@ -223,14 +234,30 @@ export async function updateListing(
         toolDetails: data.toolDetails ?? existingListing.toolDetails,
         condition: data.condition ?? existingListing.condition,
         contact: data.contact ?? existingListing.contact,
-      };
-
+        price: data.price ?? existingListing.price,
+        ratePeriod: data.ratePeriod ?? existingListing.ratePeriod,
+      } as Partial<ListingWithAuthorRef> &
+        ListingFormData & { deleteToken: string };
+    console.log("DELETE TOKEN: ", updatedData.deleteToken);
     const result = await writeClient.patch(listingId).set(updatedData).commit();
     return result;
   } catch (error) {
     console.error("Error:", error);
     throw error;
   }
+}
+
+export async function createDeleteAction() {
+  const token = process.env.SANITY_STUDIO_API_TOKEN;
+  if (!token) {
+    throw new Error("SANITY_API_TOKEN environment variable not set");
+  }
+
+  // Return an authenticated client with the token
+  return client.withConfig({
+    token: token,
+    useCdn: false,
+  });
 }
 
 export async function deleteListing(listingId: string) {
@@ -240,34 +267,25 @@ export async function deleteListing(listingId: string) {
       throw new Error("Authorization required");
     }
 
-    // Fetch and delete all ratings associated with the listing
-    const ratingIds = await client.fetch(
-      `
-      *[_type == "rating" && listing._ref == $listingId]._id
-    `,
-      { listingId }
-    );
+    // Get an authenticated client
+    const authenticatedClient = await createDeleteAction();
 
-    for (const ratingId of ratingIds) {
-      await client.delete(ratingId);
-    }
-
-    const listing = await client.fetch(
-      `
-      *[_type == "listing" && _id == $listingId][0]{
+    // Fetch the listing first to check permissions
+    const listing = await authenticatedClient.fetch(
+      `*[_type == "listing" && _id == $listingId][0]{
         _id,
         image,
-        license,
-        licensingState,
+        title,
         deleteToken,
         author->{
           _id,
           email
         }
-      }
-    `,
+      }`,
       { listingId }
     );
+
+    console.log("Listing to delete: ", listing);
 
     if (!listing) {
       throw new Error("Listing not found");
@@ -283,6 +301,29 @@ export async function deleteListing(listingId: string) {
       );
     }
 
+    console.log("Listing.Author.Email: ", listing.author.email);
+    console.log("Session.User.Email: ", session.user.email);
+
+    // Use a transaction to delete ratings and the listing
+    const transaction = authenticatedClient.transaction();
+
+    // Get rating IDs
+    const ratingIds = await authenticatedClient.fetch(
+      `*[_type == "rating" && listing._ref == $listingId]._id`,
+      { listingId }
+    );
+
+    // Add each rating deletion to the transaction
+    for (const ratingId of ratingIds) {
+      transaction.delete(ratingId);
+    }
+
+    // Add listing deletion to the transaction
+    transaction.delete(listingId);
+
+    // Execute the transaction
+    await transaction.commit();
+
     // Delete the image from Cloudinary if deleteToken exists
     if (listing.deleteToken) {
       try {
@@ -293,9 +334,6 @@ export async function deleteListing(listingId: string) {
       }
     }
 
-    // Delete the service from Sanity
-    await client.delete(listingId);
-
     revalidatePath("/");
 
     return {
@@ -303,6 +341,7 @@ export async function deleteListing(listingId: string) {
       message: "Listing deleted successfully",
     };
   } catch (error) {
+    console.error("Error during deletion:", error);
     return {
       status: "ERROR",
       message: error instanceof Error ? error.message : "Unknown error",

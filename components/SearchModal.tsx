@@ -13,7 +13,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Search } from "lucide-react";
-import LoadingSpinner from "./LoadingSpinner";
+import { LoadingSpinner } from "./LoadingAnimations";
 
 export function SearchModal({ query }: { query: string }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,8 +48,8 @@ export function SearchModal({ query }: { query: string }) {
               <Input
                 name="query"
                 defaultValue={query}
-                placeholder="socket set, drill, screwdriver, etc."
-                className="w-full placeholder:italic"
+                placeholder="search by keywords..."
+                className="w-full"
                 autoFocus
               />
             </div>

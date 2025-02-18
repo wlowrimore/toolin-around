@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -18,22 +19,30 @@ import {
 import { UserProfileListingType } from "@/app/(root)/user-profile/[id]/page";
 import { deleteListing } from "@/lib/actions"; // adjust import path
 import { cn } from "@/lib/utils";
-import { Blocks, PackageMinus } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const DeleteButton: React.FC<UserProfileListingType> = ({ userListings }) => {
   const listing = userListings[0];
   const router = useRouter();
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      const ListingId = listing._id;
+      console.log("Attempting to delete listing with ID:", listing._id);
+      listing._id;
       listing;
+      console.log("Listing to delete:", listing);
 
       const result = await deleteListing(listing._id);
+      console.log("Delete listing result:", result);
+      console.log(
+        "LISTING ID AFTER AWAIT DELETElISTING(listing._id):",
+        listing._id
+      );
+      console.log("LISTING AFTER AWAIT DELETElISTING(listing._id):", listing);
 
       if (result.status === "SUCCESS") {
         toast({
@@ -42,7 +51,7 @@ const DeleteButton: React.FC<UserProfileListingType> = ({ userListings }) => {
           variant: "success",
         });
         router.refresh();
-        router.push("/user-profile");
+        router.push("/");
       } else {
         throw new Error(result.message);
       }

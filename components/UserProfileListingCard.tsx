@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { UserProfilePageProps } from "../app/(root)/user-profile/[id]/page";
@@ -18,7 +18,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import Link from "next/link";
 import DeleteButton from "./Mutations/DeleteButton";
-import UpdateButton from "./Mutations/UpdateButton";
+import UpdateLinkButton from "./Mutations/UpdateLinkButton";
 
 interface ListingIdType {
   listingId: string;
@@ -71,20 +71,12 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
   const router = useRouter();
   const [approvesDelete, setApprovesDelete] = useState<boolean>(false);
 
+  useEffect(() => {
+    router.refresh();
+  }, []);
+
   const handleListingClick = () => {
     router.push(`/listing/${_id}`);
-  };
-
-  const handleDeleteListing = () => {
-    if (session?.user?.email !== author?._id) {
-      console.log("Deleting listing with id:", _id);
-    } else {
-      console.log("You do not have permission to delete this listing.");
-    }
-  };
-
-  const handleUpdateListing = () => {
-    console.log("Updating listing with id:", _id);
   };
 
   const userHandle = () => {
@@ -111,7 +103,7 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
   return (
     <div>
       <div className="flex items-center justify-between text-xs mb-1 p-2 bg-slate-600 text-white">
-        <UpdateButton userListings={[listing]} />
+        <UpdateLinkButton userListings={[listing]} />
         <DeleteButton userListings={[listing]} />
       </div>
 

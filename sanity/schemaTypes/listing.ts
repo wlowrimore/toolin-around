@@ -81,7 +81,7 @@ export const listing = defineType({
       title: "Tool Details",
       type: "text",
       description: "Briefly describe your listing",
-      validation: (Rule) => Rule.required().min(20).max(1000),
+      validation: (Rule) => Rule.required().min(200).max(1000),
     }),
     defineField({
       name: "contact",

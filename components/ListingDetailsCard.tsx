@@ -60,7 +60,7 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
   return (
     <>
       <ConditionLegend />
-      <Card className="border-slate-800 rounded-none hover:bg-blue-300/10">
+      <Card className="border-slate-800 rounded-none hover:bg-blue-300/10 w-full">
         <CardHeader>
           <div className="w-full h-auto flex justify-between pb-2">
             <div className="flex w-fit">
@@ -86,25 +86,25 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
           <CardDescription>{listing?.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="w-full max-h-64 overflow-hidden flex justify-center items-center bg-slate-700">
+          <div className="w-full max-h-64 overflow-hidden flex items-center bg-slate-700">
             <img
               src={listing?.image || ""}
               alt={listing?.title || ""}
               width={1000}
               height={1000}
-              className="w-[24rem] h-[24rem] object-cover"
+              className="max-w-[18rem] min-w-[18rem] w-full max-h-[24rem] min-h-[16rem] aspect-[2/1] object-cover"
               loading="lazy"
             />
 
-            <article className="p-20 text-white">
-              <div className="flex">
-                <div className="w-full">
+            <article className="text-white w-full">
+              <div className="flex justify-center w-full">
+                <div className="max-w-[20rem] min-w-[20.5rem] text-sm">
                   <Quote
                     style={{ transform: "scaleX(-1)" }}
-                    className="fill-white/60 stroke-none -ml-6"
+                    className="fill-white/60 stroke-none -ml-10"
                   />
-                  <div className="mx-4">
-                    <span className="">{listing?.toolDetails}</span>
+                  <div className="">
+                    <p className="">{listing?.toolDetails}</p>
                   </div>
                   <div className="flex w-full justify-end">
                     <Quote className="fill-white/60 stroke-none -mr-6" />
@@ -113,6 +113,7 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
               </div>
             </article>
           </div>
+          <hr className="my-2" />
           <p className="text-slate-800 tracking-wide text-[0.65rem]">
             Listed {formatDate(createdAt)}
           </p>
@@ -121,7 +122,7 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
           <CardFooter className="flex flex-col">
             <div className="w-full flex justify-between items-end py-3">
               {session ? (
-                <div className="flex px-4 gap-2 items-center">
+                <div className="w-full flex px-4 gap-2 items-center">
                   <img
                     src={session?.user?.image || ""}
                     alt={session?.user?.name || ""}
@@ -155,7 +156,7 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
               <p className="text-sm font-normal text-white">
                 {listing?.category}
               </p>
-              <div className="w-fit">
+              <div className="w-[6rem] text-center">
                 <h2 className={getConditionColor(listing?.condition)}>
                   {listing?.condition}
                 </h2>

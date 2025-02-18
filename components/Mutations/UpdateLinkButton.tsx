@@ -3,7 +3,9 @@
 import { UserProfileListingType } from "@/app/(root)/user-profile/[id]/page";
 import { useRouter } from "next/navigation";
 
-const UpdateButton: React.FC<UserProfileListingType> = ({ userListings }) => {
+const UpdateLinkButton: React.FC<UserProfileListingType> = ({
+  userListings,
+}) => {
   const listing = userListings[0];
   const router = useRouter();
 
@@ -24,4 +26,4 @@ const UpdateButton: React.FC<UserProfileListingType> = ({ userListings }) => {
   );
 };
 
-export default UpdateButton;
+export default UpdateLinkButton;
