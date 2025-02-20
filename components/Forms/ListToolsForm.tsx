@@ -470,7 +470,7 @@ const ListToolsForm = (
             </div>
 
             <div className="flex flex-col gap-1 pt-[0.3rem]">
-              <label htmlFor="contact">Contact Email</label>
+              <label htmlFor="contact">Alternate Email</label>
               <input
                 id="contact"
                 type="email"
@@ -486,9 +486,9 @@ const ListToolsForm = (
                     {errors.contact}
                   </span>
                 ) : (
-                  <span>
-                    ** We will never share your personal information with
-                    anyone. **
+                  <span className="text-xs mt-1">
+                    ** For security purposes, email will not be shared and will
+                    only be visible in your profile **
                   </span>
                 )}
               </p>

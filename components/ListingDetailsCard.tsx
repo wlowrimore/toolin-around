@@ -18,21 +18,25 @@ import Image from "next/image";
 import { Quote, Star } from "lucide-react";
 import Link from "next/link";
 import ConditionLegend from "./ConditionLegend";
+import MessageModal from "./MessageModal";
 
 const ListingDetailsCard: React.FC<ListingCardProps> = ({
   listing,
+  author,
   currentUser,
   createdAt,
 }) => {
   const { data: session } = useSession();
   const [conditionTextColor, setConditionTextColor] = useState();
 
-  const userHandle = () => {
-    if (session) {
-      const nameTag = session?.user?.email?.split("@")[0].toLowerCase();
-      return `@${nameTag}`;
+  const authorHandle = () => {
+    if (author?.email) {
+      const authorNameTag = author?.email?.split("@")[0].toLowerCase();
+      return `@${authorNameTag}`;
     }
   };
+
+  const authorFirstName = author?.name?.split(" ")[0];
 
   type ConditionType = "New" | "Like New" | "Good" | "Fair" | "Poor" | "Other";
 
@@ -41,13 +45,13 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
   ): string => {
     switch (condition) {
       case "New":
-        return "bg-sky-600 text-white py-0.5 px-1.5 border border-sky-600"; // Bright green for new items
+        return "bg-sky-600 text-cyan-800 py-0.5 px-1.5 border border-sky-600"; // Bright green for new items
       case "Like New":
         return "bg-green-500 text-white py-0.5 px-1.5 border border-green-500"; // Green for almost new items
       case "Good":
         return "bg-purple-700 text-white py-0.5 px-1.5 border border-purple-700"; // Blue for good condition
       case "Fair":
-        return "bg-amber-500 text-white py-0.5 px-1.5 border border-amber-500"; // Amber/orange for fair condition
+        return "bg-amber-500 text-black py-0.5 px-1.5 border border-amber-500"; // Amber/orange for fair condition
       case "Poor":
         return "bg-red-500 text-white py-0.5 px-1.5 border border-red-500"; // Red for poor condition
       case "Other":
@@ -121,20 +125,18 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
         <Suspense fallback={<div>Loading...</div>}>
           <CardFooter className="flex flex-col">
             <div className="w-full flex justify-between items-end py-3">
-              {session ? (
+              {author ? (
                 <div className="w-full flex px-4 gap-2 items-center">
                   <img
-                    src={session?.user?.image || ""}
-                    alt={session?.user?.name || ""}
+                    src={author?.image || ""}
+                    alt={author?.name || ""}
                     width={500}
                     height={500}
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">
-                    <p className="font-semibold">
-                      {session?.user?.name as string}
-                    </p>
-                    <p className="font-normal">{userHandle()}</p>
+                    <p className="font-semibold">{author?.name as string}</p>
+                    <p className="font-normal">{authorHandle()}</p>
                   </div>
                 </div>
               ) : (
@@ -142,15 +144,17 @@ const ListingDetailsCard: React.FC<ListingCardProps> = ({
                   Loading user data...
                 </p>
               )}
-
-              <div className="w-full flex justify-end mr-4">
-                <button
-                  type="button"
-                  className="text-red-900 underline px-4 py-2 hover:text-slate-700 hover:bg-white text-base"
-                >
-                  Contact Listing Owner
-                </button>
-              </div>
+              <MessageModal authorFirstName={authorFirstName as string} />
+              {/* <div className="w-full flex justify-end mr-4">
+                <Link href="/messages">
+                  <button
+                    type="button"
+                    className="text-blue-800 text-sm px-4 py-2 hover:text-slate-700 hover:bg-white"
+                  >
+                    Message {authorFirstName}
+                  </button>
+                </Link>
+              </div> */}
             </div>
             <div className="w-full flex justify-between items-center bg-slate-700 py-1 px-2 mt-6">
               <p className="text-sm font-normal text-white">

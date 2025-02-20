@@ -87,7 +87,7 @@ const UserProfilePage = async () => {
 
     return (
       <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
-        <div className="w-full mt-10 px-6">
+        <div className="w-full my-10 px-6">
           <header className="w-full border-b-[0.025rem] border-slate-300 py-2">
             <h1 className="text-slate-600 text-3xl font-semibold">
               {userFirstName}&apos;s Profile

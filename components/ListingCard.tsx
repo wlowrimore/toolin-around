@@ -35,10 +35,10 @@ const ListingCard: React.FC<ListingCardProps> = ({
     router.push(`/listing/${_id}`);
   };
 
-  const userHandle = () => {
-    if (session) {
-      const nameTag = session?.user?.email?.split("@")[0].toLowerCase();
-      return `@${nameTag}`;
+  const authorHandle = () => {
+    if (author?.email) {
+      const authorNameTag = author?.email?.split("@")[0].toLowerCase();
+      return `@${authorNameTag}`;
     }
   };
 
@@ -101,6 +101,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               <div className="flex p-4 pt-0 gap-2 items-center">
                 <div className="flex items-center justify-center gap-2 pb-2 pt-1">
                   <img
+                    title={author?.name as string}
                     src={author?.image || ""}
                     alt={author?.name || ""}
                     width={1000}
@@ -109,7 +110,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
                   />
                   <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">
                     <p className="font-semibold">{author?.name as string}</p>
-                    <p className="font-normal">{userHandle()}</p>
+                    <p className="font-normal">{authorHandle()}</p>
                   </div>
                 </div>
               </div>

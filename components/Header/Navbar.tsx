@@ -72,11 +72,13 @@ const Header = ({ query }: { query: string }) => {
                   <span>Featured Listings</span>
                 </button>
               </Link>
-              <button className="flex items-center hover:text-blue-200">
-                <MessageCircle className="h-5 w-5 -mr-1" />
-                <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
-                <span>Messages</span>
-              </button>
+              <Link href="/messages">
+                <button className="flex items-center hover:text-blue-200">
+                  <MessageCircle className="h-5 w-5 -mr-1" />
+                  <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
+                  <span>Messages</span>
+                </button>
+              </Link>
               <Link href={`/user-profile/${session.user?.id}`}>
                 <button className="flex items-center space-x-1 hover:text-blue-200">
                   <UserCircle className="h-5 w-5" />
