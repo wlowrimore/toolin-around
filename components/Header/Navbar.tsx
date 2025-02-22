@@ -26,10 +26,11 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import LoginModalForm from "../Auth/LoginModalForm";
 import { SearchModal } from "../SearchModal";
+import { useMessages } from "@/hooks/useMessages";
 
 const Header = ({ query }: { query: string }) => {
   const { data: session } = useSession();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { unreadCount } = useMessages(session?.user?.id as string);
 
   return (
     <div className="bg-sky-900 text-slate-400">
@@ -74,8 +75,10 @@ const Header = ({ query }: { query: string }) => {
               </Link>
               <Link href="/messages">
                 <button className="flex items-center hover:text-blue-200">
-                  <MessageCircle className="h-5 w-5 -mr-1" />
-                  <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
+                  <MessageCircle className="h-5 w-5 mr-1" />
+                  {unreadCount > 0 && (
+                    <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
+                  )}
                   <span>Messages</span>
                 </button>
               </Link>

@@ -1,0 +1,909 @@
+[
+  {
+    "fields": [
+      {
+        "description": "Author ID (email)",
+        "hidden": true,
+        "name": "id",
+        "type": "string",
+        "title": "ID"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "url"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "role"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to role"
+          }
+        ],
+        "name": "roles",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "to": [
+                  {
+                    "type": "listing"
+                  }
+                ],
+                "name": "listing",
+                "type": "reference"
+              },
+              {
+                "initialValue": 0,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "precision",
+                        "constraint": 2
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 5
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "averageRating",
+                "type": "number"
+              },
+              {
+                "initialValue": 0,
+                "name": "totalRatings",
+                "type": "number"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "listingRatings",
+        "type": "array"
+      }
+    ],
+    "name": "author",
+    "type": "document"
+  },
+  {
+    "options": {
+      "list": [
+        {
+          "title": "Common Tools",
+          "value": "Common Tools"
+        },
+        {
+          "title": "Power Tools",
+          "value": "Power Tools"
+        },
+        {
+          "title": "Electric Tools",
+          "value": "Electric Tools"
+        },
+        {
+          "title": "Carpentry Tools",
+          "value": "Carpentry Tools"
+        },
+        {
+          "title": "Gardening Tools",
+          "value": "Gardening Tools"
+        },
+        {
+          "title": "Plumbing Tools",
+          "value": "Plumbing Tools"
+        },
+        {
+          "title": "Automotive Tools",
+          "value": "Automotive Tools"
+        },
+        {
+          "title": "Safety Tools",
+          "value": "Safety Tools"
+        },
+        {
+          "title": "Other Tools",
+          "value": "Other Tools"
+        }
+      ]
+    },
+    "validation": [
+      {
+        "rules": [
+          {
+            "flag": "valid",
+            "constraint": [
+              "Common Tools",
+              "Power Tools",
+              "Electric Tools",
+              "Carpentry Tools",
+              "Gardening Tools",
+              "Plumbing Tools",
+              "Automotive Tools",
+              "Safety Tools",
+              "Other Tools"
+            ]
+          },
+          {
+            "flag": "presence",
+            "constraint": "required"
+          }
+        ],
+        "level": "error"
+      }
+    ],
+    "name": "category",
+    "type": "string",
+    "title": "Tools Category"
+  },
+  {
+    "options": {
+      "list": [
+        {
+          "title": "New",
+          "value": "New"
+        },
+        {
+          "title": "Like New",
+          "value": "Like New"
+        },
+        {
+          "title": "Good",
+          "value": "Good"
+        },
+        {
+          "title": "Fair",
+          "value": "Fair"
+        },
+        {
+          "title": "Poor",
+          "value": "Poor"
+        },
+        {
+          "title": "Other",
+          "value": "Other"
+        }
+      ]
+    },
+    "validation": [
+      {
+        "rules": [
+          {
+            "flag": "valid",
+            "constraint": [
+              "New",
+              "Like New",
+              "Good",
+              "Fair",
+              "Poor",
+              "Other"
+            ]
+          },
+          {
+            "flag": "presence",
+            "constraint": "required"
+          }
+        ],
+        "level": "error"
+      }
+    ],
+    "name": "condition",
+    "type": "string"
+  },
+  {
+    "fields": [
+      {
+        "hidden": true,
+        "name": "id",
+        "type": "string",
+        "title": "ID"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "The author who created this service",
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "name": "author",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 10
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "name": "condition",
+        "type": "string"
+      },
+      {
+        "name": "price",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Hour",
+              "value": "hour"
+            },
+            {
+              "title": "Day",
+              "value": "day"
+            },
+            {
+              "title": "Week",
+              "value": "week"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "hour",
+                  "day",
+                  "week"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "ratePeriod",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "url"
+      },
+      {
+        "name": "deleteToken",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 200
+              },
+              {
+                "flag": "max",
+                "constraint": 1000
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Briefly describe your listing",
+        "name": "toolDetails",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Contact email is required"
+          }
+        ],
+        "description": "Contact email for this service",
+        "name": "contact",
+        "type": "email",
+        "title": "Contact Email"
+      }
+    ],
+    "name": "listing",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "listing"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to listing"
+          }
+        ],
+        "name": "select",
+        "type": "array"
+      }
+    ],
+    "name": "playlist",
+    "type": "document",
+    "title": "Playlists"
+  },
+  {
+    "fields": [
+      {
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "name": "author",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "rating",
+        "type": "number"
+      },
+      {
+        "name": "review",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "listing"
+          }
+        ],
+        "name": "listing",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "listing"
+          }
+        ],
+        "name": "user",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "createdAt",
+        "type": "datetime"
+      }
+    ],
+    "name": "rating",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "key"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "name": "user",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "listing"
+          }
+        ],
+        "name": "listing",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "name": "listingProvider",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "createdAt",
+        "type": "datetime"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "expiresAt",
+        "type": "datetime"
+      },
+      {
+        "initialValue": false,
+        "name": "isUsed",
+        "type": "boolean"
+      }
+    ],
+    "name": "ratingKey",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "code",
+        "type": "string"
+      }
+    ],
+    "name": "role",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "description": "User ID (email)",
+        "to": [
+          {
+            "type": "author"
+          }
+        ],
+        "hidden": true,
+        "name": "id",
+        "type": "reference",
+        "title": "ID"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "name": "image",
+        "type": "string"
+      },
+      {
+        "name": "role",
+        "type": "string"
+      }
+    ],
+    "name": "user",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "content",
+        "type": "text"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "user"
+          }
+        ],
+        "name": "sender",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "user"
+          }
+        ],
+        "name": "recipient",
+        "type": "reference"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "to": [
+          {
+            "type": "listing"
+          }
+        ],
+        "name": "listing",
+        "type": "reference"
+      },
+      {
+        "initialValue": false,
+        "name": "isRead",
+        "type": "boolean"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "createdAt",
+        "type": "datetime"
+      }
+    ],
+    "name": "message",
+    "type": "document"
+  }
+]

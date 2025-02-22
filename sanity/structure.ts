@@ -13,4 +13,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("ratingKey").title("Rating Keys"),
       S.documentTypeListItem("role").title("Roles"),
       S.documentTypeListItem("user").title("Users"),
+      S.documentTypeListItem("message").title("Messages"),
     ]);

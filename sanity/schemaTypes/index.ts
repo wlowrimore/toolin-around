@@ -8,6 +8,7 @@ import { rating } from "./rating";
 import { ratingKey } from "./ratingKey";
 import { role } from "./role";
 import { user } from "./user";
+import { message } from "./message";
 
 export const schema = {
   types: [
@@ -20,5 +21,6 @@ export const schema = {
     ratingKey,
     role,
     user,
+    message,
   ] as SchemaTypeDefinition[],
 };

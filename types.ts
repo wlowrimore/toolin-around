@@ -85,6 +85,24 @@ export interface FeaturedListings {
   toolDescription: null;
 }
 
+export type Message = {
+  _id: string;
+  sender: {
+    _ref: string;
+    name: string;
+    image: string;
+  };
+  recipient: {
+    _ref: string;
+    name: string;
+  };
+  content: string;
+  listingId: string;
+  createdAt: string;
+  isRead: boolean;
+  parentMessageId?: string;
+};
+
 export interface SanityFetchResponse {
   data: FeaturedListings;
 }
