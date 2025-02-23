@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -12,8 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { MessageCircleMore } from "lucide-react";
+import { MessageCircleMore, Check } from "lucide-react";
 import LoginModalForm from "./Auth/LoginModalForm";
+import { toast } from "@/hooks/use-toast";
 
 interface MessageModalProps {
   authorFirstName: string;
@@ -34,11 +35,27 @@ const MessageModal = ({
   authorId,
   listingId,
   sessionUserId,
+  isOpen: externalIsOpen,
+  onOpenChange,
 }: MessageModalProps) => {
   const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [isSent, setIsSent] = useState(false);
   const router = useRouter();
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setIsSent(false);
+    }
+    onOpenChange?.(open);
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleOpenChange(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +64,8 @@ const MessageModal = ({
       router.push("/");
       return;
     }
+
+    setIsSending(true);
 
     try {
       const requestBody = {
@@ -68,49 +87,32 @@ const MessageModal = ({
       });
 
       if (!response.ok) {
-        // Check for HTTP errors (4xx or 5xx)
-        const errorText = await response.text(); // Get the error message from the server
-        throw new Error(`HTTP error ${response.status}: ${errorText}`); // Throw an error
+        const errorText = await response.text();
+        throw new Error(`HTTP error ${response.status}: ${errorText}`);
       }
 
-      const responseText = await response.text(); // Get the raw response text
-      console.log("Raw Response:", responseText); // Log the raw response
+      const data = await response.json();
+      setMessage("");
+      setIsSent(true);
 
-      try {
-        const data = JSON.parse(responseText); // *NOW* try to parse the JSON
-        console.log("Parsed JSON Data:", data);
-        setMessage(""); // Clear the message input ONLY on success
-        setIsOpen(false); // Close the modal on success
-        // if (onMessageSent) {
-        //   onMessageSent(data.message); // Call the callback if provided.
-        // }
-      } catch (jsonError) {
-        console.error("JSON Parse Error:", jsonError);
-        console.error("Problematic JSON Data:", responseText);
-        // Handle the JSON parsing error (e.g., show a user-friendly message)
-        throw new Error("Invalid JSON response from server.");
-      }
+      setTimeout(() => {
+        handleOpenChange(false);
+      }, 1500);
     } catch (error) {
       console.error("Fetch/Processing Error:", error);
-      // Display a user-friendly error message
-      alert("Failed to send message. Please try again later."); // Or use a state variable to show an error message in the UI.
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+        duration: 3000,
+      });
     } finally {
-      setIsSending(false); // Set isSending to false in all cases (success or error)
+      setIsSending(false);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <div className="w-full flex justify-end mr-4">
-          <button
-            type="button"
-            className="text-blue-800 text-sm px-4 py-2 hover:text-slate-700 hover:bg-white"
-          >
-            Message {authorFirstName}
-          </button>
-        </div>
-      </DialogTrigger>
+    <Dialog open={externalIsOpen ?? isOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-1 text-base text-sky-800 font-semibold tracking-wide">
@@ -137,6 +139,12 @@ const MessageModal = ({
             required
           />
           <DialogFooter>
+            {isSent && (
+              <span className="flex items-center gap-1 text-emerald-600">
+                <Check className="w-4 h-4" />
+                Sent!
+              </span>
+            )}
             <button
               type="submit"
               disabled={isSending}

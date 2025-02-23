@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
 import MessagesDisplay from "@/components/MessagesDisplay";
 import { redirect } from "next/navigation";
+import { Rss } from "lucide-react";
 
 async function getMessages(userId: string) {
   const query = `*[_type == "message" && (recipient._ref == $userId || sender._ref == $userId)] | order(createdAt desc) {
@@ -38,8 +39,13 @@ export default async function MessagesPage() {
   const messages = await getMessages(session.user.id);
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6">Messages</h1>
+    <div className="max-w-6xl mx-auto px-5 py-12">
+      <h1 className="flex items-center gap-2 text-3xl font-bold mb-6">
+        <span className="text-green-700">
+          <Rss />
+        </span>
+        Messages Inbox
+      </h1>
       <MessagesDisplay initialMessages={messages} userId={session.user.id} />
     </div>
   );

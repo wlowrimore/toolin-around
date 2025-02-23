@@ -1,9 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogHeader } from "@/components/ui/dialog";
 import MessageModal from "@/components/MessageModal";
 import { formatDate } from "@/lib/utils";
+import {
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 
 interface Message {
   _id: string;
@@ -39,12 +45,16 @@ export default function MessagesDisplay({
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
 
-  const handleMessageClick = async (message: Message) => {
-    setSelectedMessage(message);
+  const truncateContent = (content: string) => {
+    return content.length > 100 ? content.slice(0, 100) + "..." : content;
+  };
+
+  const handleMessageClick = async (message: Message, id: Message["_id"]) => {
+    setSelectedMessage({ ...message, _id: id });
 
     if (!message.isRead && message.recipient._id === userId) {
       try {
-        const response = await fetch("/api/messages/mark-read", {
+        const response = await fetch("/api/mark-read", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -97,30 +107,36 @@ export default function MessagesDisplay({
       {messages.map((message) => (
         <div
           key={message._id}
-          onClick={() => handleMessageClick(message)}
-          className={`p-4 border rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer ${
-            !message.isRead && message.recipient._id === userId
-              ? "bg-blue-50"
-              : "bg-white"
+          onClick={() => handleMessageClick(message, message._id)}
+          className={`p-4 hover:shadow-md transition-shadow cursor-pointer border-b border-slate-300 ${
+            message.isRead && message.recipient._id === userId
+              ? "opacity-60"
+              : "opacity-100"
           }`}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <img
-              src={message.sender.image}
-              alt={message.sender.name}
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <p className="font-semibold">{message.sender.name}</p>
-              <p className="text-sm text-gray-500">
-                Re: {message.listing.title}
+          <div className="w-full grid grid-cols-6 gap-4">
+            <div className="flex col-span-2 gap-3 mb-2">
+              <img
+                src={message.sender.image}
+                alt={message.sender.name}
+                className="w-10 h-10 rounded-full"
+              />
+              <div>
+                <p className="font-semibold">{message.sender.name}</p>
+                <p className="text-sm text-gray-600">
+                  Re: {message.listing.title}
+                </p>
+              </div>
+            </div>
+            <div className="col-span-3 flex items-center">
+              <p className="text-gray-700">
+                &quot; {truncateContent(message.content)} &quot;
               </p>
             </div>
-            <p className="ml-auto text-sm text-gray-500">
+            <p className="flex justify-end items-center text-sm text-gray-500">
               {formatDate(message.createdAt)}
             </p>
           </div>
-          <p className="text-gray-700">{message.content}</p>
         </div>
       ))}
 
@@ -129,30 +145,52 @@ export default function MessagesDisplay({
           open={!!selectedMessage}
           onOpenChange={(open) => !open && setSelectedMessage(null)}
         >
-          <div className="p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={selectedMessage.sender.image}
-                alt={selectedMessage.sender.name}
-                className="w-12 h-12 rounded-full"
-              />
-              <div>
-                <h3 className="font-bold text-lg">
-                  {selectedMessage.sender.name}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Re: {selectedMessage.listing.title}
-                </p>
+          <DialogContent className="relative">
+            <DialogTitle></DialogTitle>
+            <DialogHeader>
+              <div className="max-w-6xl w-full h-[17.2rem] max-h-[17.2rem] p-6 space-y-4 bg-sky-900 text-white">
+                <div className="flex items-center gap-5">
+                  <img
+                    src={selectedMessage.sender.image}
+                    alt={selectedMessage.sender.name}
+                    className="w-20 h-20 border border-white"
+                  />
+                  <div>
+                    <div className="flex flex-col pb-3">
+                      <h3 className="flex flex-col font-bold text-2xl leading-6">
+                        {selectedMessage.sender.name}
+                        <span className="text-xs text-gray-300">
+                          Sent on {formatDate(selectedMessage.createdAt)}
+                        </span>
+                      </h3>
+                    </div>
+                    <p className="text-base text-sky-200">
+                      Re: {selectedMessage.listing.title}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4 px-[6.3rem]">
+                  <div className="border border-slate-700 bg-white text-black p-2 mb-2 h-[5rem] max-h-[5rem] overflow-auto">
+                    <p className="tracking-wide">{selectedMessage.content}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setIsReplyModalOpen(true)}
+                      className="py-[3px] px-3 bg-white text-black font-semibold hover:bg-emerald-700 hover:text-white text-sm transition-colors duration-200"
+                    >
+                      Reply
+                    </button>
+                    <button
+                      onClick={() => setSelectedMessage(null)}
+                      className="py-1 px-3 border-white bg-gray-900 hover:bg-red-700/80 text-white text-sm"
+                    >
+                      Ignore
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <p className="text-gray-700 mt-4">{selectedMessage.content}</p>
-            <button
-              onClick={() => setIsReplyModalOpen(true)}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-            >
-              Reply
-            </button>
-          </div>
+            </DialogHeader>
+          </DialogContent>
         </Dialog>
       )}
 
@@ -161,8 +199,8 @@ export default function MessagesDisplay({
         authorId={selectedMessage?.sender._id || ""}
         listingId={selectedMessage?.listing._id || ""}
         isOpen={isReplyModalOpen}
-        onClose={() => setIsReplyModalOpen(false)}
-        onMessageSent={handleReply}
+        onOpenChange={setIsReplyModalOpen}
+        sessionUserId={userId}
       />
     </div>
   );
