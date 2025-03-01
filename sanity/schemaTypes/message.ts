@@ -33,6 +33,13 @@ export const message = defineType({
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: "conversation",
+      title: "Conversation",
+      type: "reference",
+      to: [{ type: "conversation" }],
+      description: "The conversation this message belongs to",
+    },
+    {
       name: "isRead",
       title: "Is Read",
       type: "boolean",

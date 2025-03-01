@@ -201,6 +201,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
 }) => {
   const { data: session } = useSession();
   const [conditionTextColor, setConditionTextColor] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const authorHandle = () => {
     if (author?.email) {
@@ -210,6 +211,14 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   };
 
   const authorFirstName = author?.name?.split(" ")[0];
+
+  const handleOpenModal = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    console.log("attempting to open modal");
+    setIsModalOpen(true);
+  };
 
   const getConditionColor = (
     condition: ConditionType | string | null
@@ -306,7 +315,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
         {/* Updated CardFooter with enhanced MessageModal */}
         <Suspense fallback={<div>Loading...</div>}>
           <CardFooter className="flex flex-col">
-            <div className="w-full flex justify-between items-end py-3">
+            <div className="relative w-full flex justify-between items-end py-3">
               {author ? (
                 <div className="w-full flex px-4 gap-2 items-center">
                   <img
@@ -320,19 +329,29 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                     <p className="font-semibold">{author?.name as string}</p>
                     <p className="font-normal">{authorHandle()}</p>
                   </div>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="absolute right-6 top-3 text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
+                  >
+                    Message {authorFirstName}
+                  </button>
                 </div>
               ) : (
                 <p className="w-full text-center text-sm">
                   Loading user data...
                 </p>
               )}
-              <MessageModal
-                authorFirstName={authorFirstName as string}
-                authorId={author?._id as string}
-                listingId={listing?._id}
-                sessionUserId={session?.user?.id}
-                onMessageSent={handleMessageSent}
-              />
+              {isModalOpen ? (
+                <MessageModal
+                  authorFirstName={authorFirstName as string}
+                  authorId={author?._id as string}
+                  listingId={listing?._id}
+                  sessionUserId={session?.user?.id}
+                  isOpen={isModalOpen}
+                  onOpenChange={(open) => setIsModalOpen(open)}
+                  onMessageSent={handleMessageSent}
+                />
+              ) : null}
             </div>
             <div className="w-full flex justify-between items-center bg-slate-700 py-1 px-2 mt-6">
               <p className="text-sm font-normal text-white">

@@ -6,6 +6,7 @@ type Message = {
   recipientId: string;
   listingId: string;
   senderId: string;
+  conversationId: string;
 };
 
 type Error = {
@@ -16,7 +17,7 @@ type Error = {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { content, recipientId, listingId, senderId } = body;
+    const { content, recipientId, listingId, senderId, conversationId } = body;
 
     // Validate required fields
     if (!content || !recipientId || !listingId || !senderId) {
@@ -41,6 +42,61 @@ export async function POST(req: Request) {
       );
     }
 
+    let conversation;
+
+    if (conversationId) {
+      const existingConversation = await client.fetch(
+        `*[_type == "conversation" && _id == $id && $senderId in participants[]._ref][0]`,
+        { id: conversationId, senderId }
+      );
+
+      if (!existingConversation) {
+        return NextResponse.json(
+          { message: "Conversation not found or you're not a participant" },
+          { status: 404 }
+        );
+      }
+
+      conversation = existingConversation;
+    } else {
+      const existingConversation = await client.fetch(
+        `*[_type == "conversation" && $senderId in participants[]._ref && $recipientId in participants[]._ref && listing._ref == $listingId][0]`,
+        { senderId, recipientId, listingId }
+      );
+
+      if (existingConversation) {
+        conversation = existingConversation;
+      } else {
+        const listing = await client.fetch(
+          `*[_type == "listing" && _id == $id][0]`,
+          { id: listingId }
+        );
+
+        const newConversation = await client.create({
+          _type: "conversation",
+          subject: `Re: ${listing.title || "Listing"}`,
+          participants: [
+            {
+              _type: "reference",
+              _ref: senderId,
+            },
+            {
+              _type: "reference",
+              _ref: recipientId,
+            },
+          ],
+          listing: {
+            _type: "reference",
+            _ref: listingId,
+          },
+          lastMessageAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+        });
+
+        conversation = newConversation;
+      }
+    }
+
     // Create a new message document in Sanity
     const message = await client.create({
       _type: "message",
@@ -57,19 +113,30 @@ export async function POST(req: Request) {
         _type: "reference",
         _ref: listingId,
       },
+      conversation: {
+        _type: "reference",
+        _ref: conversation._id,
+      },
       isRead: false,
       createdAt: new Date().toISOString(),
     });
 
-    console.log("Message sent successfully: ", message);
+    await client
+      .patch(conversation._id)
+      .set({ lastMessageAt: new Date().toISOString() })
+      .commit();
+
     return NextResponse.json(
-      { message: "Message sent successfully", data: message },
+      {
+        message: "Message sent successfully",
+        data: message,
+        conversation: conversation,
+      },
       { status: 200 }
     );
   } catch (error: Error | any) {
     console.error("Error sending message:", error);
 
-    // Check if it's a permissions error
     if (error.statusCode === 403) {
       return NextResponse.json(
         {

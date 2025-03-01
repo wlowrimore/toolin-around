@@ -37,6 +37,7 @@ const MessageModal = ({
   sessionUserId,
   isOpen: externalIsOpen,
   onOpenChange,
+  onMessageSent,
 }: MessageModalProps) => {
   const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -45,16 +46,12 @@ const MessageModal = ({
   const router = useRouter();
 
   const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
+    if (onOpenChange) {
+      onOpenChange(open);
+    }
     if (!open) {
       setIsSent(false);
     }
-    onOpenChange?.(open);
-  };
-
-  const handleButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleOpenChange(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,15 +64,56 @@ const MessageModal = ({
 
     setIsSending(true);
 
+    //   try {
+    //     const requestBody = {
+    //       recipientId: authorId,
+    //       content: message,
+    //       listingId,
+    //       senderId: sessionUserId,
+    //       createdAt: new Date().toISOString(),
+    //       isRead: false,
+    //       _type: "message",
+    //     };
+
+    //     const response = await fetch("/api/send-message", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(requestBody),
+    //     });
+
+    //     if (!response.ok) {
+    //       const errorText = await response.text();
+    //       throw new Error(`HTTP error ${response.status}: ${errorText}`);
+    //     }
+
+    //     const data = await response.json();
+    //     setMessage("");
+    //     setIsSent(true);
+
+    //     setTimeout(() => {
+    //       handleOpenChange(false);
+    //     }, 1500);
+    //   } catch (error) {
+    //     console.error("Fetch/Processing Error:", error);
+    //     toast({
+    //       title: "Error",
+    //       description: "Failed to send message. Please try again later.",
+    //       variant: "destructive",
+    //       duration: 3000,
+    //     });
+    //   } finally {
+    //     setIsSending(false);
+    //   }
+    // };
+
     try {
       const requestBody = {
         recipientId: authorId,
         content: message,
         listingId,
         senderId: sessionUserId,
-        createdAt: new Date().toISOString(),
-        isRead: false,
-        _type: "message",
       };
 
       const response = await fetch("/api/send-message", {
@@ -95,9 +133,24 @@ const MessageModal = ({
       setMessage("");
       setIsSent(true);
 
-      setTimeout(() => {
-        handleOpenChange(false);
-      }, 1500);
+      // If we have a conversation ID, we can redirect to the conversation
+      if (data.conversation?._id) {
+        setTimeout(() => {
+          handleOpenChange(false);
+          if (onMessageSent) {
+            onMessageSent(data.conversation._id);
+          }
+          // Optional: navigate to the conversation
+          // router.push(`/messages?conversation=${data.conversation._id}`);
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          handleOpenChange(false);
+          if (onMessageSent) {
+            onMessageSent(data.message._id);
+          }
+        }, 1500);
+      }
     } catch (error) {
       console.error("Fetch/Processing Error:", error);
       toast({

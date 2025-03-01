@@ -58,7 +58,7 @@ const Header = ({ query }: { query: string }) => {
                   className="flex items-center space-x-1 hover:text-blue-200"
                 >
                   <Eye className="h-5 w-5" />
-                  <span>View All Listings</span>
+                  <span>All Listings</span>
                 </button>
               </Link>
               <div>
@@ -74,10 +74,10 @@ const Header = ({ query }: { query: string }) => {
                 </button>
               </Link>
               <Link href="/messages">
-                <button className="flex items-center hover:text-blue-200">
-                  <MessageCircle className="h-5 w-5 -mr-1" />
+                <button className="relative flex items-center hover:text-blue-200">
+                  <MessageCircle className="h-5 w-5 mr-1" />
                   {unreadCount > 0 && (
-                    <span className="relative z-20 bottom-2 right-1 w-2 h-2 bg-green-300 rounded-full"></span>
+                    <span className="absolute z-60 top-0.5 animate-pulse duration-700 left-3 w-2 h-2 bg-green-300 rounded-full"></span>
                   )}
                   <span>Messages</span>
                 </button>

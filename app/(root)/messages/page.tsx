@@ -1,8 +1,10 @@
 import { auth } from "@/auth";
 import { client } from "@/sanity/lib/client";
-import MessagesDisplay from "@/components/MessagesDisplay";
+// import MessagesDisplay from "@/components/MessagesDisplay";
 import { redirect } from "next/navigation";
 import { Rss } from "lucide-react";
+import ConversationView from "@/components/Messaging/ConversationView";
+import MessagesInbox from "@/components/Messaging/MessagesInbox";
 
 async function getMessages(userId: string) {
   const query = `*[_type == "message" && (recipient._ref == $userId || sender._ref == $userId)] | order(createdAt desc) {
@@ -46,7 +48,7 @@ export default async function MessagesPage() {
         </span>
         Messages Inbox
       </h1>
-      <MessagesDisplay initialMessages={messages} userId={session.user.id} />
+      <MessagesInbox />
     </div>
   );
 }
