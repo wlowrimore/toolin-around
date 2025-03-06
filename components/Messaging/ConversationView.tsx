@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { MessageCircleMore, ArrowLeft, Send } from "lucide-react";
+import { LoadingSpinner, LoadingSpinnerWhite } from "../LoadingAnimations";
+import { formatMessageTime } from "@/lib/utils";
+import Image from "next/image";
 
 interface ConversationProps {
   _id: string;
@@ -35,6 +38,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
   const [loading, setLoading] = useState(true);
   const [replyContent, setReplyContent] = useState("");
   const [sending, setSending] = useState(false);
+  const [isFromMe, setIsFromMe] = useState(false);
 
   useEffect(() => {
     const loadConversation = async () => {
@@ -56,7 +60,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
         if (unreadMessages.length > 0) {
           await Promise.all(
             unreadMessages.map((msg: Message) =>
-              fetch("/api/mark-as-read", {
+              fetch("/api/mark-read", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ messageId: msg._id }),
@@ -114,12 +118,13 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
         createdAt: new Date().toISOString(),
       };
 
-      setMessages([...messages, updatedMessage]);
+      setMessages([...messages, updatedMessage, (messages[0].isRead = true)]);
       setReplyContent("");
     } catch (error) {
       console.error("Error sending reply:", error);
     } finally {
       setSending(false);
+      messages[0].isRead = true;
     }
   };
 
@@ -130,6 +135,10 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
   if (!conversation) {
     return <div className="p-6 text-center">Conversation not found</div>;
   }
+
+  // if (messages[0].sender._id === session?.user?.id) {
+  //   setIsFromMe(true);
+  // }
 
   return (
     <div className="flex flex-col h-full max-h-[78vh]">
@@ -159,7 +168,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
           <div className="h-screen">
             {messages.length > 0 &&
               messages.map((message) => {
-                const isFromMe = message.sender._id === session?.user?.id;
+                const isFromMe = message?.sender?._id === session?.user?.id;
 
                 return (
                   <div
@@ -169,27 +178,27 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
                     <div
                       className={`max-w-[80%] p-3 ${
                         isFromMe
-                          ? "bg-blue-500 text-white mb-3"
-                          : "bg-gray-100 text-gray-800 mb-3"
+                          ? "bg-blue-500 text-white my-3 max-w-[47%] w-[47%] rounded-l-2xl rounded-br-2xl"
+                          : "bg-slate-200 text-gray-800 my-3 max-w-[47%] w-[47%] rounded-r-2xl rounded-bl-2xl"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <img
-                          src={message?.sender?.image || "/default-avatar.jpg"}
-                          alt={message?.sender?.name}
+                        <Image
+                          src={message?.sender?.image as string}
+                          alt={message?.sender?.name as string}
+                          width={500}
+                          height={500}
                           className="w-6 h-6 rounded-full object-cover"
                         />
                         <span className="font-medium text-sm">
                           {message?.sender?.name}
                         </span>
                       </div>
-                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      <p className="whitespace-pre-wrap">{message?.content}</p>
                       <div
-                        className={`text-xs mt-1 ${isFromMe ? "text-blue-100" : "text-gray-500"}`}
+                        className={`text-xs mt-1 ${isFromMe ? "text-blue-200" : "text-gray-500"}`}
                       >
-                        {formatDistanceToNow(new Date(message.createdAt), {
-                          addSuffix: true,
-                        })}
+                        {formatMessageTime(message.createdAt)}
                       </div>
                     </div>
                   </div>
@@ -202,7 +211,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
       {/* Reply Form */}
       <form
         onSubmit={handleSendReply}
-        className="border-t p-3 bg-white mt-auto"
+        className="border-t py-3 bg-white mt-auto"
       >
         <div className="flex items-end">
           <div className="flex-1">
@@ -210,6 +219,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
               value={replyContent}
               onChange={(e) => setReplyContent(e.target.value)}
               placeholder="Type your reply..."
+              style={{ resize: "none" }}
               className="w-full border p-2 min-h-[5rem] focus:outline-none"
               disabled={sending}
             />
@@ -220,8 +230,10 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
           disabled={!replyContent.trim() || sending}
           className="flex items-center justify-center bg-cyan-700 text-white p-2 w-full disabled:bg-gray-300"
         >
-          <Send className="w-6 h-6" />
-          <span className="ml-2 text-xl">Send</span>
+          {sending ? <LoadingSpinner /> : <Send className="w-6 h-6" />}
+          <span className={`ml-2 text-xl ${sending && "text-sky-600"}`}>
+            {sending ? "Sending..." : "Send"}
+          </span>
         </button>
       </form>
     </div>

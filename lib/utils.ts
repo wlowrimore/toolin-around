@@ -3,6 +3,7 @@ import { client } from "@/sanity/lib/client";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Listing } from "../types";
+import { formatDistanceToNow } from "date-fns";
 
 // GET LISTING RATINGS INTERFACE
 
@@ -115,6 +116,28 @@ export function formatDate(date: string) {
     day: "numeric",
     year: "numeric",
   });
+}
+
+export function formatMessageTime(createdAt: string | undefined) {
+  try {
+    if (!createdAt) return "Unknown time";
+
+    // Attempt to parse the date, with fallback for different formats
+    const date = new Date(createdAt);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      console.warn("Invalid date:", createdAt);
+      return "Invalid date";
+    }
+
+    return formatDistanceToNow(date, {
+      addSuffix: true,
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Unable to format time";
+  }
 }
 
 interface WeekCycle {

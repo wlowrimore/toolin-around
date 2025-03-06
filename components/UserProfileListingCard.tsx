@@ -155,10 +155,10 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
             <div className="w-full flex ">
               {session ? (
                 <div className="flex w-full p-4 pt-0 gap-2 items-start">
-                  <div className="flex flex-col">
+                  <div className="flex flex-col w-full">
                     <div className="flex items-center gap-2 pb-2 pt-1">
                       {author?.image ? (
-                        <img
+                        <Image
                           src={author?.image || ""}
                           alt={author?.name || ""}
                           width={1000}
@@ -178,12 +178,12 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
                       </div>
                     </div>
                     {price && ratePeriod && (
-                      <p className="w-full flex justify-center text-sm mt-1 font-semibold">
-                        Listed Price :{" "}
-                        <span className="ml-2 text-green-600">
+                      <div className="w-full flex justify-between text-sm mt-1 font-semibold">
+                        <p>Listed Price</p>
+                        <p className="text-emerald-700">
                           ${price} / {ratePeriod}
-                        </span>
-                      </p>
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>

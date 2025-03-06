@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import ConversationView from "./ConversationView";
+import Image from "next/image";
 
 export interface Conversation {
   _id: string;
@@ -75,10 +76,6 @@ const MessagesInbox = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      {/* <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold">Messages Inbox</h1>
-      </div> */}
-
       {loading ? (
         <div className="text-center py-8">Loading conversations...</div>
       ) : conversations.length === 0 ? (
@@ -86,7 +83,7 @@ const MessagesInbox = () => {
           <p className="text-gray-500">You don't have any messages yet.</p>
         </div>
       ) : (
-        <div className="space-y-1 border rounded-lg divide-y">
+        <div className="space-y-1 border divide-y">
           {conversations.map((conversation) => {
             // Find the other participant
             const otherParticipant = conversation.participants.find(
@@ -103,35 +100,48 @@ const MessagesInbox = () => {
               <div
                 key={conversation._id}
                 onClick={() => setSelectedConversationId(conversation._id)}
-                className="p-4 hover:bg-gray-50 cursor-pointer flex items-center"
+                className="p-4 hover:bg-sky-50 hover:shadow-md shadow-cyan-800 cursor-pointer grid grid-cols-7"
               >
-                <div className="mr-4">
-                  <img
-                    src={otherParticipant?.image || "/default-avatar.jpg"}
-                    alt={otherParticipant?.name || "User"}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-baseline">
-                    <h3 className="font-medium truncate">
-                      {conversation.subject}
-                    </h3>
-                    <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                <div className="flex items-center col-span-2">
+                  <div className="mr-3">
+                    <Image
+                      src={otherParticipant?.image as string}
+                      alt={otherParticipant?.name || "User"}
+                      width={500}
+                      height={500}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline">
+                      <h3 className="font-medium truncate">
+                        {conversation.subject}
+                      </h3>
+                      {/* <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
                       {formatDistanceToNow(
                         new Date(conversation.lastMessageAt),
                         { addSuffix: true }
                       )}
-                    </span>
+                    </span> */}
+                    </div>
+                    <p className="text-sm text-gray-600 truncate">
+                      {otherParticipant?.name || "Unknown user"}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 truncate">
-                    {otherParticipant?.name || "Unknown user"}
-                  </p>
+                </div>
+                <div className="col-span-3 text-center">
                   {lastMessage && (
                     <p className="text-sm text-gray-500 truncate">
                       {lastMessage.content}
                     </p>
                   )}
+                </div>
+                <div className="col-span-2 text-right">
+                  <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
+                    {formatDistanceToNow(new Date(conversation.lastMessageAt), {
+                      addSuffix: true,
+                    })}
+                  </span>
                 </div>
                 {unreadCount > 0 && (
                   <div className="ml-3">

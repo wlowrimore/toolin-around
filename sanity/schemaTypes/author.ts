@@ -35,7 +35,7 @@ export const author = defineType({
       name: "roles",
       title: "Roles",
       type: "array",
-      of: [{ type: "reference", to: { type: "role" } }],
+      of: [{ type: "reference", to: [{ type: "role" }] }],
     }),
 
     defineField({

@@ -100,7 +100,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             {session ? (
               <div className="flex p-4 pt-0 gap-2 items-center">
                 <div className="flex items-center justify-center gap-2 pb-2 pt-1">
-                  <img
+                  <Image
                     title={author?.name as string}
                     src={author?.image || ""}
                     alt={author?.name || ""}

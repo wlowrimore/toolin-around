@@ -54,7 +54,7 @@ export const message = defineType({
   ],
   preview: {
     select: {
-      sender: "serder.name",
+      sender: "sender.name",
       recipient: "recipient.name",
       content: "content",
       createdAt: "createdAt",
