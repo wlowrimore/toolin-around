@@ -7,7 +7,7 @@ import { playlist } from "./playlist";
 import { rating } from "./rating";
 import { ratingKey } from "./ratingKey";
 import { role } from "./role";
-import { user } from "./user";
+// import { user } from "./user";
 import { message } from "./message";
 import { conversation } from "./conversation";
 
@@ -21,7 +21,7 @@ export const schema = {
     rating,
     ratingKey,
     role,
-    user,
+    // user,
     message,
     conversation,
   ] as SchemaTypeDefinition[],

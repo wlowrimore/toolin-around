@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
-import { formatDistanceToNow } from "date-fns";
-import { MessageCircleMore, ArrowLeft, Send } from "lucide-react";
-import { LoadingSpinner, LoadingSpinnerWhite } from "../LoadingAnimations";
+import { useMessages } from "@/hooks/useMessages";
+import { toast } from "@/hooks/use-toast";
+import { ArrowLeft, Send } from "lucide-react";
+import { LoadingBar, LoadingSpinner } from "../LoadingAnimations";
 import { formatMessageTime } from "@/lib/utils";
-import Image from "next/image";
 
 interface ConversationProps {
   _id: string;
@@ -15,6 +15,8 @@ interface ConversationProps {
   listing: { _id: string; title: string; image: string };
   subject: string;
   onBack: () => void;
+  onMessageRead?: (count: number) => void;
+  onMessageSent?: () => void;
 }
 
 interface Message {
@@ -29,8 +31,14 @@ interface Message {
   createdAt: string;
 }
 
-const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
+const ConversationView = ({
+  conversationId,
+  onBack,
+  onMessageRead,
+  onMessageSent,
+}: ConversationProps) => {
   const { data: session } = useSession();
+  const { markConversationAsRead } = useMessages(session?.user?.id as string);
   const [conversation, setConversation] = useState<ConversationProps | null>(
     null
   );
@@ -38,12 +46,21 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
   const [loading, setLoading] = useState(true);
   const [replyContent, setReplyContent] = useState("");
   const [sending, setSending] = useState(false);
-  const [isFromMe, setIsFromMe] = useState(false);
+  const hasLoadedRef = useRef(false);
 
   useEffect(() => {
+    // Guard against multiple calls and ensure we have the necessary data
+    if (hasLoadedRef.current || !conversationId || !session?.user?.id) {
+      return;
+    }
+
     const loadConversation = async () => {
       try {
         setLoading(true);
+
+        // Add a small delay to ensure everything is initialized
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         const response = await fetch(`/api/conversations/${conversationId}`);
         if (!response.ok) throw new Error("Failed to load conversation");
 
@@ -51,34 +68,42 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
         setConversation(data.conversation);
         setMessages(data.messages);
 
-        // Mark unread messages as read
-        const unreadMessages = data.messages.filter(
-          (msg: Message) =>
-            !msg.isRead && msg.recipient._id === session?.user?.id
-        );
+        // Mark messages as read only if we successfully loaded the conversation
+        try {
+          if (markConversationAsRead) {
+            const markedCount = await markConversationAsRead(conversationId);
 
-        if (unreadMessages.length > 0) {
-          await Promise.all(
-            unreadMessages.map((msg: Message) =>
-              fetch("/api/mark-read", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messageId: msg._id }),
-              })
-            )
-          );
+            if (typeof onMessageRead === "function" && markedCount > 0) {
+              onMessageRead(markedCount);
+            }
+          }
+        } catch (readError) {
+          console.error("Error marking conversation as read:", readError);
+          // Don't fail the whole operation if just marking as read fails
         }
+
+        // Set the flag to prevent reloading
+        hasLoadedRef.current = true;
       } catch (error) {
         console.error("Error loading conversation:", error);
+        // Add a user-friendly toast
+        toast({
+          title: "Error",
+          variant: "destructive",
+          description: "Failed to load the conversation. Please try again.",
+        });
       } finally {
         setLoading(false);
       }
     };
 
-    if (conversationId && session?.user?.id) {
-      loadConversation();
-    }
-  }, [conversationId, session?.user?.id]);
+    loadConversation();
+
+    // Cleanup function
+    return () => {
+      hasLoadedRef.current = false;
+    };
+  }, [conversationId, session?.user?.id]); // Remove markConversationAsRead and onMessageRead from dependencies
 
   const handleSendReply = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -116,29 +141,44 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
         sender: session?.user,
         recipient: otherParticipant,
         createdAt: new Date().toISOString(),
+        isRead: false,
       };
 
-      setMessages([...messages, updatedMessage, (messages[0].isRead = true)]);
+      setMessages((prevMessages) => [...prevMessages, updatedMessage]);
+      toast({
+        title: "Message Status",
+        variant: "success",
+        description: "Your message has been sent successfully",
+      });
       setReplyContent("");
+
+      if (typeof onMessageSent === "function") {
+        onMessageSent();
+      }
     } catch (error) {
       console.error("Error sending reply:", error);
+      toast({
+        title: "Message Status",
+        variant: "destructive",
+        description: "Failed to send your message. Please try again.",
+      });
     } finally {
       setSending(false);
-      messages[0].isRead = true;
     }
   };
 
   if (loading) {
-    return <div className="p-6 text-center">Loading conversation...</div>;
+    return (
+      <div className="flex flex-col justify-center items-center p-6">
+        <p>Loading conversation...</p>
+        <LoadingBar />
+      </div>
+    );
   }
 
   if (!conversation) {
     return <div className="p-6 text-center">Conversation not found</div>;
   }
-
-  // if (messages[0].sender._id === session?.user?.id) {
-  //   setIsFromMe(true);
-  // }
 
   return (
     <div className="flex flex-col h-full max-h-[78vh]">
@@ -166,44 +206,46 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
           </div>
         ) : (
           <div className="h-screen">
-            {messages.length > 0 &&
-              messages.map((message) => {
-                const isFromMe = message?.sender?._id === session?.user?.id;
+            {messages.map((message, index) => {
+              const isFromMe = message?.sender?._id === session?.user?.id;
+              console.log("SENDER: ", message?.sender);
+              console.log("USER: ", session?.user);
+              const messageKey = message._id ? message._id : index;
 
-                return (
+              return (
+                <div
+                  key={messageKey}
+                  className={`flex ${isFromMe ? "justify-end" : "justify-start"}`}
+                >
                   <div
-                    key={message._id}
-                    className={`flex ${isFromMe ? "justify-end" : "justify-start"}`}
+                    className={`max-w-[80%] p-3 ${
+                      isFromMe
+                        ? "bg-blue-500 text-white my-3 max-w-[47%] w-[47%] rounded-l-2xl rounded-br-2xl"
+                        : "bg-slate-200 text-gray-800 my-3 max-w-[47%] w-[47%] rounded-r-2xl rounded-bl-2xl"
+                    }`}
                   >
+                    <div className="flex items-center gap-2 mb-1">
+                      <img
+                        src={message?.sender?.image as string}
+                        alt={message?.sender?.name as string}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      <span className="font-medium text-sm">
+                        {message?.sender?.name}
+                      </span>
+                    </div>
+                    <p className="whitespace-pre-wrap">{message?.content}</p>
                     <div
-                      className={`max-w-[80%] p-3 ${
-                        isFromMe
-                          ? "bg-blue-500 text-white my-3 max-w-[47%] w-[47%] rounded-l-2xl rounded-br-2xl"
-                          : "bg-slate-200 text-gray-800 my-3 max-w-[47%] w-[47%] rounded-r-2xl rounded-bl-2xl"
-                      }`}
+                      className={`text-xs mt-1 ${isFromMe ? "text-blue-200" : "text-gray-500"}`}
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <Image
-                          src={message?.sender?.image as string}
-                          alt={message?.sender?.name as string}
-                          width={500}
-                          height={500}
-                          className="w-6 h-6 rounded-full object-cover"
-                        />
-                        <span className="font-medium text-sm">
-                          {message?.sender?.name}
-                        </span>
-                      </div>
-                      <p className="whitespace-pre-wrap">{message?.content}</p>
-                      <div
-                        className={`text-xs mt-1 ${isFromMe ? "text-blue-200" : "text-gray-500"}`}
-                      >
-                        {formatMessageTime(message.createdAt)}
-                      </div>
+                      {formatMessageTime(message.createdAt)}
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -231,7 +273,7 @@ const ConversationView = ({ conversationId, onBack }: ConversationProps) => {
           className="flex items-center justify-center bg-cyan-700 text-white p-2 w-full disabled:bg-gray-300"
         >
           {sending ? <LoadingSpinner /> : <Send className="w-6 h-6" />}
-          <span className={`ml-2 text-xl ${sending && "text-sky-600"}`}>
+          <span className={`ml-2 text-xl ${sending ? "text-white" : ""}`}>
             {sending ? "Sending..." : "Send"}
           </span>
         </button>

@@ -8,3 +8,7 @@ export function LoadingSpinner() {
 export function LoadingSpinnerWhite() {
   return <Loader className="animate-spin duration-1000 text-white" />;
 }
+
+export function LoadingBar() {
+  return <div className="loaderBar"></div>;
+}

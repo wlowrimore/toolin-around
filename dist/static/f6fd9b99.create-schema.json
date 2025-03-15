@@ -774,40 +774,6 @@
   {
     "fields": [
       {
-        "description": "User ID (email)",
-        "to": [
-          {
-            "type": "author"
-          }
-        ],
-        "hidden": true,
-        "name": "id",
-        "type": "reference",
-        "title": "ID"
-      },
-      {
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "name": "email",
-        "type": "string"
-      },
-      {
-        "name": "image",
-        "type": "string"
-      },
-      {
-        "name": "role",
-        "type": "string"
-      }
-    ],
-    "name": "user",
-    "type": "document"
-  },
-  {
-    "fields": [
-      {
         "validation": [
           {
             "rules": [
@@ -836,7 +802,7 @@
         ],
         "to": [
           {
-            "type": "user"
+            "type": "author"
           }
         ],
         "name": "sender",
@@ -856,7 +822,7 @@
         ],
         "to": [
           {
-            "type": "user"
+            "type": "author"
           }
         ],
         "name": "recipient",
@@ -883,6 +849,16 @@
         "type": "reference"
       },
       {
+        "description": "The conversation this message belongs to",
+        "to": [
+          {
+            "type": "conversation"
+          }
+        ],
+        "name": "conversation",
+        "type": "reference"
+      },
+      {
         "initialValue": false,
         "name": "isRead",
         "type": "boolean"
@@ -904,6 +880,75 @@
       }
     ],
     "name": "message",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "description": "Subject line for the conversation",
+        "name": "subject",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 2
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "to": [
+              {
+                "type": "author"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to author"
+          }
+        ],
+        "name": "participants",
+        "type": "array"
+      },
+      {
+        "to": [
+          {
+            "type": "listing"
+          }
+        ],
+        "name": "listing",
+        "type": "reference"
+      },
+      {
+        "name": "lastMessageAt",
+        "type": "datetime"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "createdAt",
+        "type": "datetime"
+      }
+    ],
+    "name": "conversation",
     "type": "document"
   }
 ]

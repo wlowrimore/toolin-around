@@ -85,6 +85,13 @@ export interface FeaturedListings {
   toolDescription: null;
 }
 
+type ListingId = {
+  _ref: string;
+  _type: string;
+};
+
+export type ListingIdOrString = string | ListingId;
+
 export type Message = {
   _id: string;
   sender: {
@@ -97,7 +104,7 @@ export type Message = {
     name: string;
   };
   content: string;
-  listingId: string;
+  listingId: ListingIdOrString;
   createdAt: string;
   isRead: boolean;
   parentMessageId?: string;

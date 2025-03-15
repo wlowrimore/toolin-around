@@ -27,7 +27,7 @@ export const conversation = defineType({
       name: "listing",
       title: "Listing",
       type: "reference",
-      to: [{ type: "listing" }],
+      to: { type: "listing" },
     },
     {
       name: "lastMessageAt",
@@ -52,6 +52,7 @@ export const conversation = defineType({
       return {
         title: subject || "No Subject",
         subtitle: `Last activity: ${lastMessageAt ? new Date(lastMessageAt).toLocaleString() : "Unknown"}`,
+        participantCount: participants ? participants.length : 0,
       };
     },
   },

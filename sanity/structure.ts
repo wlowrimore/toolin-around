@@ -12,7 +12,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("rating").title("Ratings"),
       S.documentTypeListItem("ratingKey").title("Rating Keys"),
       S.documentTypeListItem("role").title("Roles"),
-      S.documentTypeListItem("user").title("Users"),
+      // S.documentTypeListItem("user").title("Users"),
       S.documentTypeListItem("message").title("Messages"),
       S.documentTypeListItem("conversation").title("Conversations"),
     ]);

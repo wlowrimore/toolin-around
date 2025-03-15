@@ -49,9 +49,9 @@ export async function GET(request: Request) {
         // Count unread messages for the user
         const unreadCount = await client.fetch(
           `count(*[
-            _type == "message" && 
-            conversation._ref == $conversationId && 
-            recipient._ref == $userId && 
+            _type == "message" &&
+            conversation._ref == $conversationId &&
+            recipient._ref == $userId &&
             isRead == false
           ])`,
           { conversationId: conversation._id, userId }
@@ -70,6 +70,40 @@ export async function GET(request: Request) {
     console.error("Error fetching conversations:", error);
     return NextResponse.json(
       { error: "Failed to fetch conversations" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  // Change to POST
+  try {
+    const body = await request.json();
+    const { conversationId, userId } = body;
+
+    if (!conversationId || !userId) {
+      return NextResponse.json(
+        { error: "Conversation ID and User ID are required" },
+        { status: 400 }
+      );
+    }
+
+    const transaction = client.transaction();
+    const query = `*[_type == "message" && conversation._ref == $conversationId && recipient._ref == $userId && isRead == false]`;
+    const messages = await client.fetch(query, { conversationId, userId });
+
+    messages.forEach((message: any) => {
+      const patch = transaction.patch(message._id);
+      (patch as any).set({ isRead: true });
+    });
+
+    const result = await transaction.commit();
+
+    return NextResponse.json({ success: true, result });
+  } catch (error) {
+    console.error("Error marking messages as read:", error);
+    return NextResponse.json(
+      { error: "Failed to mark messages as read" },
       { status: 500 }
     );
   }
