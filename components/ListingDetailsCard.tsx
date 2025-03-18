@@ -67,7 +67,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   ): string => {
     switch (condition) {
       case "New":
-        return "bg-sky-600 text-cyan-800 py-0.5 px-1.5 border border-sky-600";
+        return "bg-neutral-900 text-green-500 font-semibold py-0.5 px-1.5 border border-sky-600";
       case "Like New":
         return "bg-green-500 text-white py-0.5 px-1.5 border border-green-500";
       case "Good":
@@ -174,7 +174,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                   {author && session && author._id !== session.user.id ? (
                     <button
                       onClick={() => setIsModalOpen(true)}
-                      className="absolute right-6 top-3 text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
+                      className="absolute right-4 top-3 text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
                     >
                       Message {authorFirstName}
                     </button>

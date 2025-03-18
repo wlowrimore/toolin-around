@@ -15,6 +15,7 @@ import {
 import { MessageCircleMore, Check } from "lucide-react";
 import LoginModalForm from "./Auth/LoginModalForm";
 import { toast } from "@/hooks/use-toast";
+import { LoadingSpinner } from "./LoadingAnimations";
 
 interface MessageModalProps {
   authorFirstName: string;
@@ -192,19 +193,23 @@ const MessageModal = ({
             required
           />
           <DialogFooter>
-            {isSent && (
-              <span className="flex items-center gap-1 text-emerald-600">
+            {isSent ? (
+              <span className="flex items-center gap-1 text-emerald-800 mr-5">
                 <Check className="w-4 h-4" />
                 Sent!
               </span>
+            ) : (
+              <button
+                type="submit"
+                disabled={isSending}
+                className="text-blue-700 font-semibold tracking-wide text-sm px-2 py-1 hover:text-blue-900 disabled:pointer-events-none disabled:opacity-50"
+              >
+                <span className="flex items-center gap-1">
+                  {isSending && <LoadingSpinner />}
+                  {isSending ? "Sending..." : "Send Message"}
+                </span>
+              </button>
             )}
-            <button
-              type="submit"
-              disabled={isSending}
-              className="text-blue-700 font-semibold tracking-wide text-sm px-2 py-1 hover:text-blue-900 disabled:pointer-events-none disabled:opacity-50"
-            >
-              {isSending ? "Sending..." : "Send Message"}
-            </button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -50,13 +50,14 @@ export default function FilteredListings({
 
   const truncatedDescription = truncateDesc(listing?.description || "");
 
-  if (listings.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">No listings found matching "{query}"</p>
-      </div>
-    );
-  }
+  // if (listings.length === 0) {
+  //   console.log("No listings found matching", query);
+  //   return (
+  //     <div className="text-center py-12">
+  //       <p className="text-gray-500">No listings found matching "{query}"</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <Card

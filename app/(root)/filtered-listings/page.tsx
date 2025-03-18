@@ -52,9 +52,15 @@ export default async function FilteredListingsPage({
     <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
       <div className="w-full mt-10 px-6">
         <header className="w-full border-b-[0.025rem] border-slate-300 py-2">
-          <h1 className="text-slate-600 text-3xl font-semibold">
-            Search Results for "{query}"
-          </h1>
+          {listings.length === 0 ? (
+            <h1 className="text-slate-600 text-3xl font-semibold">
+              No listings found matching "{query}"
+            </h1>
+          ) : (
+            <h1 className="text-slate-600 text-3xl font-semibold">
+              Search Results for "{query}"
+            </h1>
+          )}
         </header>
         <div className="grid grid-cols-3 gap-4 text-xl items-center py-6">
           {listings.length > 0 &&

@@ -41,8 +41,8 @@ body {
   left: 0;
   height: 100%;
   /* border-radius: 5px; */
-  background: repeating-linear-gradient(45deg, #cbd5e1 0 30px, #22d3ee 0 40px) right/200% 100%;
-  animation: fillProgress 6s ease-in-out infinite, lightEffect 1s infinite linear;
+  background: repeating-linear-gradient(45deg, #da959b 0 30px, #22d3ee 0 40px) right/200% 100%;
+  animation: fillProgress 6s ease-in-out infinite, lightEffect 3s infinite linear;
   animation-fill-mode: forwards;
 }
 
@@ -66,11 +66,11 @@ body {
 
 @keyframes lightEffect {
   0%, 20%, 40%, 60%, 80%, 100% {
-    background: repeating-linear-gradient(45deg, #64748b 0 30px, #006DFE 0 40px) right/200% 100%;
+    background: repeating-linear-gradient(45deg, #4d6d9b 0 30px, #fdfdfd 0 40px) right/200% 100%;
   }
 
   10%, 30%, 50%, 70%, 90% {
-    background: repeating-linear-gradient(45deg, #64748b 0 30px, #006DFE 0 40px, rgba(255, 255, 255, 0.3) 0 40px) right/200% 100%;
+    background: repeating-linear-gradient(45deg, #4d6d9b 0 30px, #2069f0 0 40px, rgba(64, 142, 243, 0.3) 0 40px) right/200% 100%;
   }
 }
 

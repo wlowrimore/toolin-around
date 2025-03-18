@@ -56,7 +56,9 @@ export function SearchModal({ query }: { query: string }) {
             <button onClick={handleClick} type="submit" className="">
               <span className="">
                 {isLoading ? (
-                  <LoadingSpinner />
+                  <span className="border-none">
+                    <LoadingSpinner />
+                  </span>
                 ) : (
                   <Search className="h-9 w-9 p-1 border-2 border-slate-400 hover:bg-slate-200" />
                 )}
