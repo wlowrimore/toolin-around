@@ -448,7 +448,6 @@ const MessagesInbox = () => {
   if (status === "loading") {
     return (
       <div className="flex flex-col items-center justify-center p-8">
-        <p>Loading...</p>
         <LoadingBar />
       </div>
     );
@@ -540,8 +539,7 @@ const MessagesInbox = () => {
       )}
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-8">
-          <p>Loading conversations...</p>
+        <div className="flex flex-col items-center justify-center mt-3">
           <LoadingBar />
         </div>
       ) : conversations?.length === 0 ? (

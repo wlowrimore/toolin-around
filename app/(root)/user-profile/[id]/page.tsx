@@ -74,7 +74,6 @@ const UserProfilePage = async () => {
       }
     `;
 
-    // Use Promise.race to implement timeout
     const result = await Promise.race([
       client.fetch(query, { email: session.user.email }),
     ]);

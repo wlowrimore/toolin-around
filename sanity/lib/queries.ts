@@ -1,6 +1,12 @@
 import { defineQuery } from "next-sanity";
 import { createClient } from "@sanity/client";
 
+interface Params {
+  search?: string;
+  category?: string;
+  authorId?: string;
+}
+
 export const LISTINGS_QUERY = defineQuery(`
   *[_type == "listing" && defined(slug.current) && 
     (
@@ -46,6 +52,89 @@ export const LISTINGS_QUERY = defineQuery(`
       }
     }
   }`);
+
+// export const SINGLE_AUTHOR_LISTINGS_QUERY = `(
+//   *[_type == "listing" &&
+//     ${(params: Params) => (params.search ? `title match "${params.search}*" || description match "${params.search}*"` : "true")} &&
+//     ${(params: Params) => (params.category ? `category == "${params.category}"` : "true")} &&
+//     ${(params: Params) => (params.authorId ? `author._ref == "${params.authorId}"` : "true")}
+//   ] | order(_createdAt desc) {
+//     _id,
+//     _createdAt,
+//     title,
+//     price,
+//     ratePeriod,
+//     description,
+//     "slug": slug.current,
+//     "image": image.asset->url,
+//     category,
+//     condition,
+//     toolDetails,
+//     author->{
+//       _id,
+//       name,
+//       "image": image.asset->url,
+//       email
+//     }
+//   }
+// )`;
+
+export const BASE_LISTINGS_QUERY = `
+  *[_type == "listing"
+`;
+
+// Function to create a complete query with filters
+export function createListingsQuery(params: {
+  search?: string | null;
+  category?: string | null;
+  authorId?: string | null;
+}) {
+  let filters = [];
+
+  if (params.search) {
+    filters.push(
+      `(title match "${params.search}*" || description match "${params.search}*")`
+    );
+  }
+
+  if (params.category) {
+    filters.push(`category == "${params.category}"`);
+  }
+
+  if (params.authorId) {
+    filters.push(`author._ref == "${params.authorId}"`);
+  }
+
+  let query = BASE_LISTINGS_QUERY;
+
+  // Add filters if any exist
+  if (filters.length > 0) {
+    query += ` && ${filters.join(" && ")}`;
+  }
+
+  // Complete the query
+  query += `] | order(_createdAt desc) {
+    _id,
+    _createdAt,
+    title,
+    price,
+    ratePeriod,
+    description,
+    "slug": slug.current,
+    image,
+    category,
+    condition,
+    toolDetails,
+    author->{
+      _id,
+      name,
+      image,
+      email
+    }
+  }`;
+
+  return query;
+}
 
 export const LISTINGS_BY_AUTHOR_QUERY =
   defineQuery(`*[_type == "listing" && author._ref == $authorId] | order(_createdAt desc){

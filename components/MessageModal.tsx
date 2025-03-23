@@ -55,6 +55,13 @@ const MessageModal = ({
     }
   };
 
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { value } = e.target;
+    setMessage(value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -64,50 +71,6 @@ const MessageModal = ({
     }
 
     setIsSending(true);
-
-    //   try {
-    //     const requestBody = {
-    //       recipientId: authorId,
-    //       content: message,
-    //       listingId,
-    //       senderId: sessionUserId,
-    //       createdAt: new Date().toISOString(),
-    //       isRead: false,
-    //       _type: "message",
-    //     };
-
-    //     const response = await fetch("/api/send-message", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(requestBody),
-    //     });
-
-    //     if (!response.ok) {
-    //       const errorText = await response.text();
-    //       throw new Error(`HTTP error ${response.status}: ${errorText}`);
-    //     }
-
-    //     const data = await response.json();
-    //     setMessage("");
-    //     setIsSent(true);
-
-    //     setTimeout(() => {
-    //       handleOpenChange(false);
-    //     }, 1500);
-    //   } catch (error) {
-    //     console.error("Fetch/Processing Error:", error);
-    //     toast({
-    //       title: "Error",
-    //       description: "Failed to send message. Please try again later.",
-    //       variant: "destructive",
-    //       duration: 3000,
-    //     });
-    //   } finally {
-    //     setIsSending(false);
-    //   }
-    // };
 
     try {
       const requestBody = {
@@ -166,54 +129,56 @@ const MessageModal = ({
   };
 
   return (
-    <Dialog open={externalIsOpen ?? isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-1 text-base text-sky-800 font-semibold tracking-wide">
-            <MessageCircleMore className="w-6 h-6 text-sky-800" />
-            <span className="underline">
-              Compose your message for {authorFirstName}
-            </span>
-          </DialogTitle>
-        </DialogHeader>
-        <form
-          onSubmit={handleSubmit}
-          className="w-full h-full flex flex-col items-end gap-6"
-        >
-          <textarea
-            name="message"
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            rows={4}
-            autoFocus={true}
-            placeholder="Type your message here..."
-            className="w-full border border-slate-400 p-2 placeholder:text-sm resize-none outline-none"
-            maxLength={500}
-            required
-          />
-          <DialogFooter>
-            {isSent ? (
-              <span className="flex items-center gap-1 text-emerald-800 mr-5">
-                <Check className="w-4 h-4" />
-                Sent!
+    <div onClick={(e) => e.stopPropagation()}>
+      <Dialog open={externalIsOpen ?? isOpen} onOpenChange={handleOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-1 text-base text-sky-800 font-semibold tracking-wide">
+              <MessageCircleMore className="w-6 h-6 text-sky-800" />
+              <span className="underline">
+                Compose your message for {authorFirstName}
               </span>
-            ) : (
-              <button
-                type="submit"
-                disabled={isSending}
-                className="text-blue-700 font-semibold tracking-wide text-sm px-2 py-1 hover:text-blue-900 disabled:pointer-events-none disabled:opacity-50"
-              >
-                <span className="flex items-center gap-1">
-                  {isSending && <LoadingSpinner />}
-                  {isSending ? "Sending..." : "Send Message"}
+            </DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={handleSubmit}
+            className="w-full h-full flex flex-col items-end gap-6"
+          >
+            <textarea
+              name="message"
+              id="message"
+              value={message}
+              onChange={handleTextAreaChange}
+              rows={4}
+              autoFocus={true}
+              placeholder="Type your message here..."
+              className="w-full border border-slate-400 p-2 placeholder:text-sm resize-none outline-none"
+              maxLength={500}
+              required
+            />
+            <DialogFooter>
+              {isSent ? (
+                <span className="flex items-center gap-1 text-emerald-800 mr-5">
+                  <Check className="w-4 h-4" />
+                  Sent!
                 </span>
-              </button>
-            )}
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isSending}
+                  className="text-blue-700 font-semibold tracking-wide text-sm px-2 py-1 hover:text-blue-900 disabled:pointer-events-none disabled:opacity-50"
+                >
+                  <span className="flex items-center gap-1">
+                    {isSending && <LoadingSpinner />}
+                    {isSending ? "Sending..." : "Send Message"}
+                  </span>
+                </button>
+              )}
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

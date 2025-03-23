@@ -14,5 +14,9 @@ export function LoadingSpinnerRed() {
 }
 
 export function LoadingBar() {
-  return <div className="loaderBar"></div>;
+  return (
+    <div className="progress">
+      <div className="bar"></div>
+    </div>
+  );
 }

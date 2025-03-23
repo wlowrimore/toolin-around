@@ -6,6 +6,7 @@ import { LISTINGS_QUERY } from "@/sanity/lib/queries";
 import { SearchModal } from "@/components/SearchModal";
 import ListingCard from "@/components/ListingCard";
 import PageHeaderSearchForm from "@/components/PageHeaderSearchForm";
+import { LoadingBar } from "@/components/LoadingAnimations";
 
 export default async function AllListingsPage({
   searchParams,
@@ -24,7 +25,13 @@ export default async function AllListingsPage({
   });
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="w-full h-screen flex justify-center items-center mx-auto">
+          <LoadingBar />
+        </div>
+      }
+    >
       <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
         <header className="flex items-center w-full border-b-[0.025rem] border-slate-300 py-2">
           <h1 className="text-slate-600 text-3xl font-semibold">

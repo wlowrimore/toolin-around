@@ -197,10 +197,15 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                 />
               ) : null}
             </div>
-            <div className="w-full flex justify-between items-center bg-slate-700 py-1 px-2 mt-6">
+            <div className="relative w-full flex justify-between items-center bg-slate-700 py-1 px-2 mt-6">
               <p className="text-sm font-normal text-white">
                 {listing?.category}
               </p>
+              <Link href={`/lister-profile/${author?._id}`}>
+                <p className="absolute right-[40%] top-[22%] text-sm font-semibold text-white hover:text-green-300">
+                  View all of {authorFirstName}&apos;s listings
+                </p>
+              </Link>
               <div className="w-[6rem] text-center">
                 <h2 className={getConditionColor(listing?.condition)}>
                   {listing?.condition}
