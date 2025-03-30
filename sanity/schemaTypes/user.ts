@@ -33,5 +33,10 @@
 //       title: "Role",
 //       type: "string",
 //     }),
+//     defineField({
+//       name: "contact",
+//       title: "Contact",
+//       type: "string",
+//     }),
 //   ],
 // });

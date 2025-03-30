@@ -160,6 +160,30 @@ export const LISTINGS_BY_AUTHOR_QUERY =
   contact
 }`);
 
+export const LISTING_BY_LISTING_ID_QUERY =
+  defineQuery(`*[_type == "listing" && _id == $listingId][0]{
+  _id,
+  title,
+  description,
+  category,
+  condition,
+  author->{
+    _id,
+    name,
+    image,
+    email
+  },
+  slug,
+  _createdAt,
+  ratings,
+  image,
+  deleteToken,  // Make sure this is included if you need it for mutations
+  toolDetails,
+  price,
+  ratePeriod,
+  contact
+}`);
+
 export const AUTHOR_BY_GOOGLE_ID_QUERY =
   defineQuery(`[_type == "author" && email == $email][0]{
       _id,

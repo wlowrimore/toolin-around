@@ -170,7 +170,6 @@ const ConversationView = ({
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center p-6">
-        <p>Loading conversation...</p>
         <LoadingBar />
       </div>
     );

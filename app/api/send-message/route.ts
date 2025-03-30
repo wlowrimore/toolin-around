@@ -19,6 +19,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { content, recipientId, listingId, senderId, conversationId } = body;
 
+    console.log("SENDERID", senderId);
+
     // Validate required fields
     if (!content || !recipientId || !listingId || !senderId) {
       return NextResponse.json(
@@ -27,15 +29,19 @@ export async function POST(req: Request) {
       );
     }
 
-    const [senderExists, recipientExists, listingExists] = await Promise.all([
-      client.fetch('*[_type == "author" && _id == $id][0]', { id: senderId }),
+    const [recipientExists, listingExists] = await Promise.all([
+      // client.fetch('*[_type == "user" && _id == $id][0]', { id: senderId }),
       client.fetch('*[_type == "author" && _id == $id][0]', {
         id: recipientId,
       }),
       client.fetch('*[_type == "listing" && _id == $id][0]', { id: listingId }),
     ]);
 
-    if (!senderExists || !recipientExists || !listingExists) {
+    // console.log("Sender Exists:", senderExists);
+    console.log("Recipient Exists:", recipientExists);
+    console.log("Listing Exists:", listingExists);
+
+    if (!recipientExists || !listingExists) {
       return NextResponse.json(
         { message: "One or more referenced documents do not exist" },
         { status: 400 }

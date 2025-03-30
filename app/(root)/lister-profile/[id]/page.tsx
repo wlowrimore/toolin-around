@@ -155,8 +155,8 @@ export default async function ListerProfilePage({
   console.log("LISTINGS:", listings);
 
   return (
-    <Suspense fallback={<LoadingBar />}>
-      <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
+    <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
+      <Suspense fallback={<LoadingBar />}>
         <header className="flex items-center w-full border-b-[0.025rem] border-slate-300 py-2">
           <h1 className="text-slate-600 text-3xl font-semibold">
             {listersFirstName} Listings
@@ -176,7 +176,7 @@ export default async function ListerProfilePage({
             </div>
           )}
         </div>
-      </main>
-    </Suspense>
+      </Suspense>
+    </main>
   );
 }

@@ -37,6 +37,7 @@
     "next-auth": "^5.0.0-beta.25",
     "next-cloudinary": "^6.16.0",
     "next-sanity": "^9.8.47",
+    "nodemailer": "^6.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sanity": "3.72.1",
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
