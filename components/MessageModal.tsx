@@ -81,8 +81,6 @@ const MessageModal = ({
   // const sessionUserId = params?.id;
   const sessionUserInfo = session?.user;
 
-  // console.log("Session User ID:", params?.id);
-
   const handleOpenChange = (open: boolean) => {
     if (onOpenChange) {
       onOpenChange(open);
@@ -115,30 +113,58 @@ const MessageModal = ({
     }
   };
 
-  // Function to fetch sender data
-  // const fetchSenderData = async (id: string) => {
+  // Function to send confirmation email
+  // const sendConfirmationEmail = async (
+  //   messageData: any,
+  //   listingInfo: ListingData,
+  //   senderData: SenderData
+  // ) => {
   //   try {
-  //     const response = await fetch(`/api/sender/${id}`);
+  //     const recipientEmail = listingInfo.contact || listingInfo.author?.email;
+  //     const senderEmail = session?.user?.email;
+  //     const senderName = session?.user?.name;
+  //     const senderId = session?.user?.id || session?.user?.email;
+
+  //     if (!senderEmail) {
+  //       console.error("Sender email not available");
+  //       return false;
+  //     }
+
+  //     const emailData = {
+  //       messageId: messageData.message._id,
+  //       conversationId: messageData.conversation?._id,
+  //       listingId: listingInfo._id,
+  //       listingTitle: listingInfo.title,
+  //       listingPrice: listingInfo.price,
+  //       listingRatePeriod: listingInfo.ratePeriod,
+  //       recipientId: authorId,
+  //       recipientName: listingInfo?.author?.name,
+  //       recipientEmail,
+  //       senderId,
+  //       senderName: senderName,
+  //       senderEmail: senderData.email,
+  //       messageContent: message,
+  //     };
+
+  //     const response = await fetch("/api/send-confirmation-email", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(emailData),
+  //     });
+
   //     if (!response.ok) {
   //       throw new Error(`HTTP error ${response.status}`);
   //     }
-  //     const data = await response.json();
-  //     console.log("2. SENDER DATA:", data);
-  //     return data as SenderData;
+
+  //     return true;
   //   } catch (error) {
-  //     console.error("Failed to fetch sender data:", error);
-  //     return null;
+  //     console.error("Failed to send confirmation email:", error);
+  //     return false;
   //   }
   // };
 
-  // const senderData = {
-  //   _id: session?.user?.id || session?.user?.email || "",
-  //   name: session?.user?.name || "",
-  //   image: session?.user?.image || "",
-  //   email: session?.user?.email || "",
-  // };
-
-  // Function to send confirmation email
   const sendConfirmationEmail = async (
     messageData: any,
     listingInfo: ListingData,
@@ -165,9 +191,11 @@ const MessageModal = ({
         recipientId: authorId,
         recipientName: listingInfo?.author?.name,
         recipientEmail,
+        recipientImage: listingInfo?.author?.image,
         senderId,
-        senderName: senderName,
-        senderEmail: senderData.email,
+        senderName,
+        senderEmail,
+        senderImage: senderData.image,
         messageContent: message,
       };
 
@@ -242,9 +270,18 @@ const MessageModal = ({
           fetchedListingData,
           sessionUserInfo
         );
-        console.log("Confirmation email sent successfully", fetchedListingData);
-        console.log("Confirmation email sent successfully", sessionUserInfo);
-        console.log("Confirmation email sent successfully", messageData);
+        console.log(
+          "Confirmation email ListingData sent successfully",
+          fetchedListingData
+        );
+        console.log(
+          "Confirmation email sessionUserInfo sent successfully",
+          sessionUserInfo
+        );
+        console.log(
+          "Confirmation email messageData sent successfully",
+          messageData
+        );
       }
 
       // 4. Success handling

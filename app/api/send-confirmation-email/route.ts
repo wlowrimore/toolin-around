@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
-
+import { auth } from "@/auth";
 import nodemailer from "nodemailer";
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
+    const session = await auth();
+    const userEmail = session?.user?.email.toLowerCase();
+    const userName = session?.user?.name;
+    const listingAuthorImage = console.log("User Email:", userEmail);
 
-    // Destructure all the data we need
     const {
-      messageId,
-      conversationId,
+      // messageId,
+      // conversationId,
       listingId,
       listingTitle,
       listingPrice,
@@ -17,27 +19,30 @@ export async function POST(request: Request) {
       recipientId,
       recipientName,
       recipientEmail,
-      senderId,
-      senderName,
+      recipientImage,
+      // senderId,
+      // senderName,
       senderEmail,
+      senderImage,
       messageContent,
-    } = data;
+    } = await request.json();
 
-    // Configure your email transport (this is an example - replace with your actual email service)
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_SERVER,
-      port: parseInt(process.env.EMAIL_PORT || "587"),
-      secure: process.env.EMAIL_SECURE === "true",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.AUTH_NODEMAILER_EMAIL,
+        pass: process.env.AUTH_NODEMAILER_PASSWORD,
+        // user: userEmail,
+        // pass: process.env.AUTH_NODEMAILER_PASSWORD,
       },
     });
-
-    // Format the price if available
-    // const formattedPrice = listingPrice
-    //   ? formatCurrency(listingPrice)
-    //   : "Not specified";
+    console.log("AUTH_NODEMAILER_EMAIL", process.env.AUTH_NODEMAILER_EMAIL),
+      console.log(
+        "AUTH_NODEMAILER_PASSWORD",
+        process.env.AUTH_NODEMAILER_PASSWORD
+      );
 
     const alteredRatePeriod = () => {
       if (listingRatePeriod === "hour") {
@@ -53,28 +58,27 @@ export async function POST(request: Request) {
 
     // Create the invoice-like email
     const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
         <h2 style="color: #0369a1; margin-bottom: 20px;">Message Confirmation</h2>
         
         <p>Your message has been sent successfully!</p>
         
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-          <h3 style="color: #0369a1; margin-top: 0;">Listing Details</h3>
-          <p><strong>Title:</strong> ${listingTitle}</p>
-          <p><strong>Price:</strong> ${listingPrice}</p>
-          <p><strong>${alteredRatePeriod()}:</strong> ${listingRatePeriod} || "Not specified"}</p>
-          <p><strong>Listing ID:</strong> ${listingId}</p>
+        <h3 style="color: #0369a1; margin-top: 0;">Listing Details</h3>
+        <p><strong>Title:</strong> ${listingTitle}</p>
+        <p><strong>Price:</strong> $${listingPrice} ${alteredRatePeriod()}</p>        
+        <p><strong>Listing ID:</strong> ${listingId}</p>
         </div>
         
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-          <h3 style="color: #0369a1; margin-top: 0;">Recipient Information</h3>
-          <p><strong>Name:</strong> ${recipientName}</p>
-          <p><strong>Recipient ID:</strong> ${recipientId}</p>
+        <h3 style="color: #0369a1; margin-top: 0;">Recipient Information<span style="float: right;"><img src="${recipientImage}" alt="${recipientName} Profile Picture" style="max-width: 60px; border: 2px solid #0369a1; border-radius: 50%; margin: 10px 0;"></span></h3>
+        <p><strong>Name:</strong> ${recipientName}</p>
+          <p><strong>Recipient ID:</strong> ${recipientId}</p>          
         </div>
         
         <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-          <h3 style="color: #0369a1; margin-top: 0;">Your Message</h3>
-          <p style="white-space: pre-wrap;">${messageContent}</p>
+        <h3 style="color: #0369a1; margin-top: 0;">Your Message</h3>
+        <p style="white-space: pre-wrap;">${messageContent}</p>
         </div>
         
         <p style="font-size: 12px; color: #666; margin-top: 30px;">
@@ -84,13 +88,15 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    // Send the email
-    await transporter.sendMail({
-      from: `"Your App Name" <${process.env.EMAIL_FROM}>`,
+    const mailOptions = {
+      from: `"${userName} via Toolin' Around" <${process.env.EMAIL_FROM}>`,
       to: senderEmail,
       subject: `Message Confirmation - ${listingTitle}`,
       html: emailHtml,
-    });
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
   } catch (error) {
