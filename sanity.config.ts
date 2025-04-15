@@ -1,5 +1,3 @@
-"use client";
-
 import { LoginMethod } from "sanity";
 import { defineConfig } from "sanity";
 import { validateToken } from "./middleware/sanityStudio";
@@ -7,10 +5,8 @@ import type { SanityDocument } from "@sanity/types";
 import type { User } from "next-auth";
 
 import { visionTool } from "@sanity/vision";
-// import { sanityConfig } from "./lib/utils";
 import { structureTool } from "sanity/structure";
 
-// import { apiVersion, dataset, projectId } from "./sanity/env";
 import { schema } from "./sanity/schemaTypes";
 import { structure } from "./sanity/structure";
 
@@ -25,7 +21,6 @@ export default defineConfig({
   basePath: "/studio",
   projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
   dataset: process.env.SANITY_STUDIO_DATASET || "production",
-  // dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion,
   schema,
   plugins: [
@@ -34,7 +29,6 @@ export default defineConfig({
   ],
   auth: {
     type: "custom",
-    // loginMethod: "jwt" as LoginMethod,
     login: {
       name: "custom",
       title: "Login with Google",
@@ -63,7 +57,6 @@ export default defineConfig({
         return res.status(401).json({ message: "Invalid token" });
       }
 
-      // Add user info to the request
       req.user = {
         id: payload?.sub as string,
         email: payload?.email as string,
@@ -113,7 +106,6 @@ export default defineConfig({
     ],
   },
   document: {
-    // New: Add permissions
     actions: (prev, { schemaType }) => {
       if (schemaType === "listing") {
         return prev.filter(
