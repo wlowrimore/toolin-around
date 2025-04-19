@@ -11,6 +11,12 @@
     "prebuild": "npm run typegen",
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
   },
+  "imports": {
+  "lucide-react": {
+    "import": "./node_modules/lucide-react/dist/esm/lucide-react.js",
+    "require": "./node_modules/lucide-react/dist/cjs/lucide-react.js"
+  }
+},
   "pagckageManager": "npm@10.5.2",
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",
