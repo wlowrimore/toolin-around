@@ -18,6 +18,7 @@
 //   return <NextStudio config={config} />
 // }
 
+import React from "react";
 import { auth } from "@/auth";
 import { NextStudio } from "next-sanity/studio";
 import { redirect } from "next/navigation";

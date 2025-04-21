@@ -66,12 +66,12 @@ const nextConfig: NextConfig = {
   webpack: (config: any) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@": path.resolve(__dirname), // This aliases @ to the root directory
+      "@": path.resolve("auth.ts"),
       // Fix for lucide-react ESM/CJS issue
-      "lucide-react": path.resolve(
-        __dirname,
-        "node_modules/lucide-react/dist/esm/lucide-react.js"
-      ),
+      // "lucide-react": path.resolve(
+      //   __dirname,
+      //   "node_modules/lucide-react/dist/esm/lucide-react.js"
+      // ),
     };
     return config;
   },
