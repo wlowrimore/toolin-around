@@ -13,7 +13,6 @@
     "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
   },
   "pagckageManager": "npm@10.5.2",
-  
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-checkbox": "^1.1.3",
@@ -40,8 +39,8 @@
     "next-cloudinary": "^6.16.0",
     "next-sanity": "^9.8.20",
     "nodemailer": "^6.10.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "sanity": "^3.67.1",
     "slugify": "^1.6.6",
     "styled-components": "^6.1.14",
