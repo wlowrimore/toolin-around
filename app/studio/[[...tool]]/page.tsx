@@ -1,5 +1,7 @@
+"use client";
+
 import { auth } from "@/auth";
-// import { NextStudio } from "next-sanity/studio";
+import { NextStudio } from "next-sanity/studio";
 import { redirect } from "next/navigation";
 import config from "../../../sanity.config";
 
@@ -12,6 +14,6 @@ export default async function StudioPage() {
     redirect("/api/auth/signin");
   }
 
-  // return <NextStudio config={config} />;
+  return <NextStudio config={config} />;
   return <div>Studio Page</div>;
 }
