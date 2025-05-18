@@ -126,10 +126,12 @@ const AboutPageContent = () => {
             what they have to help each other thrive.
           </p>
         </div>
-        <h5 className="text-2xl font-semibold text-slate-600 w-full italic mt-6">
-          &quot;Toolin&apos; Around:&nbsp; Building projects together as a
-          community...&quot;
-        </h5>
+        <div className="w-full mt-3">
+          <h5 className="text-xl w-full italic text-slate-600">
+            &quot;Toolin&apos; Around:&nbsp; Building projects together as a
+            community...&quot;
+          </h5>
+        </div>
       </main>
     </Suspense>
   );
