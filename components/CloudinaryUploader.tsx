@@ -29,7 +29,7 @@ const CloudinaryUploader = ({
   );
 
   const { isUpdatePath } = useUpdatePath();
-  const buttonText = isUpdatePath ? "Replace Image" : "Upload Images";
+  const buttonText = isUpdatePath ? "Replace Image" : "Upload Image";
   className =
     "text-xl flex flex-col items-center justify-center gap-2 px-6 relative bottom-0 left-[30%] text-white z-50";
 
@@ -85,7 +85,7 @@ const CloudinaryUploader = ({
 
   return (
     <div className="relative space-y-4">
-      <div className="h-[7rem]">
+      <div className="h-[7rem] max-w-[70%] right-7 bottom-1 relative flex items-center justify-center">
         <CldUploadButton
           uploadPreset={cloudPresetName}
           options={{
@@ -98,7 +98,9 @@ const CloudinaryUploader = ({
           {...props}
         >
           {buttonText} <CloudUpload className="w-8 h-8" />
-          <p className="text-sm">( Up to 4 images )</p>
+          <p className="text-sm">
+            This can be an image of your item(s), or your profile image
+          </p>
         </CldUploadButton>
       </div>
     </div>
