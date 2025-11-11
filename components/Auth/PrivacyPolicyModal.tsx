@@ -29,18 +29,31 @@ const PrivacyPolicyModal = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex items-center gap-1 text-lg underline hover:text-blue-500 cursor-pointer transition-colors duration-200">
-          {!isPolicyReviewed ? (
-            <span onClick={() => handlePolicyClick()} className="">
-              Please Review Our Privacy Policy to Continue
-            </span>
-          ) : (
-            <Fade duration={1000} cascade direction="up" className="">
-              <SignUpForm />
-            </Fade>
+        <div className="flex items-center gap-1 text-lg duration-200">
+          {!isPolicyReviewed && (
+            <div onClick={() => handlePolicyClick()}>
+              <h1 className="text-blue-500 cursor-pointer hover:underline transition-all duration-200">
+                Please Review Our Privacy Policy to Continue
+              </h1>
+            </div>
           )}
         </div>
       </DialogTrigger>
+      <div>
+        {isPolicyReviewed && (
+          <div onClick={() => null}>
+            <Fade
+              triggerOnce
+              duration={1000}
+              cascade
+              direction="up"
+              className=""
+            >
+              <SignUpForm />
+            </Fade>
+          </div>
+        )}
+      </div>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Privacy Policy</DialogTitle>
