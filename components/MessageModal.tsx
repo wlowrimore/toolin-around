@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { MessageCircleMore, Check } from "lucide-react";
-import LoginModalForm from "./Auth/LoginModalForm";
+import LoginModalForm from "./Auth/PrivacyPolicyModal";
 import { toast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "./LoadingAnimations";
 import { listing } from "@/sanity/schemaTypes/listing";

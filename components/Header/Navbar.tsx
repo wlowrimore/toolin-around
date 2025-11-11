@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import LoginModalForm from "../Auth/LoginModalForm";
+import LoginModalForm from "../Auth/PrivacyPolicyModal";
 import { SearchModal } from "../SearchModal";
 import { useMessages } from "@/hooks/useMessages";
 
@@ -33,19 +33,20 @@ const Header = ({ query }: { query: string }) => {
   const { unreadCount } = useMessages(session?.user?.id as string);
 
   return (
-    <div className="bg-sky-900 text-slate-400">
+    <div className="text-slate-400">
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo/Brand */}
           <Link href="/">
             <div className="flex items-center space-x-2">
-              <Image
+              {/* <Image
                 src="/logos/headerLogo.png"
                 alt="Tooling Around Logo"
                 width={1000}
                 height={1000}
                 className="w-24 h-auto"
-              />
+              /> */}
+              {/* <h1 className="font-bold text-2xl">Toolin' Around</h1> */}
             </div>
           </Link>
 
@@ -122,33 +123,9 @@ const Header = ({ query }: { query: string }) => {
                 </TooltipProvider>
               ) : null}
             </div>
-          ) : (
-            <div className="flex flex-col w-[95%] ml-10">
-              <div className=" flex text-base text-white tracking-wide">
-                <p className="w-full tracking-wide leading-tight">
-                  To get started searching for and listing tools, please take a
-                  moment to read our&nbsp;
-                  <Link href="/" className="text-blue-300 hover:underline">
-                    privacy policy
-                  </Link>
-                  &nbsp;and sign up using the form below if
-                </p>
-              </div>
-              <div className=" flex text-base text-white tracking-wide">
-                <p className="flex">
-                  you do not have an account with us. If you already have an
-                  account with us, please&nbsp;
-                  <span className="text-blue-300 hover:underline">
-                    <LoginModalForm />
-                  </span>
-                  .
-                </p>
-              </div>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
-      {/* {isOpen && <LoginModalForm />} */}
     </div>
   );
 };

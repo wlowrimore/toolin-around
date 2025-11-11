@@ -1,17 +1,16 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const GoogleButton = () => {
-  const { data: session } = useSession();
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/all-listings" })}
-      className="gsi-material-button"
+      className="flex bg-black text-white rounded-md items-center justify-center hover:scale-105 transition-scale duration-300"
     >
       <div className="gsi-material-button-state"></div>
-      <div className="gsi-material-button-content-wrapper">
-        <div className="gsi-material-button-icon">
+      <div className="flex items-center px-3 py-2">
+        <div className="w-6 h-6">
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -38,9 +37,7 @@ const GoogleButton = () => {
             <path fill="none" d="M0 0h48v48H0z"></path>
           </svg>
         </div>
-        <span className="gsi-material-button-contents">
-          Continue with Google
-        </span>
+        <span className="ml-2 text-base">Continue with Google</span>
         <span style={{ display: "none" }} aria-hidden="true">
           Continue with Google
         </span>

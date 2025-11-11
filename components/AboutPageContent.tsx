@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { LoadingBar } from "./LoadingAnimations";
+import Link from "next/link";
 
 const AboutPageContent = () => {
   return (

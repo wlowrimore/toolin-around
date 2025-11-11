@@ -1,5 +1,8 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
+import MicrosoftEntraID, {
+  MicrosoftEntraIDProfile,
+} from "next-auth/providers/microsoft-entra-id";
 import { client } from "./sanity/lib/client";
 import { writeClient } from "./sanity/lib/write-client";
 import { AUTHOR_BY_GOOGLE_ID_QUERY } from "./sanity/lib/queries";
@@ -12,8 +15,14 @@ console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
 console.log("AUTH_GOOGLE_ID:", process.env.AUTH_GOOGLE_ID);
 console.log("AUTH_GOOGLE_SECRET:", process.env.AUTH_GOOGLE_SECRET);
 console.log("AUTH_SECRET:", process.env.AUTH_SECRET);
+console.log("AZURE_AD_CLIENT_ID:", process.env.AZURE_AD_CLIENT_ID);
+console.log(
+  "AZURE_AD_CLIENT_SECRET:",
+  process.env.AZURE_AD_CLIENT_SECRET ? "Set" : "Not set"
+);
+console.log("AZURE_AD_TENANT_ID:", process.env.AZURE_AD_TENANT_ID);
 
-declare module "next-auth" {
+declare module "next-auth/providers/microsoft-entra-id" {
   interface Session {
     user: {
       id: string;
@@ -22,6 +31,10 @@ declare module "next-auth" {
       image: string;
       roles: string[];
     };
+  }
+
+  interface ExtenedMicrosoftEntraIDProfile extends MicrosoftEntraIDProfile {
+    tenantId?: string | undefined;
   }
 
   interface Token {
@@ -46,8 +59,39 @@ const authorQuery = groq`*[_type == "author" && email == $email][0]{
   }
 }`;
 
+const authorByEmailQuery = groq`*[_type == "author" && email == $email][0]{
+  _id,
+  name,
+  email,
+  image
+  password,
+  roles[]->{
+    _id,
+    code,
+    name
+  }
+}`;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [Google],
+  providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          scope:
+            "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+        },
+      },
+    }),
+    MicrosoftEntraID({
+      clientId: process.env.AZURE_AD_CLIENT_ID,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+      issuer: `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID || "common"}/v2.0`,
+    }),
+  ],
   secret: process.env.AUTH_SECRET,
   debug: false,
   callbacks: {
