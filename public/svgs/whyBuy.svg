@@ -1,0 +1,14 @@
+<svg class="feature-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Piggy bank -->
+                    <ellipse cx="50" cy="55" rx="30" ry="22" fill="#FFB6C1"/>
+                    <ellipse cx="50" cy="52" rx="28" ry="20" fill="#FFC0CB"/>
+                    <circle cx="42" cy="48" r="2" fill="#333"/>
+                    <!-- Legs -->
+                    <rect x="35" y="70" width="6" height="10" fill="#FFB6C1" rx="3"/>
+                    <rect x="59" y="70" width="6" height="10" fill="#FFB6C1" rx="3"/>
+                    <!-- Coin slot -->
+                    <rect x="48" y="35" width="4" height="8" fill="#c41e3a"/>
+                    <!-- Tools leaning on piggy -->
+                    <line x1="68" y1="65" x2="75" y2="50" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+                    <rect x="73" y="45" width="6" height="8" fill="#555" rx="1"/>
+                </svg>

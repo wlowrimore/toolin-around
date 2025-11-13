@@ -1,0 +1,9 @@
+<svg class="feature-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Toolbox -->
+                    <rect x="20" y="45" width="60" height="35" fill="#c41e3a" rx="2"/>
+                    <rect x="25" y="50" width="50" height="25" fill="#e85d75"/>
+                    <path d="M 35 45 L 35 40 Q 35 35 40 35 L 60 35 Q 65 35 65 40 L 65 45" fill="none" stroke="#c41e3a" stroke-width="3"/>
+                    <!-- Dollar sign -->
+                    <circle cx="75" cy="25" r="15" fill="#4CAF50"/>
+                    <text x="75" y="33" font-size="20" font-weight="bold" fill="white" text-anchor="middle">$</text>
+                </svg>

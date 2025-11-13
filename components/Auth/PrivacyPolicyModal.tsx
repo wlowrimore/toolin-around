@@ -29,12 +29,13 @@ const PrivacyPolicyModal = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex items-center gap-1 text-lg duration-200">
+        <div className="max-w-7xl flex items-center gap-1 text-lg duration-200">
           {!isPolicyReviewed && (
-            <div onClick={() => handlePolicyClick()}>
-              <h1 className="text-blue-500 cursor-pointer hover:underline transition-all duration-200">
-                Please Review Our Privacy Policy to Continue
-              </h1>
+            <div
+              onClick={() => handlePolicyClick()}
+              className="text-center text-xl font-semibold text-blue-500 cursor-pointer hover:underline transition-all duration-200"
+            >
+              Please Review Our Privacy Policy to Continue
             </div>
           )}
         </div>

@@ -7,7 +7,7 @@ import MicrosoftButton from "./MicrosoftButton";
 
 const SignUpForm = () => {
   return (
-    <main className="max-w-7xl mx-auto flex flex-col bg-slate-300/50 border border-black/50 rounded-md py-4 px-6">
+    <main className="max-w-7xl flex flex-col bg-slate-300/50 border border-black/50 rounded-md py-4 px-6">
       <div className="pb-4">
         <h1 className="font-semibold mb-2">Choose your Sign In Method</h1>
         <div className="px-3 pb-3">
