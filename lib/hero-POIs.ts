@@ -4,7 +4,7 @@ export const pois = [
     header: "Find Any Tool, Anytime, Your Community",
     image: "/svgs/anyToolAnytime.svg",
     description:
-      "Need a pressure washer? A tile cutter? Browse our community inventory and rent or swap pro-grade tools for your next big project.",
+      "Need a pressure washer? A tile cutter? Browse our community inventory and rent or swap tools for your next big project.",
     footer: "Access 1000+ tools without buying a single one",
   },
   {

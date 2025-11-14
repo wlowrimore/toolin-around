@@ -29,27 +29,27 @@ const PrivacyPolicyModal = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="max-w-7xl flex items-center gap-1 text-lg duration-200">
-          {!isPolicyReviewed && (
+        {/* <div className="max-w-7xl flex items-center justify-center mx-auto gap-1 text-lg duration-200"> */}
+        {!isPolicyReviewed && (
+          <div className="w-[60rem] flex justify-between items-center">
+            <div className="w-1/4 bg-blue-500 h-[2px]"></div>
             <div
               onClick={() => handlePolicyClick()}
               className="text-center text-xl font-semibold text-blue-500 cursor-pointer hover:underline transition-all duration-200"
             >
-              Please Review Our Privacy Policy to Continue
+              <span className="w-full flex justify-center">
+                Please Review Our Privacy Policy to Continue
+              </span>
             </div>
-          )}
-        </div>
+            <div className="w-1/4 bg-blue-500 h-[2px]"></div>
+          </div>
+        )}
+        {/* </div> */}
       </DialogTrigger>
-      <div>
+      <div className="w-[70rem] flex justify-start">
         {isPolicyReviewed && (
           <div onClick={() => null}>
-            <Fade
-              triggerOnce
-              duration={1000}
-              cascade
-              direction="up"
-              className=""
-            >
+            <Fade triggerOnce duration={1000} cascade direction="up">
               <SignUpForm />
             </Fade>
           </div>

@@ -99,7 +99,8 @@ const Hero = () => {
               </article>
             </div>
           </div>
-          <section className="max-w-[69rem] mx-auto grid grid-cols-4 gap-3 mt-8">
+          {/* Points of Interest */}
+          <section className="max-w-[70rem] mx-auto grid grid-cols-4 gap-5 mt-8">
             {pois &&
               pois.map((poi) => (
                 <div key={poi.id} className="flex flex-col items-center">
@@ -132,7 +133,7 @@ const Hero = () => {
                 </div>
               ))}
           </section>
-          <div className="max-w-7xl mx-auto flex text-xl p-6 mt-8">
+          <div className="max-w-7xl mx-auto flex justify-center text-xl p-6 mt-8">
             <div className="flex flex-col items-center">
               <PrivacyPolicyModal
                 handlePolicyClick={handlePolicyClick}
