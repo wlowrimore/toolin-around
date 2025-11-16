@@ -2,11 +2,13 @@
 
 import { signIn } from "next-auth/react";
 
-const GoogleButton = () => {
+const GoogleButton = ({ disabled }: { disabled?: boolean }) => {
   return (
     <button
       onClick={() => signIn("google", { callbackUrl: "/all-listings" })}
-      className="flex bg-black text-white rounded-md items-center justify-center hover:scale-105 transition-scale duration-300"
+      type="button"
+      disabled={disabled}
+      className={`${disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : ""} max-w-7xl flex bg-black text-white rounded-md items-center justify-center hover:scale-105 transition-scale duration-300`}
     >
       <div className="gsi-material-button-state"></div>
       <div className="flex items-center px-3 py-2">

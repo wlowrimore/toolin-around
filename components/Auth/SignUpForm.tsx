@@ -1,11 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
 import GoogleButton from "./GoogleButton";
 import MicrosoftButton from "./MicrosoftButton";
 
 const SignUpForm = () => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckedChange = (checked: boolean | "indeterminate") => {
+    setIsChecked(checked === true);
+    console.log("Checked:", checked);
+  };
+
   return (
     <main className="max-w-7xl flex flex-col bg-slate-300/50 border border-black/50 rounded-md py-4 px-6">
       <div className="pb-4">
@@ -18,7 +26,12 @@ const SignUpForm = () => {
         </div>
         <div className="w-full flex flex-col gap-2 pb-3">
           <div className="flex items-center">
-            <Checkbox id="terms" className="size-3 mr-1.5" ref={null} />
+            <Checkbox
+              id="terms"
+              className="size-3 mr-1.5"
+              checked={isChecked}
+              onCheckedChange={handleCheckedChange}
+            />
             <label
               htmlFor="terms"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -35,8 +48,8 @@ const SignUpForm = () => {
         </div>
       </div>
       <div className="w-full flex gap-12">
-        <GoogleButton />
-        <MicrosoftButton />
+        <GoogleButton disabled={!isChecked} />
+        <MicrosoftButton disabled={!isChecked} />
       </div>
     </main>
   );

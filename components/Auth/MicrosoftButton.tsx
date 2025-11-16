@@ -2,13 +2,15 @@
 
 import { signIn } from "next-auth/react";
 
-const MicrosoftButton = () => {
+const MicrosoftButton = ({ disabled }: { disabled?: boolean }) => {
   return (
     <button
       onClick={() =>
         signIn("microsoft-entra-id", { callbackUrl: "/all-listings" })
       }
-      className="max-w-7xl flex items-center justify-center bg-white border border-neutral-300 rounded-md hover:scale-105 transition-scale duration-300"
+      type="button"
+      disabled={disabled}
+      className={`${disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : ""} max-w-7xl flex items-center justify-center bg-white border border-neutral-300 rounded-md hover:scale-105 transition-scale duration-300`}
     >
       <div className="flex items-center gap-2 px-3 py-2">
         <div className="w-6 h-6">
