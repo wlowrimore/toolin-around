@@ -1,6 +1,6 @@
 import { LISTING_BY_ID_QUERY } from "@/sanity/lib/queries";
 import { client } from "@/sanity/lib/client";
-import ListToolsForm from "@/components/Forms/ListToolsForm";
+import ListToolsForm from "@/app/(root)/components/Forms/ListToolsForm";
 import { Suspense } from "react";
 
 export default async function EditListingPage({

@@ -25,11 +25,8 @@ export function SearchModal({ query }: { query: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="flex items-center space-x-1 hover:text-blue-200 w-fit"
-        >
-          <span className="flex items-center gap-[0.125rem]">
+        <button type="button" className="flex items-center space-x-1 w-fit">
+          <span className="flex items-center px-2 hover:bg-black/10 rounded-lg gap-[0.125rem]">
             <Search className="h-5 w-5" />
             Find Tools
           </span>

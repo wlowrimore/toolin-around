@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/app/(root)/components/ui/card";
 import Image from "next/image";
 import { Quote, Star } from "lucide-react";
 import Link from "next/link";

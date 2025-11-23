@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from "@/app/(root)/components/ui/card";
 import { Listing } from "@/types";
 import { list } from "postcss";
 

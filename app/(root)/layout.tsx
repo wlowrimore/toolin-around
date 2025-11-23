@@ -1,4 +1,4 @@
-import Header from "../../components/Header/Navbar";
+import Header from "./components/Header/Navbar";
 import "@/app/globals.css";
 import { Geist } from "next/font/google";
 
@@ -15,6 +15,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = true;
   return (
     <main className={`${geist.variable}`}>
       <Header query="" />

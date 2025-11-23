@@ -3,8 +3,8 @@ import { client } from "@/sanity/lib/client";
 // import MessagesDisplay from "@/components/MessagesDisplay";
 import { redirect } from "next/navigation";
 import { Rss } from "lucide-react";
-import ConversationView from "@/components/Messaging/ConversationView";
-import MessagesInbox from "@/components/Messaging/MessagesInbox";
+import ConversationView from "@/app/(root)/components/Messaging/ConversationView";
+import MessagesInbox from "@/app/(root)/components/Messaging/MessagesInbox";
 
 async function getMessages(userId: string) {
   const query = `*[_type == "message" && (recipient._ref == $userId || sender._ref == $userId)] | order(createdAt desc) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/app/(root)/components/ui/checkbox";
 import { CheckIcon, AlertCircle } from "lucide-react";
 import { LoadingSpinner, LoadingSpinnerRed } from "../LoadingAnimations";
 

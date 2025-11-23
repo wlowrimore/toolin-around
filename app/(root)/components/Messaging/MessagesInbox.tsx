@@ -245,9 +245,9 @@ import { formatDistanceToNow } from "date-fns";
 import ConversationView from "./ConversationView";
 import Image from "next/image";
 import { LoadingBar, LoadingSpinnerWhite } from "../LoadingAnimations";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/app/(root)/components/ui/checkbox";
 import DeleteMsgForm from "../Forms/DeleteMsgForm";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/(root)/components/ui/button";
 import { CheckIcon, Trash2Icon } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 

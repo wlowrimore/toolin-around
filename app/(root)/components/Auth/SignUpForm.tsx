@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
 import GoogleButton from "./GoogleButton";
 import MicrosoftButton from "./MicrosoftButton";
+import Image from "next/image";
 
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -17,7 +18,16 @@ const SignUpForm = () => {
   return (
     <main className="max-w-7xl flex flex-col bg-slate-300/50 border border-black/50 rounded-md py-4 px-6">
       <div className="pb-4">
-        <h1 className="font-semibold mb-2">Choose your Sign In Method</h1>
+        <div className="flex justify-between">
+          <h1 className="font-semibold mb-2">Choose your Sign In Method</h1>
+          <Image
+            src="/logos/ta-wht.png"
+            alt="Toolin' Around Logo"
+            width={100}
+            height={100}
+            className="w-8 h-8 rounded-md"
+          />
+        </div>
         <div className="px-3 pb-3">
           <ul className="list-disc text-sm pl-2 mb-2">
             <li>Either option is safe and highly secure.</li>

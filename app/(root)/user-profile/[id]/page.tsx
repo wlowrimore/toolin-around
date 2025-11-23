@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import ListingCard from "@/components/ListingCard";
-import UserProfileListingCard from "@/components/UserProfileListingCard";
+import ListingCard from "@/app/(root)/components/ListingCard";
+import UserProfileListingCard from "@/app/(root)/components/UserProfileListingCard";
 import { User } from "@/sanity.types";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";

@@ -1,30 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { Search, UserCircle, MessageCircle, Gem, X, Eye } from "lucide-react";
+import { UserCircle, MessageCircle, Gem, Eye } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/app/(root)/components/ui/tooltip";
 import Link from "next/link";
-import LoginModalForm from "../Auth/PrivacyPolicyModal";
 import { SearchModal } from "../SearchModal";
 import { useMessages } from "@/hooks/useMessages";
 
@@ -32,31 +20,38 @@ const Header = ({ query }: { query: string }) => {
   const { data: session } = useSession();
   const { unreadCount } = useMessages(session?.user?.id as string);
 
-  return (
-    <div className="text-slate-400">
-      <div className="max-w-6xl mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
-          {/* Logo/Brand */}
-          <Link href="/">
-            <div className="flex items-center space-x-2">
-              {/* <Image
-                src="/logos/headerLogo.png"
-                alt="Tooling Around Logo"
-                width={1000}
-                height={1000}
-                className="w-24 h-auto"
-              /> */}
-              {/* <h1 className="font-bold text-2xl">Toolin' Around</h1> */}
-            </div>
-          </Link>
+  const path = usePathname();
 
+  if (path === "/") {
+    return null;
+  }
+
+  return (
+    <div className="text-black/9">
+      <div className="max-w-7xl text-center mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
           {/* Navigation */}
           {session ? (
-            <div className="flex items-center space-x-8 text-lg">
+            <div className="w-full flex items-center justify-between text-lg mt-4">
+              <Link href="/all-listings">
+                <div className="flex items-center space-x-2 px-2 rounded-lg hover:bg-black/10">
+                  <Image
+                    src="/logos/ta-wht.png"
+                    alt="Toolin' Around Logo"
+                    width={100}
+                    height={100}
+                    className="w-10 h-10 rounded-md"
+                  />
+                  <div className="flex flex-col text-[1.3rem] font-semibold items-start space-y-[-0.7rem] tracking-wider">
+                    <p>Toolin'</p>
+                    <p>Around</p>
+                  </div>
+                </div>
+              </Link>
               <Link href="/all-listings">
                 <button
                   type="button"
-                  className="flex items-center space-x-1 hover:text-blue-200"
+                  className="flex items-center px-2 rounded-lg space-x-1 hover:bg-black/10"
                 >
                   <Eye className="h-5 w-5" />
                   <span>All Listings</span>
@@ -68,14 +63,14 @@ const Header = ({ query }: { query: string }) => {
               <Link href="/featured-listings">
                 <button
                   type="button"
-                  className="flex items-center space-x-1 hover:text-blue-200"
+                  className="flex items-center px-2 rounded-lg space-x-1 hover:bg-black/10"
                 >
                   <Gem className="h-5 w-5" />
                   <span>Featured Listings</span>
                 </button>
               </Link>
               <Link href="/messages">
-                <button className="relative flex items-center hover:text-blue-200">
+                <button className="relative flex it px-2 rounded-lg items-center hover:bg-black/10">
                   <MessageCircle className="h-5 w-5 mr-1" />
                   {unreadCount > 0 && (
                     <span className="absolute z-60 top-0.5 animate-pulse duration-700 left-3 w-2 h-2 bg-green-300 rounded-full"></span>
@@ -84,7 +79,7 @@ const Header = ({ query }: { query: string }) => {
                 </button>
               </Link>
               <Link href={`/user-profile/${session.user?.id}`}>
-                <button className="flex items-center space-x-1 hover:text-blue-200">
+                <button className="flex items-center px-2 rounded-lg space-x-1 hover:bg-black/10">
                   <UserCircle className="h-5 w-5" />
                   <span>Profile</span>
                 </button>
@@ -92,7 +87,7 @@ const Header = ({ query }: { query: string }) => {
               <Link href="/list-tools">
                 <button
                   type="button"
-                  className="bg-white/70 text-slate-700 px-4 py-2 hover:bg-blue-50"
+                  className="bg-red-600/40 hover:bg-red-600/50 text-black px-3 py-1 rounded-lg"
                 >
                   List Tools
                 </button>
@@ -100,7 +95,7 @@ const Header = ({ query }: { query: string }) => {
               {session ? (
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
-                    <TooltipTrigger className="absolute right-[11.5rem] ">
+                    <TooltipTrigger className="">
                       <div className="bg-transparent p-1 border-[0.5px] border-zinc-300 rounded-full">
                         <Image
                           src={session.user?.image! as string}

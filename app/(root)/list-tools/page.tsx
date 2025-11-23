@@ -1,4 +1,4 @@
-import ListToolsForm from "@/components/Forms/ListToolsForm";
+import ListToolsForm from "@/app/(root)/components/Forms/ListToolsForm";
 import React from "react";
 
 const ListTools = () => {

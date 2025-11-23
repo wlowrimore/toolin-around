@@ -7,21 +7,27 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/app/(root)/components/ui/select";
 
 interface SelectFormProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-export function ToolConditionForm({ value, onChange }: SelectFormProps) {
-  const toolConditionCategories = [
-    "New",
-    "Like New",
-    "Good",
-    "Fair",
-    "Poor",
-    "Other",
+export const ToolSelectionForm: React.FC<SelectFormProps> = ({
+  value,
+  onChange,
+}) => {
+  const toolsCategories = [
+    "Common Tools",
+    "Power Tools",
+    "Electric Tools",
+    "Carpentry Tools",
+    "Gardening Tools",
+    "Plumbing Tools",
+    "Automotive Tools",
+    "Safety Tools",
+    "Other Tools",
   ];
 
   return (
@@ -32,7 +38,7 @@ export function ToolConditionForm({ value, onChange }: SelectFormProps) {
         </SelectTrigger>
         <SelectContent className="bg-white">
           <SelectGroup className="text-cyan-700 font-semibold">
-            {toolConditionCategories.map((category) => (
+            {toolsCategories.map((category) => (
               <SelectItem key={category} value={category}>
                 {category}
               </SelectItem>
@@ -42,4 +48,4 @@ export function ToolConditionForm({ value, onChange }: SelectFormProps) {
       </Select>
     </div>
   );
-}
+};

@@ -2,7 +2,7 @@ import { type Metadata } from "next";
 import { draftMode } from "next/headers";
 import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
-import FilteredListings from "@/components/FilteredListings";
+import FilteredListings from "@/app/(root)/components/FilteredListings";
 import { Listing } from "@/types";
 
 interface QueryParams {

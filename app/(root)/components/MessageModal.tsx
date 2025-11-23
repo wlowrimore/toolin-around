@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/app/(root)/components/ui/dialog";
 import { MessageCircleMore, Check } from "lucide-react";
 import LoginModalForm from "./Auth/PrivacyPolicyModal";
 import { toast } from "@/hooks/use-toast";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/app/(root)/components/ui/checkbox";
 
 export type RatePeriod = "hour" | "day" | "week";
 

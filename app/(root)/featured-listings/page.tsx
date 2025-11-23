@@ -4,7 +4,7 @@ import { ListingCardProps } from "@/types";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { sanityFetch } from "@/sanity/lib/live";
-import ListingCard from "@/components/ListingCard";
+import ListingCard from "@/app/(root)/components/ListingCard";
 import { getTopListingsForWeek, generateWeekCycles } from "@/lib/utils";
 import Link from "next/link";
 

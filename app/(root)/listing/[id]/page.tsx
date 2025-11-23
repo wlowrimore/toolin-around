@@ -1,5 +1,5 @@
 import React from "react";
-import ListingDetailsCard from "@/components/ListingDetailsCard";
+import ListingDetailsCard from "@/app/(root)/components/ListingDetailsCard";
 import { ListingCardProps, Slug } from "@/types";
 import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const PrivacyPolicyContent = () => {
   return (
@@ -193,6 +194,15 @@ const PrivacyPolicyContent = () => {
                   privacy@fakenamedev.com
                 </Link>
               </p>
+              <div className="mt-4 text-end">
+                <Image
+                  src="/logos/ta-wht.png"
+                  alt="Toolin' Around Logo"
+                  width={300}
+                  height={300}
+                  className="w-10 h-10 rounded-lg"
+                />
+              </div>
             </section>
           </div>
         </div>

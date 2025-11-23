@@ -46,10 +46,11 @@ const Hero = () => {
       }
     >
       <main className="max-w-7xl my-20">
-        <div className="w-full flex flex-col items-start justify-center mb-8 p-6">
+        <div className="w-full flex flex-col items-start justify-center mb-2 p-6">
           <h1 className={`${hurricane.className} text-8xl text-red-600`}>
             Toolin&apos; Around
           </h1>
+
           <span
             className={`${geist.className} w-full mt-[-0.6rem] text-base font-semibold tracking-wider text-black ml-1.5`}
           >

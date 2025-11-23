@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/app/(root)/components/ui/alert-dialog";
 
 import { UserProfileListingType } from "@/app/(root)/user-profile/[id]/page";
 import { deleteListing } from "@/lib/actions"; // adjust import path

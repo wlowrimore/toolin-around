@@ -1,4 +1,4 @@
-import { LoadingBar } from "@/components/LoadingAnimations";
+import { LoadingBar } from "@/app/(root)/components/LoadingAnimations";
 import React, { Suspense } from "react";
 
 const RatePage = () => {

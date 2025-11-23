@@ -110,8 +110,8 @@ import { auth } from "@/auth";
 import { createListingsQuery } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import { Suspense } from "react";
-import { LoadingBar } from "@/components/LoadingAnimations";
-import ListerProfileListingCard from "@/components/ListerProfileListingCard";
+import { LoadingBar } from "@/app/(root)/components/LoadingAnimations";
+import ListerProfileListingCard from "@/app/(root)/components/ListerProfileListingCard";
 
 // Add params to the page props to get the author ID from the URL
 export default async function ListerProfilePage({

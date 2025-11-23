@@ -3,10 +3,27 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { auth } from "@/auth";
 import { ListingType } from "@/types";
 import { LISTINGS_QUERY } from "@/sanity/lib/queries";
-import { SearchModal } from "@/components/SearchModal";
-import ListingCard from "@/components/ListingCard";
-import PageHeaderSearchForm from "@/components/PageHeaderSearchForm";
-import { LoadingBar } from "@/components/LoadingAnimations";
+import { Geist, Hurricane } from "next/font/google";
+import { SearchModal } from "@/app/(root)/components/SearchModal";
+import ListingCard from "@/app/(root)/components/ListingCard";
+import PageHeaderSearchForm from "@/app/(root)/components/PageHeaderSearchForm";
+import { LoadingBar } from "@/app/(root)/components/LoadingAnimations";
+
+const hurricane = Hurricane({
+  variable: "--font-hurricane",
+  weight: ["400"],
+  style: ["normal"],
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const geist = Geist({
+  variable: "--font-geist",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal"],
+  display: "swap",
+  subsets: ["latin"],
+});
 
 export default async function AllListingsPage({
   searchParams,
@@ -32,9 +49,11 @@ export default async function AllListingsPage({
         </div>
       }
     >
-      <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)] w-full my-10 px-6">
+      <main className="max-w-7xl mx-auto flex flex-col items-center w-full my-10 px-6">
         <header className="flex items-center w-full border-b-[0.025rem] border-slate-300 py-2">
-          <h1 className="text-slate-600 text-3xl font-semibold">
+          <h1
+            className={`${geist.className} text-black/80 text-3xl font-semibold`}
+          >
             All Listings
           </h1>
         </header>

@@ -10,7 +10,7 @@ const MicrosoftButton = ({ disabled }: { disabled?: boolean }) => {
       }
       type="button"
       disabled={disabled}
-      className={`${disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : ""} max-w-7xl flex items-center justify-center bg-white border border-neutral-300 rounded-md hover:scale-105 transition-scale duration-300`}
+      className={`${disabled ? "opacity-50 cursor-not-allowed hover:scale-100" : "hover:scale-105"} max-w-7xl flex items-center justify-center bg-white border border-neutral-300 rounded-md transition-scale duration-300`}
     >
       <div className="flex items-center gap-2 px-3 py-2">
         <div className="w-6 h-6">

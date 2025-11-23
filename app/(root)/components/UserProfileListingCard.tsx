@@ -3,7 +3,7 @@
 import { Suspense, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { UserProfilePageProps } from "../app/(root)/user-profile/[id]/page";
+import { UserProfilePageProps } from "../user-profile/[id]/page";
 import { formatDate } from "@/lib/utils";
 
 import {
@@ -13,7 +13,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/app/(root)/components/ui/card";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import Link from "next/link";
