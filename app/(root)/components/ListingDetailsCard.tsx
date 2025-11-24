@@ -67,7 +67,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   ): string => {
     switch (condition) {
       case "New":
-        return "bg-neutral-900 text-green-500 font-semibold py-0.5 px-1.5 border border-sky-600";
+        return "bg-sky-500 text-white font-semibold py-0.5 px-1.5 border border-sky-600";
       case "Like New":
         return "bg-green-500 text-white py-0.5 px-1.5 border border-green-500";
       case "Good":
@@ -197,7 +197,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                 />
               ) : null}
             </div>
-            <div className="relative w-full flex justify-between items-center bg-slate-700 py-1 px-2 mt-6">
+            <div className="relative w-full flex justify-between items-center bg-black/80 py-1 px-2 mt-6">
               <p className="text-sm font-normal text-white">
                 {listing?.category}
               </p>

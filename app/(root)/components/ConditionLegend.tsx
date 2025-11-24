@@ -2,9 +2,9 @@ import React from "react";
 
 const ConditionLegend = () => {
   return (
-    <div className="w-full bg-slate-600 text-white py-1 px-2 flex justify-between items-center">
+    <div className="w-full bg-white text-black py-1 px-2 flex justify-between items-center">
       <div className="flex items-center gap-1">
-        <div className="bg-neutral-900 w-3 h-3 flex items-center"></div>
+        <div className="bg-sky-500 w-3 h-3 flex items-center"></div>
         <p className="text-xs">Never Used</p>
       </div>
       <div className="flex items-center gap-1">

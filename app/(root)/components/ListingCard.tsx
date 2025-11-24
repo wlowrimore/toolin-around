@@ -59,7 +59,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   return (
     <Card
       onClick={handleListingClick}
-      className="border-cyan-800 hover:shadow-md hover:shadow-cyan-900 rounded-none hover:bg-slate-300/30 cursor-pointer"
+      className=" hover:shadow-md hover:shadow-cyan-900 rounded-lg hover:bg-slate-300/20 cursor-pointer"
     >
       <CardHeader>
         <div className="w-full flex items-center pb-2">
@@ -118,7 +118,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
               <p className="w-full text-center text-sm">Loading user data...</p>
             )}
           </div>
-          <div className="w-full bg-slate-700 py-1 px-2">
+          <div className="w-full bg-red-600/90 py-1 px-2 rounded-b-md">
             <p className="text-sm font-normal text-white">{category}</p>
           </div>
         </CardFooter>

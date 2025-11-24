@@ -46,7 +46,7 @@ export function SearchModal({ query }: { query: string }) {
                 name="query"
                 defaultValue={query}
                 placeholder="search by keywords..."
-                className="w-full"
+                className="w-full rounded-lg"
                 autoFocus
               />
             </div>
@@ -57,7 +57,7 @@ export function SearchModal({ query }: { query: string }) {
                     <LoadingSpinner />
                   </span>
                 ) : (
-                  <Search className="h-9 w-9 p-1 border-2 border-slate-400 hover:bg-slate-200" />
+                  <Search className="h-9 w-9 p-1 rounded-lg border-2 border-slate-400 hover:bg-slate-200" />
                 )}
               </span>
             </button>
