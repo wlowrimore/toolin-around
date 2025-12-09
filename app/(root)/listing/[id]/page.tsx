@@ -111,7 +111,7 @@ const IndividualListingPage = async ({
   console.log("LISTING IN ID PAGE:", listing);
 
   return (
-    <main className="max-w-4xl h-[90vh] mx-auto flex flex-col justify-center items-center font-[family-name:var(--font-poppins)]">
+    <main className="max-w-7xl h-[90vh] mx-auto flex flex-col justify-center items-center font-[family-name:var(--font-poppins)]">
       <ListingDetailsCard
         listing={listing}
         createdAt={listing?._createdAt}

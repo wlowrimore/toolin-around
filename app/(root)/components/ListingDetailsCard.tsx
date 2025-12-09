@@ -69,7 +69,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
       case "New":
         return "bg-sky-500 text-white font-semibold py-0.5 px-1.5 border border-sky-600";
       case "Like New":
-        return "bg-green-500 text-white py-0.5 px-1.5 border border-green-500";
+        return "bg-green-500 text-black text-sm px-1.5 rounded-2xl";
       case "Good":
         return "bg-purple-700 text-white py-0.5 px-1.5 border border-purple-700";
       case "Fair":
@@ -91,100 +91,85 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
 
   return (
     <>
-      <ConditionLegend />
-      <Card className="border-slate-800 rounded-none hover:bg-blue-300/10 w-full">
-        {/* CardHeader section remains the same */}
-        <CardHeader>
-          <div className="w-full h-auto flex justify-between pb-2">
-            <div className="flex w-fit">
-              <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-              <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-              <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-              <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-              <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
-              <span className="w-fit ml-2 flex flex-col items-end text-xs text-slate-950 px-2 py-1">
+      <section className="flex gap-6">
+        <div className="flex flex-col bg-black/20 gap-6">
+          <div className="flex flex-col justify-between mx-2">
+            <div className="w-full h-auto flex mx-auto items-center justify-between my-3">
+              <div className="flex bg-black/70 px-1.5 py-0.5 rounded-2xl">
+                <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
+                <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
+                <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
+                <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
+                <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
+                {/* <span className="w-fit ml-2 flex flex-col items-end text-xs text-slate-950 px-2 py-1">
                 read the reviews
-              </span>
-            </div>
-
-            {listing?.price && listing?.ratePeriod ? (
-              <div className="text-slate-900 bg-cyan-200/80 px-2 py-1 font-semibold tracking-wide text-xs">
-                ${listing?.price} / {listing?.ratePeriod}
+              </span> */}
               </div>
-            ) : (
-              <div className="text-white text-xs">Price not available</div>
-            )}
-          </div>
-          <CardTitle>{listing?.title}</CardTitle>
-          <CardDescription>{listing?.description}</CardDescription>
-        </CardHeader>
 
-        {/* CardContent section remains the same */}
-        <CardContent>
-          <div className="w-full max-h-64 overflow-hidden flex items-center bg-slate-700">
-            <img
-              src={listing?.image || ""}
-              alt={listing?.title || ""}
-              width={1000}
-              height={1000}
-              className="max-w-[18rem] min-w-[18rem] w-full max-h-[24rem] min-h-[16rem] aspect-[2/1] object-cover"
-              loading="lazy"
-            />
-
-            <article className="text-white w-full">
-              <div className="flex justify-center w-full">
-                <div className="max-w-[20rem] min-w-[20.5rem] text-sm">
-                  <Quote
-                    style={{ transform: "scaleX(-1)" }}
-                    className="fill-white/60 stroke-none -ml-10"
-                  />
-                  <div className="">
-                    <p className="">{listing?.toolDetails}</p>
-                  </div>
-                  <div className="flex w-full justify-end">
-                    <Quote className="fill-white/60 stroke-none -mr-6" />
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-          <hr className="my-2" />
-          <p className="text-slate-800 tracking-wide text-[0.65rem]">
-            Listed {formatDate(createdAt)}
-          </p>
-        </CardContent>
-
-        {/* Updated CardFooter with enhanced MessageModal */}
-        <Suspense fallback={<div>Loading...</div>}>
-          <CardFooter className="flex flex-col">
-            <div className="relative w-full flex justify-between items-end py-3">
-              {author?.image && author?.name ? (
-                <div className="w-full flex px-4 gap-2 items-center">
-                  <Image
-                    src={author?.image as string}
-                    alt={author?.name as string}
-                    width={500}
-                    height={500}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div className="flex flex-col items-start text-xs text-slate-600 leading-tight">
-                    <p className="font-semibold">{author?.name as string}</p>
-                    <p className="font-normal">{authorHandle()}</p>
-                  </div>
-                  {author && session && author._id !== session.user.id ? (
-                    <button
-                      onClick={() => setIsModalOpen(true)}
-                      className="absolute right-4 top-3 text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
-                    >
-                      Message {authorFirstName}
-                    </button>
-                  ) : null}
+              {listing?.price && listing?.ratePeriod ? (
+                <div className="text-slate-900 bg-cyan-200/80 px-2 py-1 font-semibold tracking-wide text-xs">
+                  ${listing?.price} / {listing?.ratePeriod}
                 </div>
               ) : (
-                <p className="w-full text-center text-sm">
-                  Loading user data...
-                </p>
+                <div className="text-white text-xs">Price not available</div>
               )}
+            </div>
+            {author?.image && author?.name ? (
+              <div className="w-[12rem] flex gap-2 items-center">
+                <Image
+                  src={author?.image as string}
+                  alt={author?.name as string}
+                  width={500}
+                  height={500}
+                  className="size-12 rounded-full object-cover"
+                />
+                <div className="flex flex-col items-start text-sm text-black/80 leading-tight">
+                  <p className="font-semibold">{author?.name as string}</p>
+                  <p className="font-normal">{authorHandle()}</p>
+                </div>
+                {/* {author && session && author._id !== session.user.id ? (
+                      <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
+                      >
+                        Message {authorFirstName}
+                      </button>
+                    ) : null} */}
+              </div>
+            ) : (
+              <p className="w-full text-center text-sm">Loading user data...</p>
+            )}
+          </div>
+          <ConditionLegend />
+          <Suspense fallback={<div>Loading...</div>}>
+            <aside className="flex flex-col mx-2 gap-6">
+              <div className="w-full flex flex-col bg-black/80 py-3 px-2 gap-2">
+                <p className="text-sm font-normal text-white">
+                  category: &nbsp;&nbsp;{listing?.category}
+                </p>
+
+                <div className="w-full gap-2 flex">
+                  <span className="text-white text-sm font-normal">
+                    condition:
+                  </span>
+                  <h2 className={getConditionColor(listing?.condition)}>
+                    {listing?.condition}
+                  </h2>
+                </div>
+                <Link href={`/lister-profile/${author?._id}`}>
+                  <p className="text-sm tracking-wider text-blue-300 hover:text-green-300 text-cente">
+                    View all of {authorFirstName}&apos;s listings
+                  </p>
+                </Link>
+              </div>
+              {author && session && author._id !== session.user.id ? (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-base text-red-600 bg-white font-semibold px-2 py-2 hover:bg-black hover:text-white transition-colors duration-200"
+                >
+                  Message {authorFirstName}
+                </button>
+              ) : null}
               {isModalOpen ? (
                 <MessageModal
                   authorFirstName={authorFirstName as string}
@@ -196,25 +181,49 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                   onMessageSent={handleMessageSent}
                 />
               ) : null}
+            </aside>
+          </Suspense>
+        </div>
+        <main className="w-full">
+          {/* CardHeader section remains the same */}
+          <header>
+            <h2 className="p-0 text-3xl font-serif pb-2 font-semibold">
+              {listing?.title}
+            </h2>
+            {/* <CardDescription>{listing?.description}</CardDescription> */}
+          </header>
+
+          {/* CardContent section remains the same */}
+          <section>
+            <div className="w-full overflow-hidden flex items-center gap-6">
+              <img
+                src={listing?.image || ""}
+                alt={listing?.title || ""}
+                width={1000}
+                height={1000}
+                className="w-full max-h-[28rem] object-cover"
+                loading="lazy"
+              />
+
+              <article className="text-black w-full">
+                <div className="flex justify-center w-full">
+                  <div className="max-w-[20rem] min-w-[20.5rem] text-sm">
+                    <div className="">
+                      <p className="">{listing?.toolDetails}</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
-            <div className="relative w-full flex justify-between items-center bg-black/80 py-1 px-2 mt-6">
-              <p className="text-sm font-normal text-white">
-                {listing?.category}
-              </p>
-              <Link href={`/lister-profile/${author?._id}`}>
-                <p className="absolute right-[40%] top-[22%] text-sm font-semibold text-white hover:text-green-300">
-                  View all of {authorFirstName}&apos;s listings
-                </p>
-              </Link>
-              <div className="w-[6rem] text-center">
-                <h2 className={getConditionColor(listing?.condition)}>
-                  {listing?.condition}
-                </h2>
-              </div>
-            </div>
-          </CardFooter>
-        </Suspense>
-      </Card>
+            <hr className="" />
+            <p className="text-slate-800 tracking-wide text-[0.65rem]">
+              Listed {formatDate(createdAt)}
+            </p>
+          </section>
+
+          {/* Updated CardFooter with enhanced MessageModal */}
+        </main>
+      </section>
     </>
   );
 };

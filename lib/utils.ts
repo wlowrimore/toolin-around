@@ -113,8 +113,26 @@ export async function displayTagName() {
 
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
     month: "long",
     day: "numeric",
+  });
+}
+
+export function formatMonth(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+  });
+}
+
+export function formatDay(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
+    day: "numeric",
+  });
+}
+
+export function formatYear(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
   });
 }

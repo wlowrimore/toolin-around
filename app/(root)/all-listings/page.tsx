@@ -57,7 +57,8 @@ export default async function AllListingsPage({
             All Listings
           </h1>
         </header>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8"> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
           {listings?.map((listing: any) => (
             <ListingCard
               key={listing._id}

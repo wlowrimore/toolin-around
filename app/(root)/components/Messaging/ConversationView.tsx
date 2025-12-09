@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, Send } from "lucide-react";
 import { LoadingBar, LoadingSpinner } from "../LoadingAnimations";
 import { formatMessageTime } from "@/lib/utils";
+import Image from "next/image";
 
 interface ConversationProps {
   _id: string;
@@ -214,7 +215,7 @@ const ConversationView = ({
               return (
                 <div
                   key={messageKey}
-                  className={`flex ${isFromMe ? "justify-end" : "justify-start"}`}
+                  className={`flex ${isFromMe ? "justify-start" : "justify-end"}`}
                 >
                   <div
                     className={`max-w-[80%] p-3 ${
@@ -224,7 +225,7 @@ const ConversationView = ({
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <img
+                      <Image
                         src={message?.sender?.image as string}
                         alt={message?.sender?.name as string}
                         width={24}
@@ -269,7 +270,7 @@ const ConversationView = ({
         <button
           type="submit"
           disabled={!replyContent.trim() || sending}
-          className="flex items-center justify-center bg-cyan-700 text-white p-2 w-full disabled:bg-gray-300"
+          className="flex items-center justify-center bg-red-600 hover:bg-red-600/90 rounded-lg text-white p-2 w-full disabled:bg-gray-300"
         >
           {sending ? <LoadingSpinner /> : <Send className="w-6 h-6" />}
           <span className={`ml-2 text-xl ${sending ? "text-white" : ""}`}>

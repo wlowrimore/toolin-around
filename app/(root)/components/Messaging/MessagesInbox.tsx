@@ -573,7 +573,7 @@ const MessagesInbox = () => {
                     handleConversationSelect(conversation._id);
                   }
                 }}
-                className={`relative p-4 hover:bg-sky-50 hover:shadow-md shadow-cyan-800 cursor-pointer grid grid-cols-7 ${
+                className={`relative p-4 hover:bg-red-50 hover:shadow-md shadow-cyan-800 cursor-pointer grid grid-cols-7 ${
                   selectedMessages.includes(conversation._id)
                     ? "bg-sky-100"
                     : ""
