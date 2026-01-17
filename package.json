@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:sanity\"",
+    "dev:next": "next dev",
+    "dev:sanity": "sanity dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
     "vercel-build": "next build",
     "predev": "npm run typegen",
     "prebuild": "npm run typegen",
-    "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate"
+    "typegen": "sanity schema extract --path=./sanity/extract.json && sanity typegen generate",
+    "sanity:build": "sanity build"
   },
   "pagckageManager": "npm@10.5.2",
   "dependencies": {
@@ -58,6 +61,7 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.19.0",
     "eslint-config-next": "^15.1.6",
     "postcss": "^8",

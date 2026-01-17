@@ -59,7 +59,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   return (
     <Card
       onClick={handleListingClick}
-      className="hover:shadow-md hover:shadow-cyan-900 hover:bg-slate-300/20 cursor-pointer"
+      className="hover:shadow-md hover:shadow-cyan-900 hover:bg-red-400/20 cursor-pointer rounded-lg"
     >
       <CardHeader>
         <div className="w-full flex items-center">

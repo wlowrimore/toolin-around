@@ -19,6 +19,7 @@ import { Star } from "lucide-react";
 import Link from "next/link";
 import DeleteButton from "./Mutations/DeleteButton";
 import UpdateLinkButton from "./Mutations/UpdateLinkButton";
+import AvailabilityButton from "./Mutations/AvailabilityButton";
 
 interface ListingIdType {
   listingId: string;
@@ -41,6 +42,7 @@ interface UserProfileListingType {
       image: string;
       email: string;
     };
+    availability: boolean;
     slug: string;
     _createdAt: string;
     ratings: number;
@@ -57,8 +59,10 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
   const {
     _id,
     listingId,
+    availability,
     title,
     description,
+    toolDetails,
     image,
     category,
     condition,
@@ -86,14 +90,22 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
     }
   };
 
+  console.log("AVAILABILITY:", availability);
+
   const truncateDesc = (text: string, maxLength = 25) => {
     if (!text) return "No description provided";
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "...";
   };
 
-  const truncateTitle = (text: string, maxLength = 25) => {
+  const truncateTitle = (text: string, maxLength = 50) => {
     if (!text) return "No title provided";
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  const truncateDetails = (text: string, maxLength = 100) => {
+    if (!text) return "No details provided";
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "...";
   };
@@ -102,14 +114,14 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between text-xs mb-1 p-2 bg-slate-600 text-white">
+      <div className="flex items-center text-xs mb-1 p-2 bg-slate-600 text-white gap-2">
         <UpdateLinkButton userListings={[listing]} />
         <DeleteButton userListings={[listing]} />
       </div>
 
       <Card
-        onClick={handleListingClick}
-        className="border-cyan-800 hover:shadow-md hover:shadow-cyan-900 rounded-none hover:bg-slate-300/30 cursor-pointer"
+        // onClick={handleListingClick}
+        className="border-cyan-800 rounded-none"
       >
         <CardHeader>
           <div className="w-full flex items-center pb-2">
@@ -121,7 +133,7 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
             ))}
             <span
               onClick={handleListingClick}
-              className="w-full ml-2 text-end text-xs text-slate-400"
+              className="w-full text-end text-xs text-slate-600"
             >
               read the reviews
             </span>
@@ -129,30 +141,88 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
           <CardTitle>{truncateTitle(title || "")}</CardTitle>
           <CardDescription>{truncatedDescription}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="w-full h-52 max-h-52 overflow-hidden flex justify-center items-center bg-slate-700">
-            {image ? (
-              <img
-                src={image || ""}
-                alt={title || ""}
-                width={1000}
-                height={1000}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div className="w-full h-full text-slate-400 text-xl flex justify-center items-center">
-                No Image Available
+        <section className="pb-6 px-4">
+          <div className="w-full flex justify-between">
+            <div className="w-full overflow-hidden flex flex-col justify-center items-center bg-slate-700">
+              {image ? (
+                <img
+                  src={image || ""}
+                  alt={title || ""}
+                  width={1000}
+                  height={1000}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full text-slate-400 text-xl flex justify-center items-center">
+                  No Image Available
+                </div>
+              )}
+              {/* <p className="text-white tracking-wide text-[0.8rem] p-2">
+                Listed {formatDate(_createdAt)}
+              </p> */}
+            </div>
+            <div>
+              <div className="pb-3">
+                <h4 className="text-black tracking-wide text-[0.95rem] font-semibold px-4">
+                  Tool Details
+                </h4>
+                {toolDetails ? (
+                  <p className="text-black tracking-wide text-[0.8rem] ml-4">
+                    {truncateDetails(toolDetails || "")}
+                  </p>
+                ) : (
+                  <p className="text-white tracking-wide text-[0.8rem] p-2">
+                    No tool details provided
+                  </p>
+                )}
               </div>
-            )}
+              <div className="pb-3">
+                <p className="text-black tracking-wide text-[0.95rem] font-semibold px-4">
+                  Date Listed
+                </p>
+                <p className="text-black tracking-wide text-[0.8rem] px-4">
+                  {formatDate(_createdAt)}
+                </p>
+              </div>
+              <div className="pb-3">
+                <p className="text-black tracking-wide text-[0.95rem] font-semibold px-4">
+                  Category
+                </p>
+                <p className="text-black tracking-wide text-[0.8rem] px-4">
+                  {category}
+                </p>
+              </div>
+              <div className="pb-3">
+                <p className="text-black tracking-wide text-[0.95rem] font-semibold px-4">
+                  Listed Condition
+                </p>
+                <p className="text-black tracking-wide text-[0.8rem] px-4">
+                  {condition}
+                </p>
+              </div>
+              <div className="">
+                <p className="text-black tracking-wide text-[0.95rem] font-semibold px-4">
+                  Availability
+                </p>
+                <div className="flex items-center text-[0.8rem] px-4">
+                  <div
+                    className={`${availability ? "bg-green-500" : "bg-red-500"} size-2 rounded-full`}
+                  ></div>
+                  <p className="px-1">
+                    {availability ? "Available" : "Not Available"}
+                  </p>
+                  <p className="px-2">|</p>
+                  <AvailabilityButton userListings={[listing]} />
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-slate-800 tracking-wide text-[0.65rem]">
-            Listed {formatDate(_createdAt)}
-          </p>
-        </CardContent>
+        </section>
         <Suspense fallback={<div>Loading...</div>}>
-          <CardFooter className="flex flex-col">
-            <div className="w-full flex ">
+          <CardFooter className="px-4 mb-4">
+            {/* <AvailabilityButton userListings={[listing]} /> */}
+            {/* <div className="w-full flex ">
               {session ? (
                 <div className="flex w-full p-4 pt-0 gap-2 items-start">
                   <div className="flex flex-col w-full">
@@ -192,11 +262,11 @@ const UserProfileListingCard: React.FC<UserProfileListingType> = ({
                   Loading user data...
                 </p>
               )}
-            </div>
-            <div className="w-full flex justify-between bg-slate-700 py-1 px-2">
+            </div> */}
+            {/* <div className="w-full flex justify-between bg-slate-700 py-1 px-2">
               <p className="text-sm font-normal text-white">{category}</p>
               <p className="text-sm font-normal text-white">{condition}</p>
-            </div>
+            </div> */}
           </CardFooter>
         </Suspense>
       </Card>

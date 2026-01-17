@@ -12,6 +12,11 @@ export const listing = defineType({
       hidden: true,
     }),
     defineField({
+      name: "availability",
+      title: "Availability",
+      type: "boolean",
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",

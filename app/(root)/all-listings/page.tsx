@@ -49,7 +49,7 @@ export default async function AllListingsPage({
         </div>
       }
     >
-      <main className="max-w-7xl mx-auto flex flex-col items-center w-full my-10 px-6">
+      <main className="max-w-[77rem] rounded-t-xl mx-auto flex flex-col items-center w-full my-10">
         <header className="flex items-center w-full border-b-[0.025rem] border-slate-300 py-2">
           <h1
             className={`${geist.className} text-black/80 text-3xl font-semibold`}
@@ -58,7 +58,7 @@ export default async function AllListingsPage({
           </h1>
         </header>
         {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8"> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 bg-slate-300 p-6 border-2 border-slate-700/10 rounded-xl">
           {listings?.map((listing: any) => (
             <ListingCard
               key={listing._id}

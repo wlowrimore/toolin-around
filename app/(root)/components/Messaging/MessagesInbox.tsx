@@ -485,16 +485,18 @@ const MessagesInbox = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-full mx-auto p-4">
       {conversations?.length > 0 && (
         <div className="flex justify-between items-center mb-4">
           <Button
             variant={isDeleteMode ? "destructive" : "outline"}
             onClick={toggleDeleteMode}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 hover:bg-red-600/80 hover:text-white"
           >
             <Trash2Icon size={16} />
-            {isDeleteMode ? "Cancel" : "Delete Messages"}
+            {isDeleteMode && conversations?.length > 0
+              ? "Cancel"
+              : "Delete Messages"}
           </Button>
 
           {isDeleteMode && (
@@ -573,7 +575,7 @@ const MessagesInbox = () => {
                     handleConversationSelect(conversation._id);
                   }
                 }}
-                className={`relative p-4 hover:bg-red-50 hover:shadow-md shadow-cyan-800 cursor-pointer grid grid-cols-7 ${
+                className={`relative border-2 border-slate-700/10 rounded-lg p-6 hover:bg-red-400/20 hover:shadow-md shadow-cyan-800 cursor-pointer grid grid-cols-7 transition-all duration-200 ${
                   selectedMessages.includes(conversation._id)
                     ? "bg-sky-100"
                     : ""

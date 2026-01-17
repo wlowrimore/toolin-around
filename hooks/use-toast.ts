@@ -162,6 +162,8 @@ function toast({ ...props }: Toast) {
     });
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id });
 
+  const variant = "default";
+
   dispatch({
     type: "ADD_TOAST",
     toast: {
@@ -171,6 +173,7 @@ function toast({ ...props }: Toast) {
       onOpenChange: (open) => {
         if (!open) dismiss();
       },
+      variant: variant,
     },
   });
 

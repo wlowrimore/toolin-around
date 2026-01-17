@@ -5,10 +5,13 @@ import { User } from "@/sanity.types";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import { LISTINGS_BY_AUTHOR_QUERY } from "@/sanity/lib/queries";
-import { MoveRight, Star } from "lucide-react";
+import { Gem, MoveRight, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import FeatureButton from "../../components/feature-signup/FeatureButton";
+import FeatureModal from "../../components/feature-signup/FeatureModal";
+import CTA from "../../components/feature-signup/CTA";
 
 export interface UserProfileListingType {
   userListings: {
@@ -26,6 +29,7 @@ export interface UserProfileListingType {
       image: string;
       email: string;
     };
+    availability: boolean;
     slug: string;
     _createdAt: string;
     ratings: number;
@@ -58,6 +62,7 @@ const UserProfilePage = async () => {
           _id,
           title,
           description,
+          availability,
           image,
           category,
           condition,
@@ -85,17 +90,8 @@ const UserProfilePage = async () => {
     const usersListings: UserProfileListingType[] = result.listings || [];
 
     return (
-      <main className="max-w-6xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
+      <main className="max-w-7xl mx-auto flex flex-col items-center font-[family-name:var(--font-poppins)]">
         <div className="w-full my-10 px-6">
-          <header className="w-full border-b-[0.025rem] border-slate-300 py-2">
-            <h1 className="text-slate-600 text-3xl font-semibold">
-              {userFirstName}&apos;s Profile
-            </h1>
-            <h2 className="text-slate-500 text-lg">
-              View, Edit, and Delete Your Listings Here
-            </h2>
-          </header>
-          {/* Profile image section */}
           <div className="flex items-center gap-4 my-10">
             <div className=" border-2 bg-cyan-700 border-cyan-700 p-1 w-fit">
               {session?.user?.image ? (
@@ -112,7 +108,7 @@ const UserProfilePage = async () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-[50%]">
               <h1 className="text-slate-600 text-2xl font-semibold">
                 {session?.user?.name}
               </h1>
@@ -129,14 +125,36 @@ const UserProfilePage = async () => {
                 <p className="flex text-slate-500 gap-3">
                   Your Overall Rating :
                   <span className="flex items-center">
-                    <Star size={22} strokeWidth={0.5} fill="#fbbf24" />
+                    <Star size={22} strokeWidth={0.5} fill="#facc15" />
                   </span>
                 </p>
               </div>
             </div>
+            <CTA isOpen />
+            {/* <section className="max-w-[50%] flex flex-col py-2 px-4 bg-black">
+              <h3 className="text-lg font-semibold text-white mb-3">
+                You are not a featured lister. Let&apos;s change that!
+              </h3>
+              <p className="text-sm text-neutral-300 -mt-4">
+                By signing up as a featured user, you&apos;ll be able to
+                showcase your listings to a wider audience, attract more
+                interest in your products, and boost your visibility.
+              </p>
+              <FeatureModal isOpen={isOpen} />
+              <FeatureButton />
+              <button
+                type="button"
+                title="Sign up as a featured user"
+                onClick={() => null}
+                className="w-fit pr-2 pl-1 py-1 bg-sky-600 flex items-center gap-1 mt-1 rounded-sm border border-sky-500 hover:bg-sky-500 hover:text-slate-800 hover:border-sky-600 transition-colors duration-200"
+              >
+                <Gem size={22} strokeWidth={0.5} fill="#7dd3fc" />
+                <span className="text-white text-sm">Let&apos;s Go</span>
+              </button>
+            </section> */}
           </div>
           {/* Listings grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+          <div className="bg-black grid grid-cols-1 sm:grid-cols-2 gap-1 mt-8">
             {usersListings.length > 0 ? (
               usersListings.map((userListing: any) => (
                 <UserProfileListingCard

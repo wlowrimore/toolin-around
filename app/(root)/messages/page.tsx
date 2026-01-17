@@ -41,8 +41,8 @@ export default async function MessagesPage() {
   const messages = await getMessages(session.user.id);
 
   return (
-    <div className="max-w-6xl mx-auto px-5 py-12">
-      <h1 className="flex items-center gap-2 text-3xl font-bold mb-6">
+    <div className="min-h-[80vh] overflow-y-auto max-w-[77rem] rounded-xl bg-slate-300 border-2 border-slate-700/10 shadow-md shadow-cyan-900 mx-auto px-5 py-12 my-10">
+      <h1 className="flex items-center gap-2 text-3xl font-bold mb-6 px-3">
         <span className="text-green-700">
           <Rss />
         </span>

@@ -18,7 +18,7 @@ import {
 
 import { UserProfileListingType } from "@/app/(root)/user-profile/[id]/page";
 import { deleteListing } from "@/lib/actions"; // adjust import path
-import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const DeleteButton: React.FC<UserProfileListingType> = ({ userListings }) => {
@@ -79,10 +79,14 @@ const DeleteButton: React.FC<UserProfileListingType> = ({ userListings }) => {
         <button
           title="Delete"
           type="button"
-          className="flex items-center gap-1.5 hover:underline"
+          className="w-full bg-slate-800/60 flex items-center justify-center mx-auto py-2.5 px-3 hover:bg-slate-800 active:bg-white/30 transition-colors duration-200"
         >
-          <div className="bg-red-500 w-2.5 h-2.5 rounded-full"></div>
-          <p className="tracking-wide">Delete</p>
+          {/* <div className="bg-red-500 w-2.5 h-2.5 rounded-full"></div> */}
+          {/* <p className="tracking-wide">Delete Listing</p> */}
+          <div className="text-red-500 flex items-center">
+            <X />
+            <span className="text-white tracking-wide">Delete Listing</span>
+          </div>
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
