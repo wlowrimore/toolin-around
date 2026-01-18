@@ -197,7 +197,7 @@ export function generateWeekCycles(numberOfWeeks: number): WeekCycle[] {
 export function getTopListingsForWeek(
   listings: Listing[],
   weekStart: Date,
-  weekEnd: Date
+  weekEnd: Date,
 ): Listing[] {
   return listings
     .filter((listing) => {
@@ -253,7 +253,7 @@ export async function getRatingsData(listingId: string): Promise<RatingData[]> {
           image
         }
       }`,
-      { listingId }
+      { listingId },
     );
     return ratings || [];
   } catch (error) {
@@ -284,7 +284,7 @@ export async function getRating(listingId: string): Promise<RatingData[]> {
           image
         }
       }`,
-      { listingId }
+      { listingId },
     );
 
     return rating || [];
@@ -307,7 +307,7 @@ export async function getAverageRating(listingId: string): Promise<number> {
       `{
         "averageRating": (*[_type == "rating" && listing._ref == $listingId].rating)
       }`,
-      { listingId }
+      { listingId },
     );
 
     return Number(result.averageRating) || 0;
@@ -348,7 +348,7 @@ export async function getlistingRatings(listingId: string): Promise<{
         },
         "averageRating": (*[_type == "rating" && listing._ref == $listingId].rating)
       }`,
-      { listingId }
+      { listingId },
     );
 
     return {
@@ -391,7 +391,7 @@ export const createOrUpdateUser = async (userData: {
     // Check if user exists
     const existingUser = await client.fetch(
       `*[_type == "author" && _id == $userId][0]`,
-      { userId }
+      { userId },
     );
 
     if (!existingUser) {

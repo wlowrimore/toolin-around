@@ -9,8 +9,6 @@ import { Gem, MoveRight, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import FeatureButton from "../../components/feature-signup/FeatureButton";
-import FeatureModal from "../../components/feature-signup/FeatureModal";
 import CTA from "../../components/feature-signup/CTA";
 
 export interface UserProfileListingType {
@@ -79,9 +77,7 @@ const UserProfilePage = async () => {
       }
     `;
 
-    const result = await Promise.race([
-      client.fetch(query, { email: session.user.email }),
-    ]);
+    const result = await client.fetch(query, { email: session.user.email });
 
     if (!result) {
       throw new Error("No data returned from Sanity");
@@ -130,31 +126,10 @@ const UserProfilePage = async () => {
                 </p>
               </div>
             </div>
-            <CTA isOpen />
-            {/* <section className="max-w-[50%] flex flex-col py-2 px-4 bg-black">
-              <h3 className="text-lg font-semibold text-white mb-3">
-                You are not a featured lister. Let&apos;s change that!
-              </h3>
-              <p className="text-sm text-neutral-300 -mt-4">
-                By signing up as a featured user, you&apos;ll be able to
-                showcase your listings to a wider audience, attract more
-                interest in your products, and boost your visibility.
-              </p>
-              <FeatureModal isOpen={isOpen} />
-              <FeatureButton />
-              <button
-                type="button"
-                title="Sign up as a featured user"
-                onClick={() => null}
-                className="w-fit pr-2 pl-1 py-1 bg-sky-600 flex items-center gap-1 mt-1 rounded-sm border border-sky-500 hover:bg-sky-500 hover:text-slate-800 hover:border-sky-600 transition-colors duration-200"
-              >
-                <Gem size={22} strokeWidth={0.5} fill="#7dd3fc" />
-                <span className="text-white text-sm">Let&apos;s Go</span>
-              </button>
-            </section> */}
+            <CTA />
           </div>
           {/* Listings grid */}
-          <div className="bg-black grid grid-cols-1 sm:grid-cols-2 gap-1 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 mt-8">
             {usersListings.length > 0 ? (
               usersListings.map((userListing: any) => (
                 <UserProfileListingCard
