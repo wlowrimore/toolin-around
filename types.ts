@@ -21,6 +21,9 @@ export interface ListingType {
     name: string;
     image: string;
     email: string;
+    isFeatured?: boolean;
+    featuredSince?: string;
+    featuredUntil?: string;
   } | null;
 }
 
@@ -53,6 +56,9 @@ export interface Author {
   slug: string | null;
   image: string;
   email: string;
+  isFeatured?: boolean;
+  featuredSince?: string;
+  featuredUntil?: string;
 }
 
 export interface Listing {

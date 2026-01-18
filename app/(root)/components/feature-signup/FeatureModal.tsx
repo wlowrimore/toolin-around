@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useFeatured } from "@/contexts/FeaturedContext";
+import { useSession } from "next-auth/react";
+import { updateFeaturedStatus } from "@/app/actions/featuredStatus";
 import {
   Dialog,
   DialogContent,
@@ -22,9 +25,33 @@ type PaymentMethod = "card" | "paypal";
 type Step = "details" | "payment" | "success";
 
 const FeatureModal = ({ isOpen, onClose }: FeatureModalProps) => {
+  const { data: session } = useSession();
+  const { refreshStatus } = useFeatured();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<Step>("details");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+
+  const handleSubmitPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Simulate payment processing
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    if (session?.user?.email) {
+      const result = await updateFeaturedStatus(session.user.email, true, {
+        stripeCustomerId: "mock_cus>" + Date.now(),
+        stripeSubscriptionId: "mock_sub>" + Date.now(),
+      });
+
+      if (result.success) {
+        await refreshStatus();
+        setIsLoading(false);
+        setStep("success");
+        toastSuccess("Payment successful!");
+      }
+    }
+  };
 
   const toastSuccess = (message: string) => {
     toast({
@@ -95,18 +122,6 @@ const FeatureModal = ({ isOpen, onClose }: FeatureModalProps) => {
     }
   };
 
-  const handleSubmitPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setIsLoading(false);
-    setStep("success");
-    toastSuccess("Payment successful!");
-  };
-
   const handleClose = () => {
     setStep("details");
     setPaymentMethod("card");
@@ -120,7 +135,7 @@ const FeatureModal = ({ isOpen, onClose }: FeatureModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         {step === "details" && (
           <>
             <DialogHeader>

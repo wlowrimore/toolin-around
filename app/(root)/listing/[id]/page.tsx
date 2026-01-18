@@ -3,10 +3,6 @@ import ListingDetailsCard from "@/app/(root)/components/ListingDetailsCard";
 import { ListingCardProps, Slug } from "@/types";
 import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
-import {
-  LISTING_BY_ID_QUERY,
-  PLAYLIST_BY_SLUG_QUERY,
-} from "@/sanity/lib/queries";
 import { auth } from "@/auth";
 
 interface IndividualListingPageProps extends ListingCardProps {
@@ -78,11 +74,14 @@ const IndividualListingPage = async ({
         _id,
         name,
         image,
-        email
+        email,
+        isFeatured,
+        featuredSince,
+        featuredUntil
       },
       toolDetails
     }[0]`,
-    { id: params.id }
+    { id: params.id },
   );
   console.log("PARAMS.ID AFTER FETCH:", params.id);
   if (!listingResult) {

@@ -19,7 +19,7 @@ export const LISTINGS_QUERY = defineQuery(`
       !defined($category) || 
       category match $category
     )
-  ] | order(_createdAt desc) {
+  ] | order(author->isFeatured desc, _createdAt desc) {
     _id,
     _type,
     title,
@@ -29,7 +29,10 @@ export const LISTINGS_QUERY = defineQuery(`
       _id,
       name,
       image,
-      email
+      email,
+      "isFeatured": coalesce(isFeatured, false),
+      "featuredSince": featuredSince,
+      "featuredUntil": featuredUntil
     },
     description,
     category,
@@ -53,32 +56,6 @@ export const LISTINGS_QUERY = defineQuery(`
     }
   }`);
 
-// export const SINGLE_AUTHOR_LISTINGS_QUERY = `(
-//   *[_type == "listing" &&
-//     ${(params: Params) => (params.search ? `title match "${params.search}*" || description match "${params.search}*"` : "true")} &&
-//     ${(params: Params) => (params.category ? `category == "${params.category}"` : "true")} &&
-//     ${(params: Params) => (params.authorId ? `author._ref == "${params.authorId}"` : "true")}
-//   ] | order(_createdAt desc) {
-//     _id,
-//     _createdAt,
-//     title,
-//     price,
-//     ratePeriod,
-//     description,
-//     "slug": slug.current,
-//     "image": image.asset->url,
-//     category,
-//     condition,
-//     toolDetails,
-//     author->{
-//       _id,
-//       name,
-//       "image": image.asset->url,
-//       email
-//     }
-//   }
-// )`;
-
 export const BASE_LISTINGS_QUERY = `
   *[_type == "listing"
 `;
@@ -93,7 +70,7 @@ export function createListingsQuery(params: {
 
   if (params.search) {
     filters.push(
-      `(title match "${params.search}*" || description match "${params.search}*")`
+      `(title match "${params.search}*" || description match "${params.search}*")`,
     );
   }
 

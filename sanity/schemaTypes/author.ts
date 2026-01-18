@@ -37,7 +37,30 @@ export const author = defineType({
       type: "array",
       of: [{ type: "reference", to: [{ type: "role" }] }],
     }),
-
+    defineField({
+      name: "isFeatured",
+      title: "Is Featured",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
+      name: "featuredSince",
+      title: "Featured Since",
+      type: "datetime",
+      description: "Date when user became featured",
+    }),
+    defineField({
+      name: "stripeCustomerId",
+      title: "Stripe Customer ID",
+      type: "string",
+      description: "Stripe customer ID for subscription management",
+    }),
+    defineField({
+      name: "stripeSubscriptionId",
+      title: "Stripe Subscription ID",
+      type: "string",
+      description: "Active Stripe subscription ID",
+    }),
     defineField({
       name: "listingRatings",
       title: "Listing Ratings",

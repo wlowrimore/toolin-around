@@ -3,19 +3,39 @@
 import { useState } from "react";
 import { Gem } from "lucide-react";
 import FeatureModal from "./FeatureModal";
+import { useFeatured } from "@/contexts/FeaturedContext";
 import { LoadingSpinner } from "../LoadingAnimations";
 
 const CTA = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isFeatured, isLoading, featuredUntil } = useFeatured();
 
-  const handleModalClick = () => {
-    setIsOpen(true);
-  };
+  if (isLoading) {
+    return (
+      <div className="max-w-[50%] flex flex-col py-2 px-4 bg-black">
+        <p className="text-white">Loading...</p>
+      </div>
+    );
+  }
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  if (isFeatured) {
+    return (
+      <div className="max-w-[50%] flex items-center gap-1 py-2 px-4">
+        <Gem className="size-14 fill-sky-400" />
+        <div className="flex flex-col justify-center">
+          <h3 className="text-lg font-semibold text-slate-800 flex">
+            Featured Lister
+          </h3>
+          <p className="text-sm text-slate-700/95 tracking-wide leading-tight">
+            You're currently a featured lister! Your subscription is active
+            {featuredUntil &&
+              ` until ${new Date(featuredUntil).toLocaleDateString()}`}
+            .
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -29,7 +49,7 @@ const CTA = () => {
           products, and boost your visibility.
         </p>
         <button
-          onClick={handleModalClick}
+          onClick={() => setIsOpen(true)}
           className="w-fit pr-2 pl-1 py-1 bg-sky-600 flex items-center gap-1 mt-1 rounded-sm border border-sky-500 hover:bg-sky-500 hover:text-slate-800 hover:border-sky-600 transition-colors duration-200"
         >
           {isLoading ? (
@@ -41,7 +61,7 @@ const CTA = () => {
         </button>
       </div>
 
-      <FeatureModal isOpen={isOpen} onClose={handleClose} />
+      <FeatureModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 };

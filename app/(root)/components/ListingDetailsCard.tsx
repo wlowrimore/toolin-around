@@ -1,19 +1,13 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSession } from "next-auth/react";
-import { ListingType, ListingCardProps } from "@/types";
+import { useFeatured } from "@/contexts/FeaturedContext";
+import { ListingCardProps } from "@/types";
 import { formatDate } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/(root)/components/ui/card";
 import Image from "next/image";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
+import FeaturedBadge from "./feature-signup/FeaturedBadge";
 import Link from "next/link";
 import ConditionLegend from "./ConditionLegend";
 import MessageModal from "./MessageModal";
@@ -28,22 +22,22 @@ interface EnhancedListingCardProps extends ListingCardProps {
     name: string;
     email: string;
     image: string;
+    isFeatured?: boolean;
+    featuredSince?: string;
+    featuredUntil?: string;
   };
 }
 
 const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   listing,
   author,
-  currentUser,
   createdAt,
   onMessageSent,
 }) => {
   const { data: session } = useSession();
-  const [conditionTextColor, setConditionTextColor] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  console.log("AUTHOR ID: ", author?._id);
-  console.log("SESSION USER ID: ", session?.user?.id);
+  const { isFeatured } = useFeatured();
+  const isAuthorFeatured = author?.isFeatured || false;
 
   const authorHandle = () => {
     if (author?.email) {
@@ -55,7 +49,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   const authorFirstName = author?.name?.split(" ")[0];
 
   const handleOpenModal = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     console.log("attempting to open modal");
@@ -63,23 +57,23 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
   };
 
   const getConditionColor = (
-    condition: ConditionType | string | null
+    condition: ConditionType | string | null,
   ): string => {
     switch (condition) {
       case "New":
-        return "bg-sky-500 text-white font-semibold py-0.5 px-1.5 border border-sky-600";
+        return "bg-sky-500 text-white font-semibold px-4 rounded-2xl";
       case "Like New":
-        return "bg-green-500 text-black text-sm px-1.5 rounded-2xl";
+        return "bg-green-500 text-black text-sm px-4 rounded-2xl";
       case "Good":
-        return "bg-purple-700 text-white py-0.5 px-1.5 border border-purple-700";
+        return "bg-purple-700 text-white px-4 rounded-2xl";
       case "Fair":
-        return "bg-amber-500 text-black py-0.5 px-1.5 border border-amber-500";
+        return "bg-amber-500 text-black px-4 rounded-2xl";
       case "Poor":
-        return "bg-red-500 text-white py-0.5 px-1.5 border border-red-500";
+        return "bg-red-500 text-white px-4 rounded-2xl";
       case "Other":
-        return "bg-gray-500 text-white py-0.5 px-1.5 border border-gray-500";
+        return "bg-gray-500 text-white px-4 rounded-2xl";
       default:
-        return "bg-gray-500 text-white py-0.5 px-1.5 border border-gray-500";
+        return "bg-gray-500 text-white px-4 rounded-2xl";
     }
   };
 
@@ -101,9 +95,6 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                 <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
                 <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
                 <Star className="size-4 text-amber-200 fill-amber-200 stroke-1 stroke-amber-700" />
-                {/* <span className="w-fit ml-2 flex flex-col items-end text-xs text-slate-950 px-2 py-1">
-                read the reviews
-              </span> */}
               </div>
 
               {listing?.price && listing?.ratePeriod ? (
@@ -127,14 +118,6 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                   <p className="font-semibold">{author?.name as string}</p>
                   <p className="font-normal">{authorHandle()}</p>
                 </div>
-                {/* {author && session && author._id !== session.user.id ? (
-                      <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="text-xs text-slate-600 font-semibold px-2 py-1 hover:bg-slate-700 hover:text-white"
-                      >
-                        Message {authorFirstName}
-                      </button>
-                    ) : null} */}
               </div>
             ) : (
               <p className="w-full text-center text-sm">Loading user data...</p>
@@ -170,6 +153,7 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                   Message {authorFirstName}
                 </button>
               ) : null}
+
               {isModalOpen ? (
                 <MessageModal
                   authorFirstName={authorFirstName as string}
@@ -184,18 +168,18 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
             </aside>
           </Suspense>
         </div>
-        <main className="w-full">
-          {/* CardHeader section remains the same */}
+        <main className="w-full max-h-[50rem]">
           <header>
-            <h2 className="p-0 text-3xl font-serif pb-2 font-semibold">
+            <h2 className="p-0 text-3xl font-serif -mb-2 font-semibold">
               {listing?.title}
             </h2>
-            {/* <CardDescription>{listing?.description}</CardDescription> */}
           </header>
-
-          {/* CardContent section remains the same */}
           <section>
-            <div className="w-full overflow-hidden flex items-center gap-6">
+            <span className="relative right-[32%] top-1">
+              {isAuthorFeatured && <FeaturedBadge />}
+            </span>
+
+            <div className="w-full overflow-hidden flex gap-6">
               <img
                 src={listing?.image || ""}
                 alt={listing?.title || ""}
@@ -204,11 +188,10 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                 className="w-full max-h-[28rem] object-cover"
                 loading="lazy"
               />
-
               <article className="text-black w-full">
                 <div className="flex justify-center w-full">
-                  <div className="max-w-[20rem] min-w-[20.5rem] text-sm">
-                    <div className="">
+                  <div className="max-w-[20rem] min-w-[20.5rem] text-base">
+                    <div className="max-h-[22rem] overflow-y-auto pr-2 pb-1">
                       <p className="">{listing?.toolDetails}</p>
                     </div>
                   </div>
@@ -220,8 +203,6 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
               Listed {formatDate(createdAt)}
             </p>
           </section>
-
-          {/* Updated CardFooter with enhanced MessageModal */}
         </main>
       </section>
     </>

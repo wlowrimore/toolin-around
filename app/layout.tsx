@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import AppSessionProvider from "@/AppSessionProvider";
 import { Toaster } from "@/app/(root)/components/ui/toaster";
+import { FeaturedProvider } from "@/contexts/FeaturedContext";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -26,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geist.variable}`}>
         <AppSessionProvider>
-          {children}
+          <FeaturedProvider>{children}</FeaturedProvider>
           <Toaster />
         </AppSessionProvider>
       </body>
