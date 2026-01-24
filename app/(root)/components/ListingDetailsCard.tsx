@@ -102,7 +102,9 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
                   ${listing?.price} / {listing?.ratePeriod}
                 </div>
               ) : (
-                <div className="text-white text-xs">Price not available</div>
+                <div className="text-slate-500 text-xs">
+                  Price not available
+                </div>
               )}
             </div>
             {author?.image && author?.name ? (
@@ -169,13 +171,13 @@ const ListingDetailsCard: React.FC<EnhancedListingCardProps> = ({
           </Suspense>
         </div>
         <main className="w-full max-h-[50rem]">
-          <header>
-            <h2 className="p-0 text-3xl font-serif -mb-2 font-semibold">
+          <header className="">
+            <h2 className="p-0 text-3xl font-serif font-semibold">
               {listing?.title}
             </h2>
           </header>
-          <section>
-            <span className="relative right-[32%] top-1">
+          <section className="relative">
+            <span className="absolute bottom-3 right-24">
               {isAuthorFeatured && <FeaturedBadge />}
             </span>
 

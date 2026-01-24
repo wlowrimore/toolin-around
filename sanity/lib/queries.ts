@@ -35,6 +35,7 @@ export const LISTINGS_QUERY = defineQuery(`
       "featuredUntil": featuredUntil
     },
     description,
+    isFeaturedListing,
     category,
     image,
     condition,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useFeatured } from "@/contexts/FeaturedContext";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -19,6 +20,8 @@ import { useMessages } from "@/hooks/useMessages";
 const Header = ({ query }: { query: string }) => {
   const { data: session } = useSession();
   const { unreadCount } = useMessages(session?.user?.id as string);
+
+  const { isFeatured } = useFeatured();
 
   const path = usePathname();
 
@@ -106,6 +109,11 @@ const Header = ({ query }: { query: string }) => {
                         />
                       </div>
                     </TooltipTrigger>
+                    {isFeatured && (
+                      <div className="absolute right-[19.5%] top-6 w-fit">
+                        <Gem className="size-4 fill-sky-500/60 text-black/40" />
+                      </div>
+                    )}
                     <TooltipContent>
                       <button
                         className="hover:text-cyan-500"

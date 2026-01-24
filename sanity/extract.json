@@ -1813,6 +1813,13 @@
         },
         "optional": true
       },
+      "isFeaturedListing": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "description": {
         "type": "objectAttribute",
         "value": {

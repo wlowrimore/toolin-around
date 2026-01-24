@@ -37,6 +37,14 @@ export const listing = defineType({
       description: "The author who created this service",
     }),
     defineField({
+      name: "isFeaturedListing",
+      title: "Is Featured Listing",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Mark this listing as featured a featured listing (only for featured authors)",
+    }),
+    defineField({
       name: "description",
       title: "Description",
       type: "text",

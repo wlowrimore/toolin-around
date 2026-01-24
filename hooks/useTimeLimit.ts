@@ -10,7 +10,7 @@ export const useTimeLimit = (imageUrl: string) => {
       setShowSuccess(true);
       const timer = setTimeout(() => {
         setShowSuccess(false);
-      }, 3000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }

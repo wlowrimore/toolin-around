@@ -24,7 +24,7 @@ interface Listing {
   category: string;
   condition: string | null;
   contact: string | null;
-
+  isFeaturedListing?: boolean;
   author: {
     _id: string;
     name: string;
@@ -70,6 +70,7 @@ const IndividualListingPage = async ({
       category,
       condition,
       contact,
+      isFeaturedListing,
       author->{
         _id,
         name,
@@ -83,7 +84,10 @@ const IndividualListingPage = async ({
     }[0]`,
     { id: params.id },
   );
+
   console.log("PARAMS.ID AFTER FETCH:", params.id);
+  console.log("IS FEATURED LISTING FROM DB:", listingResult?.isFeaturedListing);
+
   if (!listingResult) {
     return notFound();
   }
@@ -105,6 +109,7 @@ const IndividualListingPage = async ({
     price: listingResult.price,
     ratePeriod: listingResult.ratePeriod,
     contact: listingResult.contact,
+    isFeaturedListing: listingResult.isFeaturedListing,
   };
 
   console.log("LISTING IN ID PAGE:", listing);

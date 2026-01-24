@@ -34,6 +34,7 @@ export type ListingWithAuthorRef = Omit<Listing, "author"> & {
     _ref: string;
     email: string;
   };
+  isFeaturedListing?: boolean;
 };
 
 // New interface for listing with expanded author
@@ -84,7 +85,7 @@ export const createToolDetails = async (state: any, form: FormData) => {
   try {
     const existingAuthor = await writeClient.fetch(
       `*[_type == "author" && email == $email][0]._id`,
-      { email: session.user?.email }
+      { email: session.user?.email },
     );
 
     let authorId;
@@ -162,9 +163,10 @@ export async function updateListing(
       deleteToken: string;
       price: string;
       ratePeriod: string;
+      isFeaturedListing?: boolean;
     }
   >,
-  authorEmail: string
+  authorEmail: string,
 ) {
   try {
     // Get the existing listing first
@@ -182,6 +184,7 @@ export async function updateListing(
         price,
         ratePeriod,
         contact,
+        isFeaturedListing,
         "author": author->{
           _id,
           _type,
@@ -189,7 +192,7 @@ export async function updateListing(
           name,
         }
       }`,
-      { listingId }
+      { listingId },
     );
 
     if (!existingListing) {
@@ -199,7 +202,7 @@ export async function updateListing(
     // Check if the service's author email matches the provided email
     if (existingListing.author.email !== authorEmail) {
       throw new Error(
-        "Unauthorized: You don't have permission to edit this listing"
+        "Unauthorized: You don't have permission to edit this listing",
       );
     }
 
@@ -215,7 +218,7 @@ export async function updateListing(
         } catch (deleteError) {
           console.error(
             "Error deleting old image from Cloudinary:",
-            deleteError
+            deleteError,
           );
         }
       }
@@ -236,9 +239,14 @@ export async function updateListing(
         contact: data.contact ?? existingListing.contact,
         price: data.price ?? existingListing.price,
         ratePeriod: data.ratePeriod ?? existingListing.ratePeriod,
+        isFeaturedListing:
+          data.isFeaturedListing ?? existingListing.isFeaturedListing ?? false,
       } as Partial<ListingWithAuthorRef> &
         ListingFormData & { deleteToken: string };
+
     console.log("DELETE TOKEN: ", updatedData.deleteToken);
+    console.log("IS FEATURED LISTING: ", updatedData.isFeaturedListing);
+
     const result = await writeClient.patch(listingId).set(updatedData).commit();
     return result;
   } catch (error) {
@@ -282,7 +290,7 @@ export async function deleteListing(listingId: string) {
           email
         }
       }`,
-      { listingId }
+      { listingId },
     );
 
     console.log("Listing to delete: ", listing);
@@ -297,7 +305,7 @@ export async function deleteListing(listingId: string) {
 
     if (listing.author.email !== session.user.email) {
       throw new Error(
-        "Unauthorized: You don't have permission to delete this listing"
+        "Unauthorized: You don't have permission to delete this listing",
       );
     }
 
@@ -310,7 +318,7 @@ export async function deleteListing(listingId: string) {
     // Get rating IDs
     const ratingIds = await authenticatedClient.fetch(
       `*[_type == "rating" && listing._ref == $listingId]._id`,
-      { listingId }
+      { listingId },
     );
 
     // Add each rating deletion to the transaction
